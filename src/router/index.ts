@@ -1,19 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@/layout/index.vue'
 
-// interface Route {
-//     path: string
-//     name?: string
-//     hidden?: boolean
-//     component: any
-//     meta?: {
-//         title: string
-//     }
-//     redirect?: string
-//     children?: Array<Route>
-// }
-
-const routes= [
+const routes = [
     {
         path: '/',
         component: Layout,

@@ -22,23 +22,24 @@ const routes = useRouter().options.routes.filter(route => !route.hidden)
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .el-aside {
   background-color: rgb(255, 255, 255);
   border-right: 1px solid rgb(224, 224, 244);
-}
-.menu {
-  padding-left: 20px;
-  padding-right: 5px;
-}
-.menu-group_title {
-  color: rgb(229, 229, 229);
-}
-.menu-group_item a {
-  display: block;
-  padding: 10px 0;
-}
-.menu-group_item a:hover {
-  background-color: rgb(246, 246, 247);
+  .menu {
+    padding-left: 20px;
+    padding-right: 5px;
+    .menu-group_title {
+      color: rgb(229, 229, 229);
+      font-size: 14px;
+    }
+    .menu-group_item a {
+      display: block;
+      padding: 10px 0;
+    }
+    .menu-group_item a:hover {
+      background-color: rgb(246, 246, 247);
+    }
+  }
 }
 </style>

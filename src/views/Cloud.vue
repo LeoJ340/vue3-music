@@ -77,7 +77,7 @@ const music = [
 ]
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 header {
   width: 100%;
   padding-bottom: 20px;
