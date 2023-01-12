@@ -4,7 +4,7 @@
       <h3 style="margin-top: 0">我的音乐云盘</h3>
 
       <el-button-group>
-        <el-button round type="danger" :icon="CaretRight">播放全部</el-button>
+        <el-button round type="danger" :icon="CaretRight" @click="playAll">播放全部</el-button>
         <el-button round type="danger" :icon="Plus" />
       </el-button-group>
       <el-button round :icon="Plus" style="margin-left: 20px">上传音乐</el-button>
@@ -24,8 +24,12 @@
 </template>
 
 <script setup lang="ts">
+import { reactive } from "vue";
 import { CaretRight, Plus } from '@element-plus/icons-vue';
-const music = [
+import { songs } from "../api";
+import { usePlayerStore } from "../stores/player";
+const { push, play } = usePlayerStore()
+const music = reactive([
   {
     title: '时光漫谈',
     singer: '啊雾',
@@ -74,7 +78,13 @@ const music = [
     size: '1MB',
     uploadTime: '2022-11-20'
   }
-]
+])
+
+async function playAll() {
+  const playlist = await songs()
+  push(playlist)
+  play(playlist[0].id)
+}
 </script>
 
 <style lang="scss" scoped>

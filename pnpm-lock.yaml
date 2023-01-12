@@ -5,6 +5,7 @@ specifiers:
   '@vitejs/plugin-vue': ^2.3.4
   axios: ^1.2.2
   element-plus: ^2.2.28
+  pinia: ^2.0.28
   sass: ^1.57.1
   typescript: ^4.5.4
   vite: ^2.9.15
@@ -16,6 +17,7 @@ dependencies:
   '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/2.0.10_vue@3.2.44
   axios: registry.npmmirror.com/axios/1.2.2
   element-plus: registry.npmmirror.com/element-plus/2.2.28_vue@3.2.44
+  pinia: registry.npmmirror.com/pinia/2.0.28_d45o5shxrtvj6wh4y524t7cqnm
   vue: registry.npmmirror.com/vue/3.2.44
   vue-router: registry.npmmirror.com/vue-router/4.1.6_vue@3.2.44
 
@@ -903,6 +905,27 @@ packages:
     engines: {node: '>=8.6'}
     dev: true
 
+  registry.npmmirror.com/pinia/2.0.28_d45o5shxrtvj6wh4y524t7cqnm:
+    resolution: {integrity: sha512-YClq9DkqCblq9rlyUual7ezMu/iICWdBtfJrDt4oWU9Zxpijyz7xB2xTwx57DaBQ96UGvvTMORzALr+iO5PVMw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/pinia/-/pinia-2.0.28.tgz}
+    id: registry.npmmirror.com/pinia/2.0.28
+    name: pinia
+    version: 2.0.28
+    peerDependencies:
+      '@vue/composition-api': ^1.4.0
+      typescript: '>=4.4.4'
+      vue: ^2.6.14 || ^3.2.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+      typescript:
+        optional: true
+    dependencies:
+      '@vue/devtools-api': registry.npmmirror.com/@vue/devtools-api/6.4.5
+      typescript: registry.npmmirror.com/typescript/4.8.4
+      vue: registry.npmmirror.com/vue/3.2.44
+      vue-demi: registry.npmmirror.com/vue-demi/0.13.11_vue@3.2.44
+    dev: false
+
   registry.npmmirror.com/postcss/8.4.19:
     resolution: {integrity: sha512-h+pbPsyhlYj6N2ozBmHhHrs9DzGmbaarbLvWipMRO7RLS+v4onj26MPFXA5OBYFxyqYhUJK456SwDcY9H2/zsA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/postcss/-/postcss-8.4.19.tgz}
     name: postcss
@@ -1006,7 +1029,6 @@ packages:
     version: 4.8.4
     engines: {node: '>=4.2.0'}
     hasBin: true
-    dev: true
 
   registry.npmmirror.com/vite/2.9.15_sass@1.57.1:
     resolution: {integrity: sha512-fzMt2jK4vQ3yK56te3Kqpkaeq9DkcZfBbzHwYpobasvgYmP2SoAr6Aic05CsB4CzCZbsDv4sujX3pkEGhLabVQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/vite/-/vite-2.9.15.tgz}
