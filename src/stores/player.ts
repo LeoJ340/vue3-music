@@ -13,9 +13,8 @@ interface Loop {
 
 /**
  * TODO:
- * 1、完善列表处理功能
- * 2、防抖、节流
- * 3、进度条bug
+ * 防抖、节流
+ * 进度条bug
  */
 export const usePlayerStore = defineStore('player', () => {
     const audio = new Audio()
@@ -74,8 +73,13 @@ export const usePlayerStore = defineStore('player', () => {
         })
     }
 
-    function push(list: Array<Song>, replace: boolean = false) {
-        playList.push(...list)
+    function push(list: Array<Song>, replace: boolean = true) {
+        if (replace) {
+            playList.length = 0
+            playList.push(...list)
+        } else {
+            playList.splice(index.value + 1, 0, ...list)
+        }
     }
 
     async function play(id: number) {
@@ -94,18 +98,19 @@ export const usePlayerStore = defineStore('player', () => {
         if (!loopTypes.includes(loopType.value)) return
         switch (loopType.value.id) {
             case 0: {
-                nextPlay()
+                setTimeout(nextPlay, 2000)
                 break
             }
             case 1: {
-                togglePlay()
+                setTimeout(togglePlay, 2000)
                 break
             }
             case 2: {
-                let nextIndex = Math.floor(Math.random() * playList.length)
-                console.log(nextIndex, playList[nextIndex].id)
-                play(playList[nextIndex].id)
-                break
+                setTimeout(() => {
+                    let nextIndex = Math.floor(Math.random() * playList.length)
+                    console.log(nextIndex, playList[nextIndex].id)
+                    play(playList[nextIndex].id)
+                }, 2000)
             }
         }
     }
