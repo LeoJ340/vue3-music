@@ -1,10 +1,41 @@
 import { defineStore } from 'pinia'
-import { reactive, toRef, watch, computed } from "vue";
+import { reactive, watch, computed } from "vue";
 import { Song } from "@/models/song";
 import { songUrl } from "@/api";
+import type { Icon } from "@icon-park/vue-next/lib/runtime";
+import { LoopOnce, PlayOnce, ShuffleOne } from '@icon-park/vue-next';
 
+interface Loop {
+    id: number
+    text: string
+    icon: Icon
+}
+
+/**
+ * TODO:
+ * 1、完善列表处理功能
+ * 2、防抖、节流
+ * 3、进度条bug
+ */
 export const usePlayerStore = defineStore('player', () => {
     const audio = new Audio()
+    const loopTypes: Array<Loop> = [
+        {
+            id: 0,
+            text: '列表循环',
+            icon: LoopOnce
+        },
+        {
+            id: 1,
+            text: '单曲循环',
+            icon: PlayOnce
+        },
+        {
+            id: 2,
+            text: '随机播放',
+            icon: ShuffleOne
+        }
+    ]
     let playList: Array<Song> = reactive([])
     const player = reactive({
         currentId: 0,
@@ -12,13 +43,15 @@ export const usePlayerStore = defineStore('player', () => {
         duration: 0,
         paused: true,// 暂停
         ended: false,// 结束
-        loopType: 0,//循环模式 0 单曲循环 1 列表循环 2随机播放
+        loopType: 0,//循环模式
         muted: false,
         volume: audio.volume,
         sliderInput: false// 进度条是否被拖拽
     })
 
+    const disabled = computed(() => !player.currentId && !playList.length)
     const index = computed(() => playList.findIndex(item => item.id === player.currentId))
+    const loopType = computed(() => loopTypes.find(loop => loop.id === player.loopType))
 
     function interval() {
         if (!player.currentId) return
@@ -30,10 +63,10 @@ export const usePlayerStore = defineStore('player', () => {
     }
 
     function init() {
-        const ended = toRef(player, "ended")
-        watch(() => ended, ended => {
+        watch(() => player.ended, ended => {
             if (ended) {
                 player.paused = true
+                playEnd()
                 setTimeout(() => {
                     player.sliderInput = false
                 }, 1000)
@@ -41,7 +74,7 @@ export const usePlayerStore = defineStore('player', () => {
         })
     }
 
-    function push(list: Array<Song>) {
+    function push(list: Array<Song>, replace: boolean = false) {
         playList.push(...list)
     }
 
@@ -56,7 +89,43 @@ export const usePlayerStore = defineStore('player', () => {
         })
     }
 
+    function playEnd() {
+        if (!loopType.value) return
+        if (!loopTypes.includes(loopType.value)) return
+        switch (loopType.value.id) {
+            case 0: {
+                nextPlay()
+                break
+            }
+            case 1: {
+                togglePlay()
+                break
+            }
+            case 2: {
+                let nextIndex = Math.floor(Math.random() * playList.length)
+                console.log(nextIndex, playList[nextIndex].id)
+                play(playList[nextIndex].id)
+                break
+            }
+        }
+    }
+
+    function nextPlay() {
+        if (disabled.value) return
+        let currentIndex = index.value
+        const nextIndex = currentIndex === playList.length - 1 ? 0 : ++currentIndex
+        play(playList[nextIndex].id)
+    }
+
+    function prevPlay() {
+        if (disabled.value) return
+        let currentIndex = index.value
+        const prevIndex = currentIndex === 0 ? playList.length - 1 : --currentIndex
+        play(playList[prevIndex].id)
+    }
+
     function togglePlay() {
+        if (disabled.value) return
         if (!player.currentId) return
         if (player.paused) {
             audio.play().then(_ => {
@@ -80,9 +149,18 @@ export const usePlayerStore = defineStore('player', () => {
         audio.currentTime = val
     }
 
+    function nextLoopType() {
+        if (disabled.value) return
+        if (player.loopType === loopTypes.length - 1) {
+            player.loopType = 0
+        } else {
+            player.loopType++
+        }
+    }
+
     return {
         playList, player,
-        index,
-        init, interval, push, play, togglePlay, onSliderInput, onSliderChange
+        disabled, index, loopType,
+        init, interval, push, play, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay
     }
 })
