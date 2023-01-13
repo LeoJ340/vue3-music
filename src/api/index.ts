@@ -1,4 +1,4 @@
-import request from "../utils/request";
+import request from "@/utils/request";
 
 export async function songs() {
     // TODO：写死一个列表接口，用于调试

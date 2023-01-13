@@ -26,8 +26,8 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { CaretRight, Plus } from '@element-plus/icons-vue';
-import { songs } from "../api";
-import { usePlayerStore } from "../stores/player";
+import { songs } from "@/api";
+import { usePlayerStore } from "@/stores/player";
 const { push, play } = usePlayerStore()
 const music = reactive([
   {

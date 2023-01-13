@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, toRef, watch, computed } from "vue";
-import { Song } from "../models/song";
-import { songUrl } from "../api";
+import { Song } from "@/models/song";
+import { songUrl } from "@/api";
 
 export const usePlayerStore = defineStore('player', () => {
     const audio = new Audio()
@@ -80,5 +80,9 @@ export const usePlayerStore = defineStore('player', () => {
         audio.currentTime = val
     }
 
-    return { playList, player, init, interval, push, play, togglePlay, onSliderInput, onSliderChange }
+    return {
+        playList, player,
+        index,
+        init, interval, push, play, togglePlay, onSliderInput, onSliderChange
+    }
 })

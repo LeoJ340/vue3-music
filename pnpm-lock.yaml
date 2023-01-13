@@ -2,6 +2,7 @@ lockfileVersion: 5.4
 
 specifiers:
   '@element-plus/icons-vue': ^2.0.10
+  '@icon-park/vue-next': ^1.4.2
   '@vitejs/plugin-vue': ^2.3.4
   axios: ^1.2.2
   element-plus: ^2.2.28
@@ -15,6 +16,7 @@ specifiers:
 
 dependencies:
   '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/2.0.10_vue@3.2.44
+  '@icon-park/vue-next': registry.npmmirror.com/@icon-park/vue-next/1.4.2_vue@3.2.44
   axios: registry.npmmirror.com/axios/1.2.2
   element-plus: registry.npmmirror.com/element-plus/2.2.28_vue@3.2.44
   pinia: registry.npmmirror.com/pinia/2.0.28_d45o5shxrtvj6wh4y524t7cqnm
@@ -102,6 +104,18 @@ packages:
     version: 1.1.0
     dependencies:
       '@floating-ui/core': registry.npmmirror.com/@floating-ui/core/1.1.0
+    dev: false
+
+  registry.npmmirror.com/@icon-park/vue-next/1.4.2_vue@3.2.44:
+    resolution: {integrity: sha512-+QklF255wkfBOabY+xw6FAI0Bwln/RhdwCunNy/9sKdKuChtaU67QZqU67KGAvZUTeeBgsL+yaHHxqfQeGZXEQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npmmirror.com/@icon-park/vue-next/-/vue-next-1.4.2.tgz}
+    id: registry.npmmirror.com/@icon-park/vue-next/1.4.2
+    name: '@icon-park/vue-next'
+    version: 1.4.2
+    engines: {node: '>= 8.0.0', npm: '>= 5.0.0'}
+    peerDependencies:
+      vue: 3.x
+    dependencies:
+      vue: registry.npmmirror.com/vue/3.2.44
     dev: false
 
   registry.npmmirror.com/@sxzz/popperjs-es/2.11.7:

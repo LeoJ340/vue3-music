@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
+    "@icon-park/vue-next": "^1.4.2",
     "axios": "^1.2.2",
     "element-plus": "^2.2.28",
     "pinia": "^2.0.28",
