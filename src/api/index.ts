@@ -14,3 +14,8 @@ export async function songUrl(id: number) {
     const { data } = await request.get('/song/url', { params: { id } })
     return data.data[0]
 }
+
+export async function usePlayList(id: number) {
+    const { data } = await request.get('playlist/detail', { params: { id } })
+    return data
+}

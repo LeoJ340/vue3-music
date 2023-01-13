@@ -21,10 +21,10 @@
     </div>
     <!-- 进度条 -->
     <div class="player-slider flex">
-      <span class="currentTime">{{useFormatTime(player.currentTime)}}</span>
+      <span v-show="!disabled" class="currentTime">{{useFormatTime(player.currentTime)}}</span>
       <el-slider :show-tooltip="false" v-model="player.currentTime" :min="0" :max="player.duration"
                  @input="onSliderInput" @change="onSliderChange" />
-      <span class="duration">{{useFormatTime(player.duration)}}</span>
+      <span v-show="!disabled" class="duration">{{useFormatTime(player.duration)}}</span>
     </div>
   </div>
 </template>
@@ -33,6 +33,7 @@
 import { GoStart, PlayOne, Pause, GoEnd, Comment } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
 import { toRefs } from "vue";
+import { useFormatTime } from "@/utils/time";
 
 let {
   player,
@@ -40,14 +41,14 @@ let {
   togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay
 } = toRefs(usePlayerStore())
 
-function useFormatTime(time: number = 0) {
-  const s = Math.floor(time) % 60;
-  time = Math.floor(time / 60);
-  const i = time % 60;
-  const ii = i < 10 ? `0${i}` : i;
-  const ss = s < 10 ? `0${s}` : s;
-  return ii + ':' + ss;
-}
+// function useFormatTime(time: number = 0) {
+//   const s = Math.floor(time) % 60;
+//   time = Math.floor(time / 60);
+//   const i = time % 60;
+//   const ii = i < 10 ? `0${i}` : i;
+//   const ss = s < 10 ? `0${s}` : s;
+//   return ii + ':' + ss;
+// }
 
 </script>
 

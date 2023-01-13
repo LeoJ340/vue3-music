@@ -5,7 +5,7 @@
         <li class="menu-group">
           <div class="menu-group_title">我的音乐</div>
           <div class="menu-group_item">
-            <router-link to="/my/cloud">我的音乐云盘</router-link>
+            <router-link to="/my/playlist/2428211358">我喜欢的音乐</router-link>
           </div>
           <div class="menu-group_item">
             <router-link to="/my/cloud">我的音乐云盘</router-link>
