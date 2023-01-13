@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, watch, computed } from "vue";
 import { Song } from "@/models/song";
-import { songUrl } from "@/api";
+import { getSongUrl } from "@/api";
 import type { Icon } from "@icon-park/vue-next/lib/runtime";
 import { LoopOnce, PlayOnce, ShuffleOne } from '@icon-park/vue-next';
 
@@ -84,7 +84,7 @@ export const usePlayerStore = defineStore('player', () => {
 
     async function play(id: number) {
         if (player.currentId === id) return
-        const data = await songUrl(id)
+        const data = await getSongUrl(id)
         audio.src = data.url
         audio.play().then(_ => {
             player.currentId = id

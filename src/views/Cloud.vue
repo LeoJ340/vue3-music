@@ -3,11 +3,11 @@
     <header>
       <h3 style="margin-top: 0">我的音乐云盘</h3>
 
-      <el-button-group>
-        <el-button round type="danger" :icon="CaretRight" @click="playAll">播放全部</el-button>
-        <el-button round type="danger" :icon="Plus" />
+      <el-button-group style="margin-right: 20px">
+        <el-button round type="danger"><PlayOne theme="filled" size="22" />播放全部</el-button>
+        <el-button round type="danger"><Plus theme="filled" size="20" :strokeWidth="2" /></el-button>
       </el-button-group>
-      <el-button round :icon="Plus" style="margin-left: 20px">上传音乐</el-button>
+      <el-button round><Plus theme="filled" size="20" :strokeWidth="4" />上传音乐</el-button>
     </header>
 
 
@@ -25,10 +25,8 @@
 
 <script setup lang="ts">
 import { reactive } from "vue";
-import { CaretRight, Plus } from '@element-plus/icons-vue';
-import { songs } from "@/api";
-import { usePlayerStore } from "@/stores/player";
-const { push, play } = usePlayerStore()
+import { PlayOne, Plus } from '@icon-park/vue-next';
+
 const music = reactive([
   {
     title: '时光漫谈',
@@ -80,11 +78,6 @@ const music = reactive([
   }
 ])
 
-async function playAll() {
-  const playlist = await songs()
-  push(playlist)
-  play(playlist[0].id)
-}
 </script>
 
 <style lang="scss" scoped>

@@ -64,7 +64,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useRoute } from "vue-router";
-import { usePlayList } from "@/api";
+import { getPlayList } from "@/api";
 import { Song } from "@/models/song";
 import { useFormatTime } from "@/utils/time";
 import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue-next';
@@ -75,7 +75,7 @@ const playlistId = Number(currentRoute.params.id.toString())
 
 const playlist = ref()
 const tracks = ref<Song[]>([])
-usePlayList(playlistId).then(res => {
+getPlayList(playlistId).then(res => {
   playlist.value = res.playlist
   tracks.value = res.playlist.tracks
 })
