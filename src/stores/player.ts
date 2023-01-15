@@ -13,6 +13,7 @@ interface Loop {
 
 /**
  * TODO:
+ * songUrl接口缓存
  * 防抖、节流
  * 进度条bug
  */
@@ -50,6 +51,7 @@ export const usePlayerStore = defineStore('player', () => {
 
     const disabled = computed(() => !player.currentId && !playList.length)
     const index = computed(() => playList.findIndex(item => item.id === player.currentId))
+    const currentPlay = computed(() => playList.find(item => item.id === player.currentId))
     const loopType = computed(() => loopTypes.find(loop => loop.id === player.loopType))
 
     function interval() {
@@ -78,6 +80,7 @@ export const usePlayerStore = defineStore('player', () => {
             playList.length = 0
             playList.push(...list)
         } else {
+            // TODO:去重
             playList.splice(index.value + 1, 0, ...list)
         }
     }
@@ -165,7 +168,7 @@ export const usePlayerStore = defineStore('player', () => {
 
     return {
         playList, player,
-        disabled, index, loopType,
+        disabled, index, currentPlay, loopType,
         init, interval, push, play, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay
     }
 })
