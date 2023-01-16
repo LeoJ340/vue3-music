@@ -36,7 +36,7 @@ export const usePlayerStore = defineStore('player', () => {
             icon: ShuffleOne
         }
     ]
-    let playList: Array<Song> = reactive([])
+    const playList: Array<Song> = reactive([])
     const player = reactive({
         currentId: 0,
         currentTime: 0,
@@ -45,7 +45,7 @@ export const usePlayerStore = defineStore('player', () => {
         ended: false,// 结束
         loopType: 0,//循环模式
         muted: false,
-        volume: audio.volume,
+        volume: parseInt(localStorage.getItem('PLAYER-VOLUME') || (audio.volume * 100).toString()),
         sliderInput: false// 进度条是否被拖拽
     })
 
@@ -68,9 +68,6 @@ export const usePlayerStore = defineStore('player', () => {
             if (ended) {
                 player.paused = true
                 playEnd()
-                setTimeout(() => {
-                    player.sliderInput = false
-                }, 1000)
             }
         })
     }
@@ -80,8 +77,8 @@ export const usePlayerStore = defineStore('player', () => {
             playList.length = 0
             playList.push(...list)
         } else {
-            // TODO:去重
             playList.splice(index.value + 1, 0, ...list)
+            push([...new Set(playList)], true)
         }
     }
 
@@ -93,6 +90,7 @@ export const usePlayerStore = defineStore('player', () => {
             player.currentId = id
             player.paused = false
             player.duration = audio.duration
+            player.currentTime = 0
         })
     }
 
@@ -166,9 +164,15 @@ export const usePlayerStore = defineStore('player', () => {
         }
     }
 
+    function setVolume(val: number) {
+        localStorage.setItem('PLAYER-VOLUME', val.toString())
+        player.volume = val
+        audio.volume = val / 100
+    }
+
     return {
         playList, player,
         disabled, index, currentPlay, loopType,
-        init, interval, push, play, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay
+        init, interval, push, play, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay, setVolume
     }
 })

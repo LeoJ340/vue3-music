@@ -85,28 +85,5 @@ let {
   .duration {
     margin-left: 5px;
   }
-  .el-slider {
-    height: 10px;
-    margin-top: 10px;
-    .el-slider__runway, .el-slider__bar {
-      height: 2px;
-      border-radius: 0;
-    }
-    .el-slider__button-wrapper {
-      width: 10px;
-      height: 10px;
-      top: -9.5px;
-      display: none;
-    }
-    .el-slider__runway:hover {
-      .el-slider__button-wrapper {
-        display: block;
-      }
-    }
-    .el-slider__button {
-      width: 8px;
-      height: 8px;
-    }
-  }
 }
 </style>

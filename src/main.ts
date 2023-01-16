@@ -7,6 +7,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 
 import '@/styles/index.css' // global css
+import '@/styles/player.scss'
 
 const app = createApp(App)
 app.use(router)

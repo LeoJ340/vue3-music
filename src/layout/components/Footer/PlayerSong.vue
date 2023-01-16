@@ -13,7 +13,7 @@
 import { usePlayerStore } from "@/stores/player";
 import { toRefs } from "vue";
 
-let { currentPlay } = toRefs(usePlayerStore())
+const { currentPlay } = toRefs(usePlayerStore())
 </script>
 
 <style lang="scss" scoped>

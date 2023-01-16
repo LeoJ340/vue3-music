@@ -4,7 +4,9 @@
       <PlayerSong v-if="currentPlay" />
     </div>
     <PlayerControls class="flex-1" />
-    <div class="player-utils flex-1"></div>
+    <div class="player-utils flex-1">
+      <PlayerUtils v-if="playList.length" />
+    </div>
   </el-footer>
 </template>
 
@@ -13,8 +15,9 @@ import { usePlayerStore } from "@/stores/player";
 import { toRefs } from "vue";
 import PlayerSong from './PlayerSong.vue'
 import PlayerControls from './PlayerControls.vue'
+import PlayerUtils from './PlayerUtils.vue'
 
-let { playList, currentPlay } = toRefs(usePlayerStore())
+const { playList, currentPlay } = toRefs(usePlayerStore())
 
 </script>
 
@@ -34,6 +37,6 @@ let { playList, currentPlay } = toRefs(usePlayerStore())
 }
 .player-utils {
   position: relative;
-  justify-items: end;
+  justify-content: flex-end;
 }
 </style>
