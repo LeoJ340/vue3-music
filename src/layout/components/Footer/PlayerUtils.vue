@@ -12,32 +12,32 @@
 
 <script setup lang="ts">
 import { VolumeSmall, VolumeNotice, VolumeMute, MusicList } from '@icon-park/vue-next';
-import {computed, ref, toRefs} from "vue";
+import { computed, ref } from "vue";
 import { usePlayerStore } from "@/stores/player";
 import PlayList from './PlayList.vue'
 
-let { player, setVolume } = toRefs(usePlayerStore())
+const { player, setVolume } = usePlayerStore()
 const volumeTemp = ref(60)
 
 function onSliderInput(val: number) {
-  setVolume.value(val)
+  setVolume(val)
 }
 
 function setMute() {
-  if (player.value.volume === 0) {
-    setVolume.value(volumeTemp.value)
+  if (player.volume === 0) {
+    setVolume(volumeTemp.value)
     volumeTemp.value = 0
   } else {
-    volumeTemp.value = player.value.volume
-    setVolume.value(0)
+    volumeTemp.value = player.volume
+    setVolume(0)
   }
 
 }
 
 const volumeIcon = computed(() => {
-  if (player.value.volume === 0) return VolumeMute
-  if (player.value.volume >= 50) return VolumeNotice
-  if (player.value.volume < 50) return VolumeSmall
+  if (player.volume === 0) return VolumeMute
+  if (player.volume >= 50) return VolumeNotice
+  if (player.volume < 50) return VolumeSmall
 })
 
 </script>

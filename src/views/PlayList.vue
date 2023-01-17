@@ -65,7 +65,7 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { getPlayList } from "@/api";
-import { Song } from "@/models/song";
+import { PlayList, Tracks } from "@/models/PlayList";
 import { useFormatTime } from "@/utils/time";
 import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
@@ -73,11 +73,11 @@ import { usePlayerStore } from "@/stores/player";
 const currentRoute = useRoute()
 const playlistId = Number(currentRoute.params.id.toString())
 
-const playlist = ref()
-const tracks = ref<Song[]>([])
+const playlist = ref<PlayList>()
+const tracks = ref<Tracks[]>([])
 getPlayList(playlistId).then(res => {
-  playlist.value = res.playlist
-  tracks.value = res.playlist.tracks
+  playlist.value = res
+  tracks.value = res.tracks
 })
 
 function time(time: number) {

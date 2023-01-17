@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, watch, computed } from "vue";
-import { Song } from "@/models/song";
+import { Tracks } from "@/models/PlayList";
+import { SongUrl } from "@/models/SongUrl";
 import { getSongUrl } from "@/api";
 import type { Icon } from "@icon-park/vue-next/lib/runtime";
 import { LoopOnce, PlayOnce, ShuffleOne } from '@icon-park/vue-next';
@@ -36,7 +37,7 @@ export const usePlayerStore = defineStore('player', () => {
             icon: ShuffleOne
         }
     ]
-    const playList: Array<Song> = reactive([])
+    const playList: Array<Tracks> = reactive([])
     const player = reactive({
         currentId: 0,
         currentTime: 0,
@@ -72,7 +73,7 @@ export const usePlayerStore = defineStore('player', () => {
         })
     }
 
-    function push(list: Array<Song>, replace: boolean = true) {
+    function push(list: Array<Tracks>, replace: boolean = true) {
         if (replace) {
             playList.length = 0
             playList.push(...list)
@@ -84,8 +85,8 @@ export const usePlayerStore = defineStore('player', () => {
 
     async function play(id: number) {
         if (player.currentId === id) return
-        const data = await getSongUrl(id)
-        audio.src = data.url
+        const songUrl: SongUrl = await getSongUrl(id)
+        audio.src = songUrl.url
         audio.play().then(_ => {
             player.currentId = id
             player.paused = false
@@ -108,8 +109,7 @@ export const usePlayerStore = defineStore('player', () => {
             }
             case 2: {
                 setTimeout(() => {
-                    let nextIndex = Math.floor(Math.random() * playList.length)
-                    console.log(nextIndex, playList[nextIndex].id)
+                    const nextIndex: number = Math.floor(Math.random() * playList.length)
                     play(playList[nextIndex].id)
                 }, 2000)
             }
@@ -118,15 +118,15 @@ export const usePlayerStore = defineStore('player', () => {
 
     function nextPlay() {
         if (disabled.value) return
-        let currentIndex = index.value
+        let currentIndex: number = index.value
         const nextIndex = currentIndex === playList.length - 1 ? 0 : ++currentIndex
         play(playList[nextIndex].id)
     }
 
     function prevPlay() {
         if (disabled.value) return
-        let currentIndex = index.value
-        const prevIndex = currentIndex === 0 ? playList.length - 1 : --currentIndex
+        let currentIndex: number = index.value
+        const prevIndex: number = currentIndex === 0 ? playList.length - 1 : --currentIndex
         play(playList[prevIndex].id)
     }
 

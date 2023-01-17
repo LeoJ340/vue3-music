@@ -16,8 +16,8 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
     res => {
-        // console.log(res)
-        return res
+        const { data } = res
+        return data
     },
     error => {
         return Promise.reject(error);
