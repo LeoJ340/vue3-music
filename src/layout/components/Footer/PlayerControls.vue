@@ -9,7 +9,6 @@
       <GoStart class="player-controls-item" :class="{ 'disabled': disabled }"
                theme="outline" size="22" @click="prevPlay" :title="!disabled ? '上一首' : ''" />
       <!-- 播放|暂停 -->
-      <!-- TODO:添加音乐加载中效果 -->
       <Component :is="paused ? PlayOne : Pause"
                  class="togglePlay" :class="{ 'disabled': disabled }"
                  theme="filled" size="32" @click="togglePlay()" :title="!disabled ? (paused ? '播放' : '暂停') : ''"/>
@@ -47,7 +46,7 @@ const paused = computed(() => {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .player-controls {
   justify-content: space-around;
   align-items: center;

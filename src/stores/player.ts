@@ -46,8 +46,7 @@ export const usePlayerStore = defineStore('player', () => {
         ended: false,// 结束
         loopType: 0,//循环模式
         volume: parseInt(localStorage.getItem('PLAYER-VOLUME') || (audio.volume * 100).toString()),
-        sliderInput: false,// 进度条是否被拖拽
-        loading: false
+        sliderInput: false// 进度条是否被拖拽
     })
 
     const disabled = computed(() => !player.currentId && !playList.length)
@@ -95,21 +94,14 @@ export const usePlayerStore = defineStore('player', () => {
 
     async function play(id: number) {
         if (player.currentId === id) return
-        player.loading = true
-        try {
-            const songUrl: SongUrl = await getSongUrl(id)
-            audio.src = songUrl.url
-            audio.play().then(_ => {
-                player.currentId = id
-                player.paused = false
-                player.duration = audio.duration
-                player.currentTime = 0
-            }).finally(() => {
-                player.loading = false
-            })
-        } catch (e) {
-            player.loading = false
-        }
+        const songUrl: SongUrl = await getSongUrl(id)
+        audio.src = songUrl.url
+        audio.play().then(_ => {
+            player.currentId = id
+            player.paused = false
+            player.duration = audio.duration
+            player.currentTime = 0
+        })
     }
 
     function playEnd() {
