@@ -45,9 +45,9 @@ export const usePlayerStore = defineStore('player', () => {
         paused: true,// 暂停
         ended: false,// 结束
         loopType: 0,//循环模式
-        muted: false,
         volume: parseInt(localStorage.getItem('PLAYER-VOLUME') || (audio.volume * 100).toString()),
-        sliderInput: false// 进度条是否被拖拽
+        sliderInput: false,// 进度条是否被拖拽
+        loading: false
     })
 
     const disabled = computed(() => !player.currentId && !playList.length)
@@ -83,16 +83,33 @@ export const usePlayerStore = defineStore('player', () => {
         }
     }
 
+    function clear() {
+        audio.pause()
+        playList.length = 0
+        player.currentId = 0
+        player.currentTime = 0
+        player.duration = 0
+        player.paused = true
+        player.ended = false
+    }
+
     async function play(id: number) {
         if (player.currentId === id) return
-        const songUrl: SongUrl = await getSongUrl(id)
-        audio.src = songUrl.url
-        audio.play().then(_ => {
-            player.currentId = id
-            player.paused = false
-            player.duration = audio.duration
-            player.currentTime = 0
-        })
+        player.loading = true
+        try {
+            const songUrl: SongUrl = await getSongUrl(id)
+            audio.src = songUrl.url
+            audio.play().then(_ => {
+                player.currentId = id
+                player.paused = false
+                player.duration = audio.duration
+                player.currentTime = 0
+            }).finally(() => {
+                player.loading = false
+            })
+        } catch (e) {
+            player.loading = false
+        }
     }
 
     function playEnd() {
@@ -173,6 +190,6 @@ export const usePlayerStore = defineStore('player', () => {
     return {
         playList, player,
         disabled, index, currentPlay, loopType,
-        init, interval, push, play, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay, setVolume
+        init, interval, push, clear, play, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay, setVolume
     }
 })

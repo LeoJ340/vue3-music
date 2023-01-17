@@ -5,9 +5,10 @@
       <el-slider v-model="player.volume" vertical height="80px" @input="onSliderInput" />
     </div>
   </div>
-  <MusicList theme="filled" size="22" fill="#000000" :strokeWidth="2" class="player-list" title="打开播放列表"/>
+  <MusicList theme="filled" size="22" fill="#000000" :strokeWidth="2"
+             class="player-list" :title="`${isShowList ? '关闭' : '打开'}播放列表`" @click="showList"/>
   <!-- 列表 -->
-  <PlayList />
+  <PlayList v-show="isShowList" />
 </template>
 
 <script setup lang="ts">
@@ -40,6 +41,10 @@ const volumeIcon = computed(() => {
   if (player.volume < 50) return VolumeSmall
 })
 
+const isShowList = ref(false)
+function showList() {
+  isShowList.value = !isShowList.value
+}
 </script>
 
 <style lang="scss" scoped>
@@ -56,7 +61,7 @@ const volumeIcon = computed(() => {
   height: 100px;
   background-color: #ffffff;
   border-radius: 3px;
-  box-shadow: 1px 1px 10px #000000;
+  box-shadow: 0 0 1px #000000;
   position: absolute;
   bottom: 45px;
   display: none;
@@ -65,6 +70,7 @@ const volumeIcon = computed(() => {
   .player-volume {
     display: flex;
     justify-content: center;
+    z-index: 1;
   }
 }
 

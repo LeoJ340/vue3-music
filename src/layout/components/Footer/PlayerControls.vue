@@ -8,11 +8,11 @@
       <!-- 上一首 -->
       <GoStart class="player-controls-item" :class="{ 'disabled': disabled }"
                theme="outline" size="22" @click="prevPlay" :title="!disabled ? '上一首' : ''" />
-      <!-- 播放模式 -->
-      <PlayOne v-if="player.paused || player.ended" class="togglePlay" :class="{ 'disabled': disabled }"
-               theme="filled" size="32" @click="togglePlay()" :title="!disabled ? '播放' : ''" />
-      <Pause v-else class="togglePlay" :class="{ 'disabled': disabled }"
-             theme="filled" size="32" @click="togglePlay()" :title="!disabled ? '暂停' : ''" />
+      <!-- 播放|暂停 -->
+      <!-- TODO:添加音乐加载中效果 -->
+      <Component :is="paused ? PlayOne : Pause"
+                 class="togglePlay" :class="{ 'disabled': disabled }"
+                 theme="filled" size="32" @click="togglePlay()" :title="!disabled ? (paused ? '播放' : '暂停') : ''"/>
       <!-- 下一首 -->
       <GoEnd class="player-controls-item" :class="{ 'disabled': disabled }"
              theme="outline" size="22" @click="nextPlay" :title="!disabled ? '下一首' : ''" />
@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import { GoStart, PlayOne, Pause, GoEnd, Comment } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
-import { toRefs } from "vue";
+import { computed, toRefs } from "vue";
 import { useFormatTime } from "@/utils/time";
 
 let {
@@ -40,6 +40,10 @@ let {
   disabled, loopType,
   togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay
 } = toRefs(usePlayerStore())
+
+const paused = computed(() => {
+  return player.value.paused || player.value.ended
+})
 
 </script>
 
