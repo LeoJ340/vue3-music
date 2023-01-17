@@ -7,7 +7,7 @@
         <div class="flex" style="align-items: center;">
           <el-avatar :src="playlist.creator.avatarUrl" />
           <span style="margin-left: 10px; font-size: 12px;">{{playlist.creator.nickname}}</span>
-          <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4">{{time(playlist.createTime)}}创建</span>
+          <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4">{{useFormatTime(playlist.createTime)}}创建</span>
         </div>
         <div class="flex" style="margin: 15px 0;">
           <el-button-group style="margin-right: 12px">
@@ -54,7 +54,7 @@
       <el-table-column prop="al.name" label="专辑" show-overflow-tooltip />
       <el-table-column label="时间" width="100">
         <template #default="scope">
-          <span>{{useFormatTime(scope.row.dt / 1000)}}</span>
+          <span>{{useFormatSeconds(scope.row.dt / 1000)}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -66,7 +66,7 @@ import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { getPlayList } from "@/api";
 import { PlayList, Tracks } from "@/models/PlayList";
-import { useFormatTime } from "@/utils/time";
+import { useFormatSeconds, useFormatTime } from "@/utils/time";
 import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
 
@@ -80,15 +80,11 @@ getPlayList(playlistId).then(res => {
   tracks.value = res.tracks
 })
 
-function time(time: number) {
-  const date = new Date(time)
-  return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
-}
-
 const { playList, push, play } = usePlayerStore()
 function playAll(replace:boolean = true) {
+  const hasList = playList.length
   push(tracks.value.filter(item => !item.noCopyrightRcmd), replace)
-  if (replace || playList.length === tracks.value.length) {
+  if (replace || !hasList) {
     play(tracks.value[0].id)
   }
 }

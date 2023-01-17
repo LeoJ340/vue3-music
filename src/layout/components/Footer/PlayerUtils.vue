@@ -61,7 +61,7 @@ function showList() {
   height: 100px;
   background-color: #ffffff;
   border-radius: 3px;
-  box-shadow: 0 0 1px #000000;
+  box-shadow: 0 0 10px #D1D1D1;
   position: absolute;
   bottom: 45px;
   display: none;

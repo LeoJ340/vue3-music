@@ -19,7 +19,7 @@
       </el-table-column>
       <el-table-column label="时间" width="100">
         <template #default="scope">
-          <span>{{useFormatTime(scope.row.dt / 1000)}}</span>
+          <span>{{useFormatSeconds(scope.row.dt / 1000)}}</span>
         </template>
       </el-table-column>
     </el-table>
@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { toRefs } from "vue";
 import { usePlayerStore } from "@/stores/player";
-import { useFormatTime } from "@/utils/time";
+import { useFormatSeconds } from "@/utils/time";
 
 const { playList, clear } = toRefs(usePlayerStore())
 </script>
@@ -41,7 +41,7 @@ const { playList, clear } = toRefs(usePlayerStore())
   position: absolute;
   right: 0;
   bottom: 70px;
-  box-shadow: 0 0 5px #888888;
+  box-shadow: 0 0 5px #D1D1D1;
   background-color: #ffffff;
 }
 </style>

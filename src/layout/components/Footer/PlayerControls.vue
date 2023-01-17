@@ -21,10 +21,10 @@
     </div>
     <!-- 进度条 -->
     <div class="player-slider flex">
-      <span v-show="!disabled" class="currentTime">{{useFormatTime(player.currentTime)}}</span>
+      <span v-show="!disabled" class="currentTime">{{useFormatSeconds(player.currentTime)}}</span>
       <el-slider :show-tooltip="false" v-model="player.currentTime" :min="0" :max="player.duration"
                  @input="onSliderInput" @change="onSliderChange" />
-      <span v-show="!disabled" class="duration">{{useFormatTime(player.duration)}}</span>
+      <span v-show="!disabled" class="duration">{{useFormatSeconds(player.duration)}}</span>
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@
 import { GoStart, PlayOne, Pause, GoEnd, Comment } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
 import { computed, toRefs } from "vue";
-import { useFormatTime } from "@/utils/time";
+import { useFormatSeconds } from "@/utils/time";
 
 let {
   player,
