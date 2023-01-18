@@ -16,12 +16,23 @@ service.interceptors.request.use(
 
 service.interceptors.response.use(
     res => {
-        const { data } = res
-        return data
+        return res
     },
     error => {
         return Promise.reject(error);
     }
 )
 
-export default service
+const http = {
+    get<T>(url: string, params?: object): Promise<T> {
+        return new Promise((resolve, reject) => {
+            service.get(url, { params }).then(res => {
+                resolve(res.data);
+            }).catch(err => {
+                reject(err);
+            });
+        });
+    },
+}
+
+export default http
