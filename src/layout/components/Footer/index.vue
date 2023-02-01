@@ -1,10 +1,12 @@
 <template>
   <el-footer class="flex">
-    <div class="player-info flex-1">
-      <PlayerSong v-if="currentPlay" />
+    <div class="flex-1 flex-vertical-center">
+      <PlayerSong v-if="currentPlay" class="flex-1 flex-vertical-center" />
     </div>
-    <PlayerControls class="flex-1" />
-    <div class="player-utils flex-1">
+    <div class="flex-1">
+      <PlayerControls />
+    </div>
+    <div class="flex-1 flex-vertical-center justify-end relative">
       <PlayerUtils v-if="playList.length" />
     </div>
   </el-footer>
@@ -30,13 +32,5 @@ const { playList, currentPlay } = toRefs(usePlayerStore())
   padding: 0;
   border-top: 1px solid rgb(224, 224, 224);
   background-color: rgb(255, 255, 255);
-}
-.player-info, .player-utils {
-  display: flex;
-  align-items: center;
-}
-.player-utils {
-  position: relative;
-  justify-content: flex-end;
 }
 </style>

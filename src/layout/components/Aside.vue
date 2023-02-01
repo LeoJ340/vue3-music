@@ -3,12 +3,12 @@
     <el-scrollbar>
       <ul class="menu">
         <li v-for="menuGroup in menuGroups" class="menu-group">
-          <div class="menu-group_title">{{menuGroup.title}}</div>
+          <div class="menu-group-title">{{menuGroup.title}}</div>
           <router-link v-for="menuItem in menuGroup.list"
-                       class="menu-group_item" :class="{ active: isActive(menuItem.path) }"
+                       class="menu-item" :class="{ active: isActive(menuItem.path) }"
                        :to="menuItem.path">
             <Component :is="menuItem.icon" theme="outline" size="20" fill="#000000" :strokeWidth="2" />
-            <span style="margin-left: 5px;">{{menuItem.text}}</span>
+            <span class="menu-text">{{menuItem.text}}</span>
           </router-link>
         </li>
       </ul>
@@ -50,19 +50,23 @@ function isActive(path: string) {
   border-right: 1px solid rgb(224, 224, 244);
   .menu {
     padding: 0;
-    .menu-group_title {
+    .menu-group-title {
+      margin-bottom: 10px;
       padding-left: 20px;
       font-size: 14px;
       color: rgb(169, 169, 169);
     }
-    .menu-group_item {
+    .menu-item {
       display: flex;
       align-items: center;
-      padding: 10px 20px 10px 5px;
+      padding: 10px 20px 10px 20px;
       color: rgb(135, 135, 135);
       &.active, &:hover {
         background-color: rgb(246, 246, 247);
         color: #000000;
+      }
+      .menu-text {
+        margin-left: 5px;
       }
     }
   }

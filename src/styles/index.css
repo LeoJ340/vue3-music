@@ -26,9 +26,3 @@ a, a:focus, a:hover {
 svg {
     vertical-align: middle;
 }
-.flex {
-    display: flex;
-}
-.flex-1 {
-    flex: 1;
-}

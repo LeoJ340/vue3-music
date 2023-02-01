@@ -1,30 +1,28 @@
 <template>
-  <div>
-    <div class="player-controls flex">
-      <!-- 播放模式 -->
-      <Component class="player-controls-item" :class="{ 'disabled': disabled }"
-                 :is="loopType.icon" theme="outline" size="22" @click="nextLoopType"
-                 :title="!disabled ? loopType.text : ''" />
-      <!-- 上一首 -->
-      <GoStart class="player-controls-item" :class="{ 'disabled': disabled }"
-               theme="outline" size="22" @click="prevPlay" :title="!disabled ? '上一首' : ''" />
-      <!-- 播放|暂停 -->
-      <Component :is="paused ? PlayOne : Pause"
-                 class="togglePlay" :class="{ 'disabled': disabled }"
-                 theme="filled" size="32" @click="togglePlay()" :title="!disabled ? (paused ? '播放' : '暂停') : ''"/>
-      <!-- 下一首 -->
-      <GoEnd class="player-controls-item" :class="{ 'disabled': disabled }"
-             theme="outline" size="22" @click="nextPlay" :title="!disabled ? '下一首' : ''" />
-      <!-- 打开歌词 -->
-      <Comment class="player-controls-item disabled" theme="outline" size="22" />
-    </div>
-    <!-- 进度条 -->
-    <div class="player-slider flex">
-      <span v-show="!disabled" class="currentTime">{{useFormatSeconds(player.currentTime)}}</span>
-      <el-slider :show-tooltip="false" v-model="player.currentTime" :min="0" :max="player.duration"
-                 @input="onSliderInput" @change="onSliderChange" />
-      <span v-show="!disabled" class="duration">{{useFormatSeconds(player.duration)}}</span>
-    </div>
+  <div class="player-controls">
+    <!-- 播放模式 -->
+    <Component class="player-controls-item" :class="{ 'disabled': disabled }"
+               :is="loopType.icon" theme="outline" size="22" @click="nextLoopType"
+               :title="!disabled ? loopType.text : ''" />
+    <!-- 上一首 -->
+    <GoStart class="player-controls-item" :class="{ 'disabled': disabled }"
+             theme="outline" size="22" @click="prevPlay" :title="!disabled ? '上一首' : ''" />
+    <!-- 播放|暂停 -->
+    <Component :is="paused ? PlayOne : Pause"
+               class="togglePlay" :class="{ 'disabled': disabled }"
+               theme="filled" size="32" @click="togglePlay()" :title="!disabled ? (paused ? '播放' : '暂停') : ''"/>
+    <!-- 下一首 -->
+    <GoEnd class="player-controls-item" :class="{ 'disabled': disabled }"
+           theme="outline" size="22" @click="nextPlay" :title="!disabled ? '下一首' : ''" />
+    <!-- 打开歌词 -->
+    <Comment class="player-controls-item disabled" theme="outline" size="22" />
+  </div>
+  <!-- 进度条 -->
+  <div class="player-slider flex">
+    <span v-show="!disabled" class="currentTime">{{useFormatSeconds(player.currentTime)}}</span>
+    <el-slider :show-tooltip="false" v-model="player.currentTime" :min="0" :max="player.duration"
+               @input="onSliderInput" @change="onSliderChange" />
+    <span v-show="!disabled" class="duration">{{useFormatSeconds(player.duration)}}</span>
   </div>
 </template>
 
@@ -48,6 +46,7 @@ const paused = computed(() => {
 
 <style lang="scss" scoped>
 .player-controls {
+  display: flex;
   justify-content: space-around;
   align-items: center;
   margin-top: 10px;

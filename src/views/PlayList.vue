@@ -1,14 +1,16 @@
 <template>
   <el-scrollbar>
+    <!-- 歌单信息 -->
     <div v-if="playlist" class="flex" style="margin-bottom: 20px;">
       <el-image :src="playlist.coverImgUrl" />
       <div class="flex-1" style="margin-left: 20px;">
         <h2>我喜欢的音乐</h2>
-        <div class="flex" style="align-items: center;">
+        <div class="flex-vertical-center">
           <el-avatar :src="playlist.creator.avatarUrl" />
           <span style="margin-left: 10px; font-size: 12px;">{{playlist.creator.nickname}}</span>
-          <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4">{{useFormatTime(playlist.createTime)}}创建</span>
+          <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">{{useFormatTime(playlist.createTime)}}创建</span>
         </div>
+        <!-- 操作按钮组 -->
         <div class="flex" style="margin: 15px 0;">
           <el-button-group style="margin-right: 12px">
             <el-button round type="danger" @click="playAll"><PlayOne theme="filled" size="22" />播放全部</el-button>
@@ -18,14 +20,14 @@
           <el-button round ><Share theme="outline" size="20" :strokeWidth="2"/>分享</el-button>
           <el-button round ><Download theme="outline" size="20" :strokeWidth="2"/>下载全部</el-button>
         </div>
-        <div style="font-size: 14px;">
+        <div class="text-14">
           <span>歌曲：{{playlist.trackCount}}</span>
           <span style="margin-left: 10px;">播放：{{playlist.playCount}}</span>
         </div>
-        <div class="flex"></div>
       </div>
     </div>
     <div></div>
+    <!-- 歌单列表 -->
     <el-table :data="tracks" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
       <el-table-column type="index" width="30" />
       <el-table-column label="操作" width="80">

@@ -1,8 +1,8 @@
 <template>
   <el-scrollbar class="playlist-wrapper">
-    <h3 style="padding: 0 12px">当前播放</h3>
-    <div style="padding: 0 12px; display: flex; justify-content: space-between;">
-      <span style="font-size: 12px">共{{playList.length}}首</span>
+    <h3 style="margin-left: 12px;">当前播放</h3>
+    <div class="playlist-action">
+      <span>共{{playList.length}}首</span>
       <el-link type="primary" :underline="false" @click="clear">清空列表</el-link>
     </div>
     <el-table :data="playList" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
@@ -43,5 +43,11 @@ const { playList, clear } = toRefs(usePlayerStore())
   bottom: 70px;
   box-shadow: 0 0 5px #D1D1D1;
   background-color: #ffffff;
+}
+.playlist-action {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-size: 12px;
 }
 </style>

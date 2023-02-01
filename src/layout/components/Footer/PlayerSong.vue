@@ -1,11 +1,11 @@
 <template>
   <el-image :src="currentPlay.al.picUrl" />
-  <div style="margin-left: 10px;">
-    <div style="font-size: 14px;">
+  <div>
+    <div class="text-14">
       {{currentPlay.name}}
       <span v-show="currentPlay.alia.length" style="color:#919192;">（{{currentPlay.alia.join('')}}）</span>
     </div>
-    <div style="font-size: 12px;">{{currentPlay.ar.map(ar => ar.name).join('/')}}</div>
+    <div class="text-12">{{currentPlay.ar.map(ar => ar.name).join('/')}}</div>
   </div>
 </template>
 
@@ -20,6 +20,6 @@ const { currentPlay } = toRefs(usePlayerStore())
 .el-image {
   width: 50px;
   height: 50px;
-  margin-left: 10px;
+  margin: 0 10px;
 }
 </style>
