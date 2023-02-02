@@ -20,7 +20,7 @@
   <!-- 进度条 -->
   <div class="player-slider flex">
     <span v-show="!disabled" class="currentTime">{{useFormatSeconds(player.currentTime)}}</span>
-    <el-slider :show-tooltip="false" v-model="player.currentTime" :min="0" :max="player.duration"
+    <el-slider :show-tooltip="false" v-model="player.currentTime" :min="0" :max="player.duration" :disabled="disabled"
                @input="onSliderInput" @change="onSliderChange" />
     <span v-show="!disabled" class="duration">{{useFormatSeconds(player.duration)}}</span>
   </div>
@@ -52,16 +52,16 @@ const paused = computed(() => {
   margin-top: 10px;
   .player-controls-item {
     cursor: pointer;
-    color: #000000;
+    color: var(--player-text);
     &:hover {
-      background-color: #fff;
-      color: rgb(253, 118, 113);
+      background-color: var(--player-bg);
+      color: var(--player-controls);
     }
-  }
-  .disabled, .disabled:hover {
-    cursor: default;
-    background-color: #ffffff;
-    color: rgb(166, 166, 166);
+    &.disabled, &.disabled:hover {
+      cursor: default;
+      background-color: var(--player-bg);
+      color: rgb(166, 166, 166);
+    }
   }
   .togglePlay {
     cursor: pointer;
@@ -71,12 +71,15 @@ const paused = computed(() => {
     &:hover {
       background-color: rgb(229, 229, 229);
     }
-    &.disabled:hover {
-      background-color: rgb(245, 245, 245);
+    &.disabled, &.disabled:hover {
+      cursor: default;
+      background-color: var(--player-toggle-bg-disable);
+      color: rgb(166, 166, 166);
     }
   }
 }
 .player-slider {
+  color: rgb(166, 166, 166);
   .currentTime, .duration {
     line-height: 30px;
     font-size: 12px;

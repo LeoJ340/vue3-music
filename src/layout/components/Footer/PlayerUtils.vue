@@ -1,11 +1,11 @@
 <template>
   <div class="player-volume-wrapper" :title="player.volume === 0 ? '恢复音量' : '静音'">
-    <Component :is="volumeIcon" theme="outline" size="22" fill="#000000" :strokeWidth="2" @click="setMute" />
+    <Component :is="volumeIcon" theme="outline" size="22" :strokeWidth="2" @click="setMute" />
     <div class="player-volume">
       <el-slider v-model="player.volume" vertical height="80px" @input="onSliderInput" />
     </div>
   </div>
-  <MusicList theme="filled" size="22" fill="#000000" :strokeWidth="2"
+  <MusicList theme="filled" size="22" :strokeWidth="2"
              class="player-list" :title="`${isShowList ? '关闭' : '打开'}播放列表`" @click="showList"/>
   <!-- 列表 -->
   <PlayList v-show="isShowList" />
@@ -51,15 +51,17 @@ function showList() {
 .player-volume-wrapper {
   padding: 0 20px;
   cursor: pointer;
+  color: var(--player-text);
 }
 .player-list {
   padding-right: 20px;
   cursor: pointer;
+  color: var(--player-text);
 }
 .player-volume {
   width: 22px;
   height: 100px;
-  background-color: #ffffff;
+  background-color: var(--player-bg);
   border-radius: 3px;
   box-shadow: 0 0 10px #D1D1D1;
   position: absolute;

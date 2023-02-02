@@ -8,6 +8,7 @@ import 'element-plus/dist/index.css'
 
 import '@/styles/index.css' // global css
 import '@/styles/utils.scss'
+import '@/styles/theme.css'
 import '@/styles/element-plus.scss'
 import '@/styles/player.scss'
 

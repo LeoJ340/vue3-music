@@ -42,7 +42,8 @@ const { playList, clear } = toRefs(usePlayerStore())
   right: 0;
   bottom: 70px;
   box-shadow: 0 0 5px #D1D1D1;
-  background-color: #ffffff;
+  background-color: var(--playlist-bg);
+  color: var(--playlist-text);
 }
 .playlist-action {
   display: flex;

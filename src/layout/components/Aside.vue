@@ -7,7 +7,7 @@
           <router-link v-for="menuItem in menuGroup.list"
                        class="menu-item" :class="{ active: isActive(menuItem.path) }"
                        :to="menuItem.path">
-            <Component :is="menuItem.icon" theme="outline" size="20" fill="#000000" :strokeWidth="2" />
+            <Component :is="menuItem.icon" theme="outline" size="20" :strokeWidth="2" />
             <span class="menu-text">{{menuItem.text}}</span>
           </router-link>
         </li>
@@ -46,7 +46,7 @@ function isActive(path: string) {
 
 <style lang="scss" scoped>
 .el-aside {
-  background-color: rgb(255, 255, 255);
+  background-color: var(--aside-bg);
   border-right: 1px solid rgb(224, 224, 244);
   .menu {
     padding: 0;
@@ -60,10 +60,10 @@ function isActive(path: string) {
       display: flex;
       align-items: center;
       padding: 10px 20px 10px 20px;
-      color: rgb(135, 135, 135);
+      color: var(--aside-text);
       &.active, &:hover {
-        background-color: rgb(246, 246, 247);
-        color: #000000;
+        background-color: var(--aside-active-bg);
+        color: var(--aside-text);
       }
       .menu-text {
         margin-left: 5px;

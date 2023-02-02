@@ -31,6 +31,6 @@ const { playList, currentPlay } = toRefs(usePlayerStore())
   height: 70px;
   padding: 0;
   border-top: 1px solid rgb(224, 224, 224);
-  background-color: rgb(255, 255, 255);
+  background-color: var(--player-bg);
 }
 </style>
