@@ -32,7 +32,12 @@
         </template>
         <h6 class="m-0">主题</h6>
         <div class="theme-list">
-          <div v-for="(value, key) in themeList" class="theme-item" @click="changeTheme(key)">{{value}}</div>
+          <div v-for="theme in themeList" class="theme-item relative"
+               :style="{ background: theme.background }"
+               @click="changeTheme(theme.key)">
+            <span style="margin-left: 5px">{{theme.text}}</span>
+            <CheckOne v-show="currentTheme === theme.key" theme="two-tone" size="22" :fill="['#fff' ,'#ec4141']" :strokeWidth="3"/>
+          </div>
         </div>
       </el-popover>
       <SettingTwo class="action-icon" theme="outline" size="20" :strokeWidth="2"/>
@@ -56,10 +61,11 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, reactive, ref, toRefs, watch} from "vue";
-import { Left, Right, DownOne, Theme, SettingTwo, Mail, Power } from '@icon-park/vue-next';
+import {onMounted, ref, toRefs, watch} from "vue";
+import { Left, Right, DownOne, Theme, SettingTwo, Mail, Power, CheckOne } from '@icon-park/vue-next';
 import {checkQR, getQR, getQrKey} from "@/api/login";
 import {useUserStore} from "@/stores/user";
+import {themeList} from "@/models/Theme";
 
 const { hasLogin, userInfo } = toRefs(useUserStore())
 const { getUserInfo, exitLogin } = useUserStore()
@@ -108,13 +114,10 @@ watch(loginVisible, val => {
   }
 })
 
-const themeList = reactive({
-  dark: '炫酷黑',
-  red: '官方红',
-  pink: '可爱粉'
-})
+const currentTheme = ref('red')
 
 function changeTheme(theme: string) {
+  currentTheme.value = theme
   document.body.className = theme === 'red' ? '' : theme
 }
 </script>
@@ -135,13 +138,24 @@ function changeTheme(theme: string) {
 }
 .theme-list {
   display: flex;
+  flex-wrap: wrap;
   .theme-item {
-    width: 100px;
+    width: 30%;
+    height: 80px;
+    margin-top: 20px;
+    margin-right: 5%;
     display: flex;
     align-items: flex-end;
-    justify-content: flex-start;
     cursor: pointer;
-    &:hover {}
+    color: #ffffff;
+    &:nth-child(3n) {
+      margin-right: 0;
+    }
+    .i-icon {
+      position: absolute;
+      right: -10px;
+      bottom: -10px;
+    }
   }
 }
 </style>
