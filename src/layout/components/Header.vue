@@ -8,10 +8,23 @@
     </el-col>
     <!-- RIGHT -->
     <el-col :span="16"  class="flex-vertical-center justify-end setting">
-      <el-avatar :size="30" src="https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png" />
-      <el-link :underline="false" style="margin-left: 5px;">
-        未登录<DownOne class="flex" theme="filled" size="18" :strokeWidth="2"/>
-      </el-link>
+      <!-- login -->
+      <el-popover v-if="hasLogin" placement="bottom" trigger="click" :width="200" :offset="0">
+        <template #reference>
+          <span class="flex-vertical-center login-icon">
+            <el-avatar :size="30" :src="userInfo.avatarUrl" />
+            <span class="text-14">{{userInfo.userName}}</span>
+            <DownOne theme="filled" size="18" :strokeWidth="2"/>
+          </span>
+        </template>
+        <div style="cursor: pointer;" @click="exitLogin"><Power theme="filled" size="18" :strokeWidth="2"/>退出登录</div>
+      </el-popover>
+
+      <span v-else class="flex-vertical-center login-icon" @click="toLogin">
+        <el-avatar :size="30" :src="userInfo.avatarUrl" />
+        <span class="text-14">未登录</span>
+        <DownOne theme="filled" size="18" :strokeWidth="2"/>
+      </span>
       <!-- 主题切换 -->
       <el-popover placement="bottom-start" trigger="click" :width="300" :offset="20">
         <template #reference>
@@ -26,11 +39,74 @@
       <Mail class="action-icon" theme="outline" size="20" :strokeWidth="2"/>
     </el-col>
   </el-row>
+
+  <!-- 登录弹窗 -->
+  <el-dialog v-model="loginVisible" width="30%" draggable>
+    <div class="text-center relative">
+      <h1 class="m-0">扫码登录</h1>
+      <el-image v-if="qrImg" :src="qrImg" />
+      <!-- TODO：马赛克二维码 -->
+      <div></div>
+      <p v-if="qrStatus === 801 || qrStatus === 800" class="m-0">
+        使用 <a href="https://music.163.com/#/download" target="_blank" style="color: #409eff;">网易云音乐APP</a> 扫码登录
+      </p>
+      <p v-if="qrStatus === 802" class="m-0">请在手机上确认登录</p>
+    </div>
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
-import {reactive} from "vue";
-import { Left, Right, DownOne, Theme, SettingTwo, Mail } from '@icon-park/vue-next';
+import {onMounted, reactive, ref, toRefs, watch} from "vue";
+import { Left, Right, DownOne, Theme, SettingTwo, Mail, Power } from '@icon-park/vue-next';
+import {checkQR, getQR, getQrKey} from "@/api/login";
+import {useUserStore} from "@/stores/user";
+
+const { hasLogin, userInfo } = toRefs(useUserStore())
+const { getUserInfo, exitLogin } = useUserStore()
+
+onMounted(() => {
+  getUserInfo()
+})
+
+const loginVisible = ref(false)
+/**
+ * 800：二维码不存在或已过期
+ * 801：等待扫码
+ * 802：授权中
+ * 803：授权成功
+ */
+const qrStatus = ref(800)
+const qrImg = ref('')
+let timer: number
+
+async function toLogin() {
+  loginVisible.value = true
+  const qrKey = await getQrKey()
+  qrImg.value = await getQR(qrKey)
+  timer = setInterval( async () => {
+    try {
+      const { code, cookie } = await checkQR(qrKey)
+      qrStatus.value = code
+      if (code === 803) {
+        sessionStorage.setItem('cookie',cookie)
+        getUserInfo()
+        clearInterval(timer)
+        loginVisible.value = false
+      }
+      if (code === 802) {
+        // 授权中
+      }
+    } catch (e) {
+      clearInterval(timer)
+    }
+  }, 2000)
+}
+
+watch(loginVisible, val => {
+  if (!val && timer) {
+    clearInterval(timer)
+  }
+})
 
 const themeList = reactive({
   dark: '炫酷黑',
@@ -45,6 +121,12 @@ function changeTheme(theme: string) {
 
 <style lang="scss" scoped>
 .setting {
+  .login-icon {
+    cursor: pointer;
+    .el-avatar {
+      margin-right: 5px;
+    }
+  }
   .action-icon {
     margin-left: 20px;
     display: flex;
