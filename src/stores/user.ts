@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import {reactive, ref} from "vue";
 import {checkLogin, logout} from "@/api/login";
+import {playList} from "@/api/user";
+import {PlayList} from "@/models/PlayList";
 
 export const useUserStore = defineStore('user', () => {
     const hasLogin = ref(false)
@@ -20,6 +22,7 @@ export const useUserStore = defineStore('user', () => {
             userInfo.userName = profile.nickname
             userInfo.avatarUrl = profile.avatarUrl
             hasLogin.value = true
+            getMyPlayList()
         })
     }
 
@@ -33,5 +36,17 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    return { hasLogin, userInfo, getUserInfo, exitLogin }
+    const myPlayList = ref<PlayList[]>([])
+
+    function getMyPlayList() {
+        playList(userInfo.userId).then(res => {
+            const { playlist } = res
+            myPlayList.value = playlist
+        })
+    }
+
+    return {
+        hasLogin, userInfo, getUserInfo, exitLogin,
+        myPlayList
+    }
 })

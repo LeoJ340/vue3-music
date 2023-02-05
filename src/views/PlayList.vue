@@ -4,7 +4,7 @@
     <div v-if="playlist" class="flex" style="margin-bottom: 20px;">
       <el-image :src="playlist.coverImgUrl" />
       <div class="flex-1" style="margin-left: 20px;">
-        <h2>我喜欢的音乐</h2>
+        <h2>{{playlist.name}}</h2>
         <div class="flex-vertical-center">
           <el-avatar :src="playlist.creator.avatarUrl" />
           <span style="margin-left: 10px; font-size: 12px;">{{playlist.creator.nickname}}</span>
@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useRoute } from "vue-router";
+import {onBeforeRouteUpdate, useRoute} from "vue-router";
 import { getPlayList } from "@/api";
 import { PlayList, Tracks } from "@/models/PlayList";
 import { useFormatSeconds, useFormatTime } from "@/utils/time";
@@ -73,13 +73,20 @@ import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue
 import { usePlayerStore } from "@/stores/player";
 
 const currentRoute = useRoute()
-const playlistId = Number(currentRoute.params.id.toString())
+const playlistId = currentRoute.params.id
 
 const playlist = ref<PlayList>()
 const tracks = ref<Tracks[]>([])
-getPlayList(playlistId).then(res => {
+getPlayList(Number(playlistId)).then(res => {
   playlist.value = res
   tracks.value = res.tracks
+})
+
+onBeforeRouteUpdate(to => {
+  getPlayList(Number(to.params.id)).then(res => {
+    playlist.value = res
+    tracks.value = res.tracks
+  })
 })
 
 const { playList, push, play } = usePlayerStore()

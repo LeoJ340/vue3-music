@@ -3,10 +3,13 @@ export interface PlayList {
     name: string
     coverImgUrl: string
     createTime: number
+    updateTime: number
     playCount: number
     creator: Creator
+    tags: Array<string>
     trackCount: number
     tracks: Array<Tracks>
+    userId: number
 }
 
 interface Creator {
