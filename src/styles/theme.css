@@ -8,6 +8,7 @@
     --aside-active-bg: rgb(246, 246, 247);
 
     --player-bg: rgb(255, 255, 255);
+    --player-border: rgb(224, 224, 224);
     --player-text: rgb(51, 51, 51);
     --player-controls: rgb(240, 103, 103);
     --player-toggle-bg-disable: rgb(245, 245, 245);
@@ -23,6 +24,7 @@
     --aside-active-bg: rgb(51, 51, 51);
 
     --player-bg: rgb(34, 34, 37);
+    --player-border: rgb(61, 61, 63);
     --player-text: rgb(211, 211, 211);
     --player-controls: rgb(195, 59, 59);
     --player-toggle-bg-disable: rgb(43, 43, 46);

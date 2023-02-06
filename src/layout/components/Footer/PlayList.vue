@@ -37,11 +37,11 @@ const { playList, clear } = toRefs(usePlayerStore())
 <style scoped>
 .playlist-wrapper {
   width: 100%;
-  height: calc(100vh - 131px);
+  height: calc(100vh - 130px);
   position: absolute;
   right: 0;
   bottom: 70px;
-  box-shadow: 0 0 5px #D1D1D1;
+  box-shadow: 0 0 1px #D1D1D1;
   background-color: var(--playlist-bg);
   color: var(--playlist-text);
 }
