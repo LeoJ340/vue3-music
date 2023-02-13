@@ -89,13 +89,9 @@ onBeforeRouteUpdate(to => {
   })
 })
 
-const { playList, push, play } = usePlayerStore()
+const { push } = usePlayerStore()
 function playAll(replace:boolean = true) {
-  const hasList = playList.length
   push(tracks.value.filter(item => !item.noCopyrightRcmd), replace)
-  if (replace || !hasList) {
-    play(tracks.value[0].id)
-  }
 }
 </script>
 

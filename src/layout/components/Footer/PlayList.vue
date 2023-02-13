@@ -27,11 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import { toRefs } from "vue";
+import { storeToRefs } from "pinia";
 import { usePlayerStore } from "@/stores/player";
 import { useFormatSeconds } from "@/utils/time";
 
-const { playList, clear } = toRefs(usePlayerStore())
+const playerStore = usePlayerStore()
+const { playList } = storeToRefs(playerStore)
+const { clear } = playerStore
 </script>
 
 <style scoped>

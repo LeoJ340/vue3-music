@@ -11,9 +11,9 @@
 
 <script setup lang="ts">
 import { usePlayerStore } from "@/stores/player";
-import { toRefs } from "vue";
+import {storeToRefs} from "pinia";
 
-const { currentPlay } = toRefs(usePlayerStore())
+const { currentPlay } = storeToRefs(usePlayerStore())
 </script>
 
 <style lang="scss" scoped>

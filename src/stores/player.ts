@@ -1,7 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, watch, computed } from "vue";
 import { Tracks } from "@/models/PlayList";
-import { SongUrl } from "@/models/SongUrl";
 import { getSongUrl } from "@/api";
 import type { Icon } from "@icon-park/vue-next/lib/runtime";
 import { LoopOnce, PlayOnce, ShuffleOne } from '@icon-park/vue-next';
@@ -12,12 +11,6 @@ interface Loop {
     icon: Icon
 }
 
-/**
- * TODO:
- * songUrl接口缓存
- * 防抖、节流
- * 进度条bug
- */
 export const usePlayerStore = defineStore('player', () => {
     const audio = new Audio()
     const loopTypes: Array<Loop> = [
@@ -46,7 +39,8 @@ export const usePlayerStore = defineStore('player', () => {
         ended: false,// 结束
         loopType: 0,//循环模式
         volume: parseInt(localStorage.getItem('PLAYER-VOLUME') || (audio.volume * 100).toString()),
-        sliderInput: false// 进度条是否被拖拽
+        sliderInput: false,// 进度条是否被拖拽
+        error: false
     })
 
     const disabled = computed(() => !player.currentId && !playList.length)
@@ -73,9 +67,12 @@ export const usePlayerStore = defineStore('player', () => {
     }
 
     function push(list: Array<Tracks>, replace: boolean = true) {
+        if (!list.length) return
         if (replace) {
-            playList.length = 0
+            clear()
             playList.push(...list)
+            player.currentId = playList[0].id
+            play()
         } else {
             playList.splice(index.value + 1, 0, ...list)
             push([...new Set(playList)], true)
@@ -92,16 +89,30 @@ export const usePlayerStore = defineStore('player', () => {
         player.ended = false
     }
 
-    async function play(id: number) {
-        if (player.currentId === id) return
-        const songUrl: SongUrl = await getSongUrl(id)
-        audio.src = songUrl.url
-        audio.play().then(_ => {
-            player.currentId = id
-            player.paused = false
-            player.duration = audio.duration
-            player.currentTime = 0
-        })
+    let timer: number | null = null;
+    function play() {
+        if (timer) {
+            clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+            getSongUrl(player.currentId).then(songUrl => {
+                audio.src = songUrl.url
+                audio.play().then(_ => {
+                    player.error = false
+                    player.paused = false
+                    player.duration = audio.duration
+                    player.currentTime = 0
+                })
+            }).catch(_ => {
+                audio.pause()
+                player.error = true
+                player.paused = true
+                player.duration = 0
+                player.currentTime = 0
+            }).finally(() => {
+                timer = null
+            })
+        }, 1000)
     }
 
     function playEnd() {
@@ -119,7 +130,8 @@ export const usePlayerStore = defineStore('player', () => {
             case 2: {
                 setTimeout(() => {
                     const nextIndex: number = Math.floor(Math.random() * playList.length)
-                    play(playList[nextIndex].id)
+                    player.currentId = playList[nextIndex].id
+                    play()
                 }, 2000)
             }
         }
@@ -127,21 +139,33 @@ export const usePlayerStore = defineStore('player', () => {
 
     function nextPlay() {
         if (disabled.value) return
+        audio.pause()
+        player.paused = true
+        player.currentTime = 0
         let currentIndex: number = index.value
         const nextIndex = currentIndex === playList.length - 1 ? 0 : ++currentIndex
-        play(playList[nextIndex].id)
+        player.currentId = playList[nextIndex].id
+        play()
     }
 
     function prevPlay() {
         if (disabled.value) return
+        audio.pause()
+        player.paused = true
+        player.currentTime = 0
         let currentIndex: number = index.value
         const prevIndex: number = currentIndex === 0 ? playList.length - 1 : --currentIndex
-        play(playList[prevIndex].id)
+        player.currentId = playList[prevIndex].id
+        play()
     }
 
     function togglePlay() {
         if (disabled.value) return
         if (!player.currentId) return
+        if (player.error) {
+            play()
+            return
+        }
         if (player.paused) {
             audio.play().then(_ => {
                 player.paused = false
@@ -151,7 +175,6 @@ export const usePlayerStore = defineStore('player', () => {
             player.paused = true
             player.currentTime = audio.currentTime
         }
-
     }
 
     function onSliderInput() {
@@ -182,6 +205,6 @@ export const usePlayerStore = defineStore('player', () => {
     return {
         playList, player,
         disabled, index, currentPlay, loopType,
-        init, interval, push, clear, play, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay, setVolume
+        init, interval, push, clear, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay, setVolume
     }
 })

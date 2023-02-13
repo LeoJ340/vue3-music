@@ -29,14 +29,14 @@
 <script setup lang="ts">
 import { GoStart, PlayOne, Pause, GoEnd, Comment } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
-import { computed, toRefs } from "vue";
+import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useFormatSeconds } from "@/utils/time";
 
-let {
-  player,
-  disabled, loopType,
-  togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay
-} = toRefs(usePlayerStore())
+const playerStore = usePlayerStore()
+
+const { player, disabled, loopType } = storeToRefs(playerStore)
+const { togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay } = playerStore
 
 const paused = computed(() => {
   return player.value.paused || player.value.ended

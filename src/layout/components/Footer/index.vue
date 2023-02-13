@@ -1,7 +1,7 @@
 <template>
   <el-footer class="flex">
     <div class="flex-1 flex-vertical-center">
-      <PlayerSong v-if="currentPlay" class="flex-1 flex-vertical-center" />
+      <PlayerSong v-if="currentPlay" />
     </div>
     <div class="flex-1">
       <PlayerControls />
@@ -14,12 +14,12 @@
 
 <script setup lang="ts">
 import { usePlayerStore } from "@/stores/player";
-import { toRefs } from "vue";
+import {storeToRefs} from "pinia";
 import PlayerSong from './PlayerSong.vue'
 import PlayerControls from './PlayerControls.vue'
 import PlayerUtils from './PlayerUtils.vue'
 
-const { playList, currentPlay } = toRefs(usePlayerStore())
+const { playList, currentPlay } = storeToRefs(usePlayerStore())
 
 </script>
 
