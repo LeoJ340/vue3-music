@@ -45,7 +45,7 @@ const { clear } = playerStore
   bottom: 70px;
   box-shadow: 0 0 1px #D1D1D1;
   background-color: var(--playlist-bg);
-  color: var(--playlist-text);
+  color: var(--main-text);
 }
 .playlist-action {
   display: flex;

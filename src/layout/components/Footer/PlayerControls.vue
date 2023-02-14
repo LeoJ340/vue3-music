@@ -9,7 +9,7 @@
              theme="outline" size="22" @click="prevPlay" :title="!disabled ? '上一首' : ''" />
     <!-- 播放|暂停 -->
     <Component :is="paused ? PlayOne : Pause"
-               class="togglePlay" :class="{ 'disabled': disabled }"
+               class="player-controls-item togglePlay" :class="{ 'disabled': disabled }"
                theme="filled" size="32" @click="togglePlay()" :title="!disabled ? (paused ? '播放' : '暂停') : ''"/>
     <!-- 下一首 -->
     <GoEnd class="player-controls-item" :class="{ 'disabled': disabled }"
@@ -52,29 +52,26 @@ const paused = computed(() => {
   margin-top: 10px;
   .player-controls-item {
     cursor: pointer;
-    color: var(--player-text);
+    color: var(--main-text);
     &:hover {
-      background-color: var(--player-bg);
       color: var(--player-controls);
     }
     &.disabled, &.disabled:hover {
       cursor: default;
-      background-color: var(--player-bg);
       color: rgb(166, 166, 166);
     }
-  }
-  .togglePlay {
-    cursor: pointer;
-    padding: 2px;
-    border-radius: 50%;
-    background-color: rgb(245, 245, 245);
-    &:hover {
-      background-color: rgb(229, 229, 229);
-    }
-    &.disabled, &.disabled:hover {
-      cursor: default;
-      background-color: var(--player-toggle-bg-disable);
-      color: rgb(166, 166, 166);
+    &.togglePlay {
+      padding: 2px;
+      border-radius: 50%;
+      background-color: var(--player-toggle-bg);
+      &:hover {
+        background-color: var(--player-toggle-bg-hover);
+        color: var(--main-text);
+      }
+      &.disabled, &.disabled:hover {
+        background-color: var(--player-toggle-bg);
+        color: rgb(166, 166, 166);
+      }
     }
   }
 }

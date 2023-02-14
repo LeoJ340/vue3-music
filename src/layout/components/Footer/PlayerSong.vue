@@ -1,6 +1,6 @@
 <template>
   <el-image :src="currentPlay.al.picUrl" />
-  <div style="color: var(--player-text)">
+  <div style="color: var(--main-text)">
     <div class="text-14">
       {{currentPlay.name}}
       <span v-show="currentPlay.alia.length" style="color:#919192;">（{{currentPlay.alia.join('')}}）</span>

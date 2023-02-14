@@ -66,8 +66,8 @@ function isActive(path: string) {
 
 <style lang="scss" scoped>
 .el-aside {
-  background-color: var(--aside-bg);
-  border-right: 1px solid rgb(224, 224, 244);
+  background-color: var(--main-bg);
+  border-right: 1px solid var(--aside-border-right);
   .menu {
     .menu-group-title {
       margin-top: 20px;
@@ -80,10 +80,10 @@ function isActive(path: string) {
       display: flex;
       align-items: center;
       padding: 10px 20px 10px 20px;
-      color: var(--aside-text);
+      color: var(--main-text);
       &.active, &:hover {
         background-color: var(--aside-active-bg);
-        color: var(--aside-text);
+        color: var(--aside-active-text);
       }
       .menu-text {
         margin-left: 5px;

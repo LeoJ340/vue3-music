@@ -29,5 +29,8 @@ import Footer from './components/Footer/index.vue'
 }
 .el-main {
   position: relative;
+  padding: 0;
+  background-color: var(--main-bg);
+  color: var(--main-text);
 }
 </style>

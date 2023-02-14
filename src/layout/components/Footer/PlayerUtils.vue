@@ -51,12 +51,12 @@ function showList() {
 .player-volume-wrapper {
   padding: 0 20px;
   cursor: pointer;
-  color: var(--player-text);
+  color: var(--main-text);
 }
 .player-list {
   padding-right: 20px;
   cursor: pointer;
-  color: var(--player-text);
+  color: var(--main-text);
 }
 .player-volume {
   width: 22px;

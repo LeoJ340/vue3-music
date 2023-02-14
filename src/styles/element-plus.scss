@@ -1,7 +1,21 @@
-.el-table .el-table__cell {
-  z-index: 0;
+.el-table {
+  th.el-table__cell {
+    background-color: var(--playlist-row-striped) !important;
+  }
+  tr{
+    background-color: var(--playlist-bg) !important;
+    color: var(--main-text);
+  }
+  --el-fill-color-lighter: var(--playlist-row-striped);
+  --el-fill-color-light: var(--playlist-row-hover);
+  .el-table__cell {
+    border-bottom: none !important;
+    z-index: 0;
+  }
+  .el-table__inner-wrapper::before {
+    height: 0;
+  }
 }
-
 .el-scrollbar__bar {
   z-index: 0;
 }

@@ -2,7 +2,7 @@
   <el-scrollbar>
     <!-- 歌单信息 -->
     <div v-if="playlist" class="flex" style="margin-bottom: 20px;">
-      <el-image :src="playlist.coverImgUrl" />
+      <el-image :src="playlist.coverImgUrl" class="coverImage"/>
       <div class="flex-1" style="margin-left: 20px;">
         <h2>{{playlist.name}}</h2>
         <div class="flex-vertical-center">
@@ -29,7 +29,7 @@
     <div></div>
     <!-- 歌单列表 -->
     <el-table :data="tracks" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
-      <el-table-column type="index" width="30" />
+      <el-table-column type="index" width="50" />
       <el-table-column label="操作" width="80">
         <template #default="scope">
           <div style="display: flex; justify-content: space-around;">
@@ -96,5 +96,8 @@ function playAll(replace:boolean = true) {
 </script>
 
 <style lang="scss" scoped>
-
+.coverImage {
+  width: 320px;
+  height: 320px;
+}
 </style>
