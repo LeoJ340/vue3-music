@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, watch, computed } from "vue";
 import { Tracks } from "@/models/PlayList";
-import { getSongUrl } from "@/api";
+import { getSongUrl } from "@/api/playlist";
 import type { Icon } from "@icon-park/vue-next/lib/runtime";
 import { LoopOnce, PlayOnce, ShuffleOne } from '@icon-park/vue-next';
 

@@ -68,15 +68,17 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, toRefs, watch} from "vue";
+import {onMounted, ref, watch} from "vue";
+import {storeToRefs} from "pinia";
 import { Left, Right, DownOne, Theme, SettingTwo, Mail, Power, CheckOne } from '@icon-park/vue-next';
 import {checkQR, getQR, getQrKey} from "@/api/login";
 import {useUserStore} from "@/stores/user";
 import {themeList} from "@/models/Theme";
 import waiting from '@/assets/waiting-authorization.png'
 
-const { hasLogin, userInfo } = toRefs(useUserStore())
-const { getUserInfo, exitLogin } = useUserStore()
+const userStore = useUserStore()
+const { hasLogin, userInfo } = storeToRefs(userStore)
+const { getUserInfo, exitLogin } = userStore
 
 onMounted(() => {
   getUserInfo()

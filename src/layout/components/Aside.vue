@@ -32,7 +32,7 @@ const menuGroups = computed(() => {
     title: '我的音乐',
     list: [
       {
-        path: `/my/playlist/${myPlayList.value[0] ? myPlayList.value[0].id : undefined}`,
+        path: `/my/playlist/${myPlayList.value[0].id}`,
         text: '我喜欢的音乐',
         icon: Like
       },

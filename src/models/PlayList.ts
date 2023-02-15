@@ -1,5 +1,5 @@
 export interface PlayList {
-    id: number
+    id: number | undefined
     name: string
     coverImgUrl: string
     createTime: number

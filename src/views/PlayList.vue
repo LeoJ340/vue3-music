@@ -1,14 +1,14 @@
 <template>
   <el-scrollbar>
     <!-- 歌单信息 -->
-    <div v-if="playlist" class="flex" style="margin-bottom: 20px;">
-      <el-image :src="playlist.coverImgUrl" class="coverImage"/>
+    <div v-if="playlistInfo" class="flex" style="margin: 20px;">
+      <el-image :src="playlistInfo.coverImgUrl" class="coverImage" />
       <div class="flex-1" style="margin-left: 20px;">
-        <h2>{{playlist.name}}</h2>
+        <h2>{{playlistInfo.name}}</h2>
         <div class="flex-vertical-center">
-          <el-avatar :src="playlist.creator.avatarUrl" />
-          <span style="margin-left: 10px; font-size: 12px;">{{playlist.creator.nickname}}</span>
-          <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">{{useFormatTime(playlist.createTime)}}创建</span>
+          <el-avatar :src="playlistInfo.creator.avatarUrl" />
+          <span style="margin-left: 10px; font-size: 12px;">{{playlistInfo.creator.nickname}}</span>
+          <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">{{useFormatTime(playlistInfo.createTime)}}创建</span>
         </div>
         <!-- 操作按钮组 -->
         <div class="flex" style="margin: 15px 0;">
@@ -21,8 +21,8 @@
           <el-button round ><Download theme="outline" size="20" :strokeWidth="2"/>下载全部</el-button>
         </div>
         <div class="text-14">
-          <span>歌曲：{{playlist.trackCount}}</span>
-          <span style="margin-left: 10px;">播放：{{playlist.playCount}}</span>
+          <span>歌曲：{{playlistInfo.trackCount}}</span>
+          <span style="margin-left: 10px;">播放：{{playlistInfo.playCount}}</span>
         </div>
       </div>
     </div>
@@ -59,34 +59,49 @@
           <span>{{useFormatSeconds(scope.row.dt / 1000)}}</span>
         </template>
       </el-table-column>
+      <!-- 空数据 -->
+      <template #empty="scope">
+        <div></div>
+      </template>
     </el-table>
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import {computed, ref} from "vue";
 import {onBeforeRouteUpdate, useRoute} from "vue-router";
-import { getPlayList } from "@/api";
-import { PlayList, Tracks } from "@/models/PlayList";
+import { getPlayListTrack } from "@/api/playlist";
+import { Tracks } from "@/models/PlayList";
 import { useFormatSeconds, useFormatTime } from "@/utils/time";
 import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
+import { useUserStore } from "@/stores/user";
+import { storeToRefs } from "pinia";
 
 const currentRoute = useRoute()
-const playlistId = currentRoute.params.id
+const currentPlaylistId = ref(currentRoute.params.id)
 
-const playlist = ref<PlayList>()
+const { myPlayList } = storeToRefs(useUserStore())
+const playlistInfo = computed(() => myPlayList.value.find(item => String(item.id) === currentPlaylistId.value))
+
 const tracks = ref<Tracks[]>([])
-getPlayList(Number(playlistId)).then(res => {
-  playlist.value = res
-  tracks.value = res.tracks
-})
+getTracks()
+
+function getTracks() {
+  if (currentPlaylistId.value === 'undefined') {
+    tracks.value = []
+    return
+  }
+  getPlayListTrack(Number(currentPlaylistId.value)).then(res => {
+    tracks.value = res
+  }).catch(_ => {
+    tracks.value = []
+  })
+}
 
 onBeforeRouteUpdate(to => {
-  getPlayList(Number(to.params.id)).then(res => {
-    playlist.value = res
-    tracks.value = res.tracks
-  })
+  currentPlaylistId.value = to.params.id
+  getTracks()
 })
 
 const { push } = usePlayerStore()
