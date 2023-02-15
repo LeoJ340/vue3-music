@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar>
     <!-- 歌单信息 -->
-    <div v-if="playlistInfo" class="flex" style="margin: 20px;">
+    <div v-if="playlistInfo.name" class="flex" style="margin: 20px;">
       <el-image :src="playlistInfo.coverImgUrl" class="coverImage" />
       <div class="flex-1" style="margin-left: 20px;">
         <h2>{{playlistInfo.name}}</h2>
@@ -68,45 +68,26 @@
 </template>
 
 <script setup lang="ts">
-import {computed, ref} from "vue";
-import {onBeforeRouteUpdate, useRoute} from "vue-router";
-import { getPlayListTrack } from "@/api/playlist";
-import { Tracks } from "@/models/PlayList";
+import {PropType} from "vue";
+import {PlayList, Tracks} from "@/models/PlayList";
 import { useFormatSeconds, useFormatTime } from "@/utils/time";
 import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
 
-const currentRoute = useRoute()
-const currentPlaylistId = ref(currentRoute.params.id)
-
-const { myPlayList } = storeToRefs(useUserStore())
-const playlistInfo = computed(() => myPlayList.value.find(item => String(item.id) === currentPlaylistId.value))
-
-const tracks = ref<Tracks[]>([])
-getTracks()
-
-function getTracks() {
-  if (currentPlaylistId.value === 'undefined') {
-    tracks.value = []
-    return
+const { playlistInfo, tracks } = defineProps({
+  playlistInfo: {
+    type: Object as PropType<PlayList>,
+    required: true
+  },
+  tracks: {
+    type: Array as PropType<Tracks[]>,
+    default: []
   }
-  getPlayListTrack(Number(currentPlaylistId.value)).then(res => {
-    tracks.value = res
-  }).catch(_ => {
-    tracks.value = []
-  })
-}
-
-onBeforeRouteUpdate(to => {
-  currentPlaylistId.value = to.params.id
-  getTracks()
 })
 
 const { push } = usePlayerStore()
 function playAll(replace:boolean = true) {
-  push(tracks.value.filter(item => !item.noCopyrightRcmd), replace)
+  push(tracks.filter(item => !item.noCopyrightRcmd), replace)
 }
 </script>
 

@@ -17,8 +17,8 @@ const router = createRouter({
             children: [
                 {
                     path: 'playlist/:id',
-                    name: 'Playlist',
-                    component: () => import('@/views/PlayList.vue'),
+                    name: 'MyPlayList',
+                    component: () => import('@/views/MyPlayList.vue'),
                     meta: { title: '我喜欢的音乐' }
                 },
                 {
@@ -26,6 +26,17 @@ const router = createRouter({
                     name: 'Cloud',
                     component: () => import('@/views/Cloud.vue'),
                     meta: { title: '我的音乐网盘' }
+                }
+            ]
+        },
+        {
+            path: '/playlist',
+            component: Layout,
+            children: [
+                {
+                    path: ':id',
+                    name: 'OtherPlayList',
+                    component: () => import('@/views/OtherPlayList.vue')
                 }
             ]
         }
