@@ -47,7 +47,7 @@
 
   <!-- 登录弹窗 -->
   <el-dialog v-model="loginVisible" width="30%" draggable :before-close="closeLogin">
-    <div class="text-center relative">
+    <div v-loading="qrImgLoading" class="text-center relative">
       <h1 class="m-0">扫码登录</h1>
       <div v-show="qrStatus === 801 || qrStatus === 800">
         <el-image v-if="qrImg" :src="qrImg" />
@@ -94,17 +94,20 @@ const loginVisible = ref(false)
  */
 const qrStatus = ref(0)
 const qrImg = ref('')
+const qrImgLoading = ref(false)
 let timer: number
 
 async function toLogin() {
   clearInterval(timer)
   loginVisible.value = true
+  qrImgLoading.value = true
   const qrKey = await getQrKey()
   qrImg.value = await getQR(qrKey)
   timer = setInterval( async () => {
     try {
       const { code, cookie } = await checkQR(qrKey)
       qrStatus.value = code
+      qrImgLoading.value = false
       if (code === 803) {
         sessionStorage.setItem('cookie',cookie)
         getUserInfo()
@@ -116,6 +119,7 @@ async function toLogin() {
       }
     } catch (e) {
       clearInterval(timer)
+      qrImgLoading.value = false
     }
   }, 2000)
 }

@@ -1,5 +1,4 @@
 <template>
-  <div style="width: 100px; height: 100px; background-color: black; position: absolute;"></div>
   <el-carousel :interval="4000" type="card" height="220px">
     <el-carousel-item v-for="(banner, index) in bannerList" :key="index" @click="clickBanner(banner)">
       <div class="banner-item">
