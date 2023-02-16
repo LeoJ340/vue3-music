@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { reactive, watch, computed } from "vue";
-import { Tracks } from "@/models/PlayList";
+import { Song } from "@/models/Song";
 import { getSongUrl } from "@/api/playlist";
 import type { Icon } from "@icon-park/vue-next/lib/runtime";
 import { LoopOnce, PlayOnce, ShuffleOne } from '@icon-park/vue-next';
@@ -30,7 +30,7 @@ export const usePlayerStore = defineStore('player', () => {
             icon: ShuffleOne
         }
     ]
-    const playList: Array<Tracks> = reactive([])
+    const songs: Array<Song> = reactive([])
     const player = reactive({
         currentId: 0,
         currentTime: 0,
@@ -43,9 +43,9 @@ export const usePlayerStore = defineStore('player', () => {
         error: false
     })
 
-    const disabled = computed(() => !player.currentId && !playList.length)
-    const index = computed(() => playList.findIndex(item => item.id === player.currentId))
-    const currentPlay = computed(() => playList.find(item => item.id === player.currentId))
+    const disabled = computed(() => !player.currentId && !songs.length)
+    const index = computed(() => songs.findIndex(item => item.id === player.currentId))
+    const currentPlay = computed(() => songs.find(item => item.id === player.currentId))
     const loopType = computed(() => loopTypes.find(loop => loop.id === player.loopType))
 
     function interval() {
@@ -66,22 +66,22 @@ export const usePlayerStore = defineStore('player', () => {
         })
     }
 
-    function push(list: Array<Tracks>, replace: boolean = true) {
+    function push(list: Array<Song>, replace: boolean = true) {
         if (!list.length) return
         if (replace) {
             clear()
-            playList.push(...list)
-            player.currentId = playList[0].id
+            songs.push(...list)
+            player.currentId = songs[0].id
             play()
         } else {
-            playList.splice(index.value + 1, 0, ...list)
-            push([...new Set(playList)], true)
+            songs.splice(index.value + 1, 0, ...list)
+            push([...new Set(songs)], true)
         }
     }
 
     function clear() {
         audio.pause()
-        playList.length = 0
+        songs.length = 0
         player.currentId = 0
         player.currentTime = 0
         player.duration = 0
@@ -129,8 +129,8 @@ export const usePlayerStore = defineStore('player', () => {
             }
             case 2: {
                 setTimeout(() => {
-                    const nextIndex: number = Math.floor(Math.random() * playList.length)
-                    player.currentId = playList[nextIndex].id
+                    const nextIndex: number = Math.floor(Math.random() * songs.length)
+                    player.currentId = songs[nextIndex].id
                     play()
                 }, 2000)
             }
@@ -143,8 +143,8 @@ export const usePlayerStore = defineStore('player', () => {
         player.paused = true
         player.currentTime = 0
         let currentIndex: number = index.value
-        const nextIndex = currentIndex === playList.length - 1 ? 0 : ++currentIndex
-        player.currentId = playList[nextIndex].id
+        const nextIndex = currentIndex === songs.length - 1 ? 0 : ++currentIndex
+        player.currentId = songs[nextIndex].id
         play()
     }
 
@@ -154,8 +154,8 @@ export const usePlayerStore = defineStore('player', () => {
         player.paused = true
         player.currentTime = 0
         let currentIndex: number = index.value
-        const prevIndex: number = currentIndex === 0 ? playList.length - 1 : --currentIndex
-        player.currentId = playList[prevIndex].id
+        const prevIndex: number = currentIndex === 0 ? songs.length - 1 : --currentIndex
+        player.currentId = songs[prevIndex].id
         play()
     }
 
@@ -202,9 +202,19 @@ export const usePlayerStore = defineStore('player', () => {
         audio.volume = val / 100
     }
 
+    function playImmediately(song: Song) {
+        if (songs.map(item => item.id).includes(song.id)) return
+        audio.pause()
+        player.paused = true
+        player.currentTime = 0
+        songs.splice(index.value - 1, 0, song)
+        player.currentId = song.id
+        play()
+    }
+
     return {
-        playList, player,
+        songs, player,
         disabled, index, currentPlay, loopType,
-        init, interval, push, clear, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay, setVolume
+        init, interval, push, clear, togglePlay, onSliderInput, onSliderChange, nextLoopType, nextPlay, prevPlay, setVolume, playImmediately
     }
 })

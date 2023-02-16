@@ -7,7 +7,7 @@
       <PlayerControls />
     </div>
     <div class="flex-1 flex-vertical-center justify-end relative">
-      <PlayerUtils v-if="playList.length" />
+      <PlayerUtils v-if="songs.length" />
     </div>
   </el-footer>
 </template>
@@ -19,7 +19,7 @@ import PlayerSong from './PlayerSong.vue'
 import PlayerControls from './PlayerControls.vue'
 import PlayerUtils from './PlayerUtils.vue'
 
-const { playList, currentPlay } = storeToRefs(usePlayerStore())
+const { songs, currentPlay } = storeToRefs(usePlayerStore())
 
 </script>
 
@@ -32,5 +32,6 @@ const { playList, currentPlay } = storeToRefs(usePlayerStore())
   padding: 0;
   border-top: 1px solid var(--player-border-top);
   background-color: var(--player-bg);
+  z-index: 999;
 }
 </style>

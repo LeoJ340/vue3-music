@@ -2,7 +2,7 @@
   .el-slider {
     height: 10px;
     margin-top: 10px;
-    --el-slider-main-bg-color: var(--player-controls);
+    --el-slider-main-bg-color: var(--player-controls-hover);
     .el-slider__runway, .el-slider__bar {
       height: 2px;
       border-radius: 0;
@@ -26,7 +26,7 @@
 }
 .player-volume {
   .el-slider {
-    --el-slider-main-bg-color: var(--player-controls);
+    --el-slider-main-bg-color: var(--player-controls-hover);
     .el-slider__runway, .el-slider__bar {
       width: 4px;
       margin: 0;

@@ -1,24 +1,25 @@
 <template>
-  <PlayList :playlist-info="playlistInfo" :tracks="tracks" />
+  <PlayList v-if="Object.keys(playlistInfo).length" :playlist-info="playlistInfo" :songs="songs" />
 </template>
 
 <script setup lang="ts">
-import PlayList from "@/components/PlayList/index.vue";
 import {useRoute} from "vue-router";
-import {ref} from "vue";
+import {defineAsyncComponent, ref} from "vue";
 import {getPlayList} from "@/api/playlist";
-import {Tracks} from "@/models/PlayList";
+import {Song} from "@/models/Song";
 
 const currentRoute = useRoute()
 const currentPlaylistId = ref(currentRoute.params.id)
 
 const playlistInfo = ref({})
-const tracks = ref<Tracks[]>([])
+const songs = ref<Song[]>([])
 
 getPlayList(Number(currentPlaylistId.value)).then(res => {
   playlistInfo.value = res
-  tracks.value = res.tracks
+  songs.value = res.tracks
 })
+
+const PlayList = defineAsyncComponent(() => import('@/components/PlayList/index.vue'))
 </script>
 
 <style scoped>

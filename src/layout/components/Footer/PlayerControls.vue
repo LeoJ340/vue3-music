@@ -54,7 +54,7 @@ const paused = computed(() => {
     cursor: pointer;
     color: var(--main-text);
     &:hover {
-      color: var(--player-controls);
+      color: var(--player-controls-hover);
     }
     &.disabled, &.disabled:hover {
       cursor: default;

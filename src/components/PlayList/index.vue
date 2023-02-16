@@ -11,24 +11,24 @@
           <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">{{useFormatTime(playlistInfo.createTime)}}创建</span>
         </div>
         <!-- 操作按钮组 -->
-        <div class="flex" style="margin: 15px 0;">
-          <el-button-group style="margin-right: 12px">
-            <el-button round type="danger" @click="playAll"><PlayOne theme="filled" size="22" />播放全部</el-button>
-            <el-button round type="danger" @click="playAll(false)"><Plus theme="filled" size="20" :strokeWidth="3" /></el-button>
+        <div class="flex button-group">
+          <el-button-group class="play-control">
+            <el-button round :disabled="!songs.length" @click="playAll"><PlayOne theme="filled" size="22" />播放全部</el-button>
+            <el-button round :disabled="!songs.length" @click="playAll(false)"><Plus theme="filled" size="20" :strokeWidth="3" /></el-button>
           </el-button-group>
-          <el-button round ><FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏</el-button>
-          <el-button round ><Share theme="outline" size="20" :strokeWidth="2"/>分享</el-button>
-          <el-button round ><Download theme="outline" size="20" :strokeWidth="2"/>下载全部</el-button>
+          <el-button round :disabled="!songs.length"><FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏</el-button>
+          <el-button round :disabled="!songs.length"><Share theme="outline" size="20" :strokeWidth="2"/>分享</el-button>
+          <el-button round :disabled="!songs.length"><Download theme="outline" size="20" :strokeWidth="2"/>下载全部</el-button>
         </div>
         <div class="text-14">
           <span>歌曲：{{playlistInfo.trackCount}}</span>
-          <span style="margin-left: 10px;">播放：{{playlistInfo.playCount}}</span>
+          <span style="margin-left: 10px;">播放：{{useFormatCount(playlistInfo.playCount)}}</span>
         </div>
       </div>
     </div>
     <div></div>
     <!-- 歌单列表 -->
-    <el-table :data="tracks" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
+    <el-table :data="songs" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
       <el-table-column type="index" width="50" />
       <el-table-column label="操作" width="80">
         <template #default="scope">
@@ -61,7 +61,7 @@
       </el-table-column>
       <!-- 空数据 -->
       <template #empty="scope">
-        <div></div>
+        <el-empty description="暂无音乐" />
       </template>
     </el-table>
   </el-scrollbar>
@@ -69,25 +69,27 @@
 
 <script setup lang="ts">
 import {PropType} from "vue";
-import {PlayList, Tracks} from "@/models/PlayList";
+import {PlayList} from "@/models/PlayList";
+import {Song} from "@/models/Song";
 import { useFormatSeconds, useFormatTime } from "@/utils/time";
 import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
+import useFormatCount from "@/utils/count";
 
-const { playlistInfo, tracks } = defineProps({
+const { playlistInfo, songs } = defineProps({
   playlistInfo: {
     type: Object as PropType<PlayList>,
     required: true
   },
-  tracks: {
-    type: Array as PropType<Tracks[]>,
-    default: []
+  songs: {
+    type: Array as PropType<Song[]>,
+    required: true
   }
 })
 
 const { push } = usePlayerStore()
 function playAll(replace:boolean = true) {
-  push(tracks.filter(item => !item.noCopyrightRcmd), replace)
+  push(songs.filter(item => !item.noCopyrightRcmd), replace)
 }
 </script>
 
@@ -95,5 +97,19 @@ function playAll(replace:boolean = true) {
 .coverImage {
   width: 320px;
   height: 320px;
+}
+
+.button-group {
+  margin: 15px 0;
+  .play-control {
+    margin-right: 12px;
+    .el-button {
+      background-color: var(--player-controls-button);
+      color: #ffffff;
+    }
+  }
+  .disabled {
+    opacity: 0.5;
+  }
 }
 </style>

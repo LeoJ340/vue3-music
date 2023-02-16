@@ -7,8 +7,22 @@ const router = createRouter({
         {
             path: '/',
             component: Layout,
-            redirect: '/my/cloud',
-            children: []
+            redirect: '/index/recommend',
+            children: [
+                {
+                    path: 'index',
+                    component: () => import('@/views/index/index.vue'),
+                    meta: { title: '发现音乐' },
+                    children: [
+                        {
+                            path: 'recommend',
+                            name: 'Recommend',
+                            component: () => import('@/views/index/Recommend.vue'),
+                            meta: { title: '个性推荐' }
+                        }
+                    ]
+                }
+            ]
         },
         {
             path: '/my',

@@ -12,7 +12,8 @@
 
     --player-bg: rgb(255, 255, 255);
     --player-border-top: rgb(224, 224, 224);
-    --player-controls: rgb(240, 103, 103);
+    --player-controls-hover: rgb(240, 103, 103);
+    --player-controls-button: rgb(240, 103, 103);
     --player-toggle-bg: rgb(245, 245, 245);
     --player-toggle-bg-hover: rgb(229, 229, 229);
 
@@ -37,7 +38,8 @@
 
     --player-bg: rgb(34, 34, 37);
     --player-border-top: rgb(61, 61, 63);
-    --player-controls: rgb(195, 59, 59);
+    --player-controls-hover: rgb(195, 59, 59);
+    --player-controls-button: rgb(195, 59, 59);
     --player-toggle-bg: rgb(43, 43, 46);
     --player-toggle-bg-hover: rgb(57, 57, 59);
 
@@ -52,20 +54,24 @@
 /* 可爱粉 */
 .pink {
     --header-bg: rgb(250, 112, 167);
-    --player-controls: rgb(250, 112, 167);
+    --player-controls-hover: rgb(250, 112, 167);
+    --player-controls-button: rgb(250, 112, 167);
 }
 /* 天际蓝 */
 .blue {
     --header-bg: rgb(65, 167, 248);
-    --player-controls: rgb(102, 158, 236);
+    --player-controls-hover: rgb(102, 158, 236);
+    --player-controls-button: rgb(102, 158, 236);
 }
 /* 清新绿 */
 .green {
     --header-bg: rgb(51, 170, 126);
-    --player-controls: rgb(93, 174, 112);
+    --player-controls-hover: rgb(93, 174, 112);
+    --player-controls-button: rgb(93, 174, 112);
 }
 /* 土豪金 */
 .golden {
     --header-bg: rgb(224, 160, 79);
-    --player-controls: rgb(251, 147, 72);
+    --player-controls-hover: rgb(251, 147, 72);
+    --player-controls-button: rgb(251, 147, 72);
 }

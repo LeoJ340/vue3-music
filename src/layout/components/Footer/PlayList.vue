@@ -1,11 +1,12 @@
 <template>
+  <!-- TODO：播放列表样式优化 -->
   <el-scrollbar class="playlist-wrapper">
     <h3 style="margin-left: 12px;">当前播放</h3>
     <div class="playlist-action">
-      <span>共{{playList.length}}首</span>
+      <span>共{{songs.length}}首</span>
       <el-link type="primary" :underline="false" @click="clear">清空列表</el-link>
     </div>
-    <el-table :data="playList" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
+    <el-table :data="songs" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
       <el-table-column label="标题" show-overflow-tooltip>
         <template #default="scope">
           <span>{{scope.row.name}}</span>
@@ -32,7 +33,7 @@ import { usePlayerStore } from "@/stores/player";
 import { useFormatSeconds } from "@/utils/time";
 
 const playerStore = usePlayerStore()
-const { playList } = storeToRefs(playerStore)
+const { songs } = storeToRefs(playerStore)
 const { clear } = playerStore
 </script>
 

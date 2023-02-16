@@ -1,28 +1,12 @@
 import request from "@/utils/request";
-
+import {QRKeyRes, QRImgRes, CheckQRRes, LoginStatus} from "@/models/Login";
 
 /**
  * 二维码登录
  */
-interface QRKeyRes {
-    code: number
-    data: {
-        code: number
-        unikey: string
-    }
-}
-
 async function getQrKey() {
     const { data } = await request.get<QRKeyRes>('/login/qr/key', { timestamp: Date.now() })
     return data.unikey
-}
-
-interface QRImgRes {
-    code: number
-    data: {
-        qrimg: string
-        qrurl: string
-    }
 }
 
 async function getQR(key: string) {
@@ -30,28 +14,8 @@ async function getQR(key: string) {
     return data.qrimg
 }
 
-interface CheckQRRes {
-    code: number
-    cookie: string
-    message: string
-}
-
 async function checkQR(key: string) {
     return await request.get<CheckQRRes>('/login/qr/check', { key, timestamp: Date.now() })
-}
-
-interface LoginStatus {
-    code: number
-    account: {
-        id: number
-        userName: string
-        createTime: number
-    }
-    profile: {
-        userId: number
-        nickname: string
-        avatarUrl: string
-    }
 }
 
 /**

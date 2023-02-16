@@ -1,14 +1,14 @@
 <template>
-  <PlayList :playlist-info="playlistInfo" :tracks="tracks" />
+  <PlayList v-if="Object.keys(playlistInfo).length" :playlist-info="playlistInfo" :songs="songs" />
 </template>
 
 <script setup lang="ts">
-import PlayList from "@/components/PlayList/index.vue";
+// TODO：整合otherPlayList
 import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
-import {computed, ref} from "vue";
+import {computed, defineAsyncComponent, ref} from "vue";
 import {storeToRefs} from "pinia";
 import {useUserStore} from "@/stores/user";
-import {Tracks} from "@/models/PlayList";
+import {Song} from "@/models/Song";
 import {getPlayListTrack} from "@/api/playlist";
 
 const router = useRouter()
@@ -29,18 +29,18 @@ const playlistInfo = computed(() => {
   return currentPlayList
 })
 
-const tracks = ref<Tracks[]>([])
+const songs = ref<Song[]>([])
 getTracks()
 
 function getTracks() {
   if (currentPlaylistId.value === 'undefined') {
-    tracks.value = []
+    songs.value = []
     return
   }
   getPlayListTrack(Number(currentPlaylistId.value)).then(res => {
-    tracks.value = res
+    songs.value = res
   }).catch(_ => {
-    tracks.value = []
+    songs.value = []
   })
 }
 
@@ -48,6 +48,8 @@ onBeforeRouteUpdate(to => {
   currentPlaylistId.value = to.params.id
   getTracks()
 })
+
+const PlayList = defineAsyncComponent(() => import('@/components/PlayList/index.vue'))
 </script>
 
 <style scoped>
