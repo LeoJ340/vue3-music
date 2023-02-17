@@ -1,14 +1,20 @@
 <template>
-  <!-- TODO：播放列表样式优化 -->
   <el-scrollbar class="playlist-wrapper">
     <h3 style="margin-left: 12px;">当前播放</h3>
     <div class="playlist-action">
       <span>共{{songs.length}}首</span>
       <el-link type="primary" :underline="false" @click="clear">清空列表</el-link>
     </div>
-    <el-table :data="songs" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
+    <el-table
+        :data="songs" stripe :show-header="false"
+        tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }"
+        :row-class-name="playingClass">
       <el-table-column label="标题" show-overflow-tooltip>
         <template #default="scope">
+          <span v-show="isPlaying(scope.row)" style="margin-right: 5px;">
+            <Pause v-show="player.paused" theme="outline" size="12" :strokeWidth="7"/>
+            <PlayOne v-show="!player.paused" theme="filled" size="12" :strokeWidth="3"/>
+          </span>
           <span>{{scope.row.name}}</span>
           <span v-if="scope.row.alia.length" style="color:#919192;">（{{scope.row.alia.join('')}}）</span>
         </template>
@@ -31,10 +37,20 @@
 import { storeToRefs } from "pinia";
 import { usePlayerStore } from "@/stores/player";
 import { useFormatSeconds } from "@/utils/time";
+import {Song} from "@/models/Song";
+import { Pause, PlayOne } from '@icon-park/vue-next';
 
 const playerStore = usePlayerStore()
-const { songs } = storeToRefs(playerStore)
+const { songs, currentPlay, player } = storeToRefs(playerStore)
 const { clear } = playerStore
+
+function isPlaying(song: Song) {
+  return song.id === currentPlay.value?.id
+}
+
+function playingClass(row: { row: Song, rowIndex: number }) {
+  return isPlaying(row.row) ? 'playing' : ''
+}
 </script>
 
 <style scoped>

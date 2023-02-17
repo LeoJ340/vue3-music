@@ -5,6 +5,9 @@
   tr{
     background-color: var(--playlist-bg) !important;
     color: var(--main-text);
+    &.playing {
+      color: var(--playlist-playing);
+    }
   }
   --el-fill-color-lighter: var(--playlist-row-striped);
   --el-fill-color-light: var(--playlist-row-hover);
