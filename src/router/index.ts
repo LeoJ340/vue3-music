@@ -21,6 +21,12 @@ const router = createRouter({
                             meta: { title: '个性推荐' }
                         }
                     ]
+                },
+                {
+                    path: 'dailySongs',
+                    name: 'DailySongs',
+                    component: () => import('@/views/index/DaySongs.vue'),
+                    meta: { title: '每日歌曲推荐' }
                 }
             ]
         },

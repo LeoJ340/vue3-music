@@ -11,18 +11,18 @@
   <div class="playlists">
     <h3 class="flex-vertical-center m-0">推荐歌单<Right theme="outline" size="22"/></h3>
     <ul class="playlists-content">
-      <!-- TODO：每日推荐，svg制作日历图标 -->
-      <!-- TODO：点击跳转去日推页 -->
-      <li v-if="false" class="playlist-item">
-        <el-image />
+      <li v-if="hasLogin" class="playlist-item daily-songs" @click="toDailySongs">
+        <el-image :src="dailySongsBg" />
+        <Calendar theme="outline" fill="#ffffff"/>
         <div style="margin-top: 5px;">每日歌曲推荐</div>
+        <PlayOne class="to-play" theme="filled" size="32" :strokeWidth="2"/>
       </li>
       <li v-for="item in playlists" class="playlist-item" @click="toPlayList(item.id)">
         <el-image :src="item.picUrl" />
         <div style="margin-top: 5px;">{{item.name}}</div>
         <div class="play-count">
           <PlayOne theme="outline" size="22" :strokeWidth="2"/>
-          <span>{{useFormatCount(item.playcount)}}</span>
+          <span>{{useFormatCount(item.playCount)}}</span>
         </div>
         <PlayOne class="to-play" theme="filled" size="32" :strokeWidth="2"/>
       </li>
@@ -35,13 +35,14 @@ import {ref, watch} from "vue";
 import {banners, personalized, recommendPlaylists} from "@/api/recommend";
 import {Banner} from "@/models/Banner";
 import {useUserStore} from "@/stores/user";
-import {Right, PlayOne} from "@icon-park/vue-next";
+import {Right, PlayOne, Calendar} from "@icon-park/vue-next";
 import {Personalized} from "@/models/personalized";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import useFormatCount from "@/utils/count";
 import {getSong} from "@/api/playlist";
 import {usePlayerStore} from "@/stores/player";
+import dailySongsBg from '@/assets/dailySongsBg.jpg'
 
 // banner
 const bannerList = ref<Banner[]>([])
@@ -80,6 +81,10 @@ const router = useRouter()
 function toPlayList(id: number) {
   router.push(`/playlist/${id}`)
 }
+
+function toDailySongs() {
+  router.push('/dailySongs')
+}
 </script>
 
 <style scoped lang="scss">
@@ -115,6 +120,13 @@ function toPlayList(id: number) {
     margin-top: 20px;
     position: relative;
     cursor: pointer;
+    .i-icon-calendar {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 120px;
+    }
     &:nth-child(5n) {
       margin-right: 0;
     }
@@ -135,7 +147,7 @@ function toPlayList(id: number) {
       right: 10px;
       border-radius: 50%;
       background-color: rgba(255, 255, 255, 0.8);
-      color: rgb(236, 65, 65);
+      color: var(--playlist-playing);
       visibility: hidden;
       opacity: 0;
       transition: all 1s;
