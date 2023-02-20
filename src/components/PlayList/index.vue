@@ -11,10 +11,10 @@
           <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">{{useFormatTime(playlistInfo.createTime)}}创建</span>
         </div>
         <!-- 操作按钮组 -->
-        <div class="flex button-group">
-          <el-button-group class="play-control">
-            <el-button round :disabled="!songs.length" @click="playAll"><PlayOne theme="filled" size="22" />播放全部</el-button>
-            <el-button round :disabled="!songs.length" @click="playAll(false)"><Plus theme="filled" size="20" :strokeWidth="3" /></el-button>
+        <div class="flex" style="margin: 15px 0;">
+          <el-button-group>
+            <el-button type="primary" round :disabled="!songs.length" @click="playAll"><PlayOne theme="filled" size="22" />播放全部</el-button>
+            <el-button type="primary" round :disabled="!songs.length" @click="playAll(false)"><Plus theme="filled" size="20" :strokeWidth="3" /></el-button>
           </el-button-group>
           <el-button round :disabled="!songs.length"><FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏</el-button>
           <el-button round :disabled="!songs.length"><Share theme="outline" size="20" :strokeWidth="2"/>分享</el-button>
@@ -97,19 +97,5 @@ function playAll(replace:boolean = true) {
 .coverImage {
   width: 320px;
   height: 320px;
-}
-
-.button-group {
-  margin: 15px 0;
-  .play-control {
-    margin-right: 12px;
-    .el-button {
-      background-color: var(--player-controls-button);
-      color: #ffffff;
-    }
-  }
-  .disabled {
-    opacity: 0.5;
-  }
 }
 </style>

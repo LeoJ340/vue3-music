@@ -6,7 +6,8 @@ export interface PlayList {
     coverImgUrl: string
     createTime: number
     updateTime: number
-    playCount: number
+    playCount?: number
+    playcount?: number
     creator: {
         userId: number
         nickname: string
@@ -14,6 +15,13 @@ export interface PlayList {
     }
     tags: Array<string>
     trackCount: number
-    tracks: Array<Song>
+    tracks: Array<Song> | any
     userId: number
+}
+
+export interface TopList extends PlayList{
+    tracks: Array<{
+        first: string;
+        second: string;
+    }>
 }

@@ -1,5 +1,5 @@
 import request from "@/utils/request";
-import { PlayList } from "@/models/PlayList";
+import {PlayList, TopList} from "@/models/PlayList";
 import { Song } from "@/models/Song";
 import { SongUrl } from "@/models/SongUrl";
 
@@ -22,4 +22,10 @@ export async function getPlayListTrack(id: number): Promise<Array<Song>> {
 export async function getSong(ids: number[]): Promise<Song> {
     const { songs } = await request.get<{ songs: Song[] }>('/song/detail', { ids: ids.join(',') })
     return songs[0]
+}
+
+// 榜单
+export async function getTopList(): Promise<TopList[]> {
+    const { list } = await request.get<{ list: TopList[] }>('/toplist/detail')
+    return list
 }

@@ -7,10 +7,10 @@
         <p class="m-0 text-12">根据你的音乐口味生成，每天6:00更新</p>
       </div>
     </div>
-    <div class="flex button-group">
-      <el-button-group class="play-control">
-        <el-button round><PlayOne theme="filled" size="22" @click="playAll"/>播放全部</el-button>
-        <el-button round><Plus theme="filled" size="20" :strokeWidth="3" @click="playAll(false)"/></el-button>
+    <div class="flex" style="margin: 15px 0;">
+      <el-button-group>
+        <el-button round type="primary"><PlayOne theme="filled" size="22" @click="playAll"/>播放全部</el-button>
+        <el-button round type="primary"><Plus theme="filled" size="20" :strokeWidth="3" @click="playAll(false)"/></el-button>
       </el-button-group>
       <el-button round><FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏</el-button>
     </div>
@@ -82,15 +82,5 @@ header {
 .i-icon-calendar {
   font-size: 100px;
   color: var(--player-theme);
-}
-.button-group {
-  margin: 15px 0;
-  .play-control {
-    margin-right: 12px;
-    .el-button {
-      background-color: var(--player-controls-button);
-      color: #ffffff;
-    }
-  }
 }
 </style>

@@ -1,9 +1,7 @@
 <template>
   <div class="main-wrapper">
-    <el-menu default-active="/index/recommend" mode="horizontal" :router="true">
-      <el-menu-item index="/index/recommend">个性推荐</el-menu-item>
-      <el-menu-item index="3" disabled>歌单</el-menu-item>
-      <el-menu-item index="4" disabled>排行榜</el-menu-item>
+    <el-menu :default-active="currentRoute.path" mode="horizontal" :router="true">
+      <el-menu-item v-for="route in indexRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
       <el-menu-item index="5" disabled>歌手</el-menu-item>
       <el-menu-item index="6" disabled>最新音乐</el-menu-item>
     </el-menu>
@@ -12,7 +10,10 @@
 </template>
 
 <script setup lang="ts">
+import {indexRoutes} from "@/router";
+import {useRoute} from "vue-router";
 
+const currentRoute = useRoute()
 </script>
 
 <style scoped lang="scss">

@@ -2,7 +2,7 @@
   .el-slider {
     height: 10px;
     margin-top: 10px;
-    --el-slider-main-bg-color: var(--player-controls-hover);
+    --el-slider-main-bg-color: var(--player-theme);
     .el-slider__runway, .el-slider__bar {
       height: 2px;
       border-radius: 0;
@@ -26,7 +26,7 @@
 }
 .player-volume {
   .el-slider {
-    --el-slider-main-bg-color: var(--player-controls-hover);
+    --el-slider-main-bg-color: var(--player-theme);
     .el-slider__runway, .el-slider__bar {
       width: 4px;
       margin: 0;
@@ -40,4 +40,18 @@
       height: 8px;
     }
   }
+}
+
+// 主题化改造主要按钮
+.el-button--primary {
+  --el-button-bg-color: var(--player-theme);
+  --el-button-border-color: var(--player-theme);
+  --el-button-hover-bg-color: var(--player-theme-light);
+  --el-button-hover-border-color: var(--player-theme-light);
+  --el-button-disabled-bg-color: var(--player-theme-light);
+  --el-button-disabled-border-color: var(--player-theme-light);
+  --el-button-active-bg-color: var(--player-theme);
+  --el-button-active-border-color: var(--player-theme);
+  --el-button-text-color: #ffffff;
+  --el-button-hover-text-color: #ffffff;
 }

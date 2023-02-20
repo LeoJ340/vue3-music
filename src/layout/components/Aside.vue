@@ -41,7 +41,7 @@ const menuGroups = computed(() => {
     {
       list: [
         {
-          path: `/index/recommend`,
+          path: '/discover',
           text: '发现音乐'
         }
       ]
@@ -80,7 +80,7 @@ const menuGroups = computed(() => {
 })
 
 function isActive(path: string) {
-  return router.currentRoute.value.fullPath === path
+  return router.currentRoute.value.fullPath.includes(path)
 }
 </script>
 

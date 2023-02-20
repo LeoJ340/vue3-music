@@ -6,7 +6,7 @@
     background-color: var(--playlist-bg) !important;
     color: var(--main-text);
     &.playing {
-      color: var(--playlist-playing);
+      color: var(--player-theme);
     }
   }
   --el-fill-color-lighter: var(--playlist-row-striped);
@@ -24,4 +24,19 @@
 }
 .el-scrollbar__bar {
   z-index: 0;
+}
+.el-button-group+.el-button {
+  margin-left: 12px;
+}
+.el-button-group .el-button--primary {
+  &:first-child {
+    border-right-color: var(--el-button-divide-border-color) !important;
+  }
+  &:last-child {
+    border-left-color: var(--el-button-divide-border-color) !important;
+  }
+  &:not(:first-child):not(:last-child) {
+    border-right-color: var(--el-button-divide-border-color) !important;
+    border-left-color: var(--el-button-divide-border-color) !important;
+  }
 }

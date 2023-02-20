@@ -22,7 +22,7 @@
         <div style="margin-top: 5px;">{{item.name}}</div>
         <div class="play-count">
           <PlayOne theme="outline" size="22" :strokeWidth="2"/>
-          <span>{{useFormatCount(item.playCount)}}</span>
+          <span>{{useFormatCount(item.playCount || item.playcount)}}</span>
         </div>
         <PlayOne class="to-play" theme="filled" size="32" :strokeWidth="2"/>
       </li>
@@ -109,15 +109,15 @@ function toDailySongs() {
   }
 }
 .playlists-content {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin: 0 auto;
   padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-gap: 10px;
+  .daily-songs .el-image{
+    width: 100%;
+  }
   .playlist-item {
-    width: 19%;
-    margin-right: 1%;
-    margin-top: 20px;
     position: relative;
     cursor: pointer;
     .i-icon-calendar {
@@ -126,12 +126,6 @@ function toDailySongs() {
       left: 50%;
       transform: translate(-50%, -50%);
       font-size: 120px;
-    }
-    &:nth-child(5n) {
-      margin-right: 0;
-    }
-    .el-image {
-      width: 100%;
     }
     .play-count {
       position: absolute;
@@ -147,7 +141,7 @@ function toDailySongs() {
       right: 10px;
       border-radius: 50%;
       background-color: rgba(255, 255, 255, 0.8);
-      color: var(--playlist-playing);
+      color: var(--player-theme);
       visibility: hidden;
       opacity: 0;
       transition: all 1s;

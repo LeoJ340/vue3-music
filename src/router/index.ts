@@ -1,31 +1,47 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Layout from '@/layout/index.vue'
 
+// 发现音乐子级路由
+export const indexRoutes = [
+    {
+        path: 'recommend',
+        name: 'Recommend',
+        component: () => import('@/views/Discover/Recommend.vue'),
+        meta: { title: '个性推荐' }
+    },
+    {
+        path: 'playlist',
+        name: 'PlayList',
+        component: () => import('@/views/Discover/PlayList.vue'),
+        meta: { title: '歌单' }
+    },
+    {
+        path: 'toplist',
+        name: 'TopList',
+        component: () => import('@/views/Discover/TopList.vue'),
+        meta: { title: '排行榜' }
+    }
+]
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
             path: '/',
             component: Layout,
-            redirect: '/index/recommend',
+            redirect: '/discover/recommend',
             children: [
                 {
-                    path: 'index',
-                    component: () => import('@/views/index/index.vue'),
+                    path: 'discover',
+                    component: () => import('@/views/Discover/index.vue'),
+                    redirect: '/discover/recommend',
                     meta: { title: '发现音乐' },
-                    children: [
-                        {
-                            path: 'recommend',
-                            name: 'Recommend',
-                            component: () => import('@/views/index/Recommend.vue'),
-                            meta: { title: '个性推荐' }
-                        }
-                    ]
+                    children: indexRoutes
                 },
                 {
                     path: 'dailySongs',
                     name: 'DailySongs',
-                    component: () => import('@/views/index/DaySongs.vue'),
+                    component: () => import('@/views/Discover/DaySongs.vue'),
                     meta: { title: '每日歌曲推荐' }
                 }
             ]

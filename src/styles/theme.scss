@@ -5,6 +5,8 @@
 
     --main-bg: rgb(255, 255, 255);
     --main-text: rgb(52, 52, 52);
+    --player-theme: rgb(236, 65, 65);
+    --player-theme-light: rgb(236, 105, 105);
 
     --aside-active-bg: rgb(246, 246, 247);
     --aside-active-text: rgb(49, 49, 49);
@@ -12,15 +14,13 @@
 
     --player-bg: rgb(255, 255, 255);
     --player-border-top: rgb(224, 224, 224);
-    --player-controls-hover: rgb(240, 103, 103);
-    --player-controls-button: rgb(236, 65, 65);
     --player-toggle-bg: rgb(245, 245, 245);
     --player-toggle-bg-hover: rgb(229, 229, 229);
 
+    // 播放列表斑马线条色
     --playlist-bg: rgb(250, 250, 250);
     --playlist-row-striped: rgb(255, 255, 255);
     --playlist-row-hover: rgb(245, 245, 245);
-    --playlist-playing: rgb(236, 65, 65);
     .playlist-wrapper {
         --playlist-bg: rgb(255, 255, 255);
         --playlist-row-striped: rgb(250, 250, 250);
@@ -32,6 +32,8 @@
 
     --main-bg: rgb(43, 43, 43);
     --main-text: rgb(214, 214, 214);
+    --player-theme: rgb(236, 65, 65);
+    --player-theme-light: rgb(236, 105, 105);
 
     --aside-active-bg: rgb(51, 51, 51);
     --aside-active-text: rgb(197, 197, 197);
@@ -39,15 +41,13 @@
 
     --player-bg: rgb(34, 34, 37);
     --player-border-top: rgb(61, 61, 63);
-    --player-controls-hover: rgb(195, 59, 59);
-    --player-controls-button: rgb(236, 65, 65);
     --player-toggle-bg: rgb(43, 43, 46);
     --player-toggle-bg-hover: rgb(57, 57, 59);
 
+    // 播放列表斑马线条色
     --playlist-bg: rgb(47, 47, 47);
     --playlist-row-striped: rgb(43, 43, 43);
     --playlist-row-hover: rgb(63, 63, 63);
-    --playlist-playing: rgb(236, 65, 65);
     .playlist-wrapper {
         --playlist-bg: rgb(54, 54, 54);
         --playlist-row-striped: rgb(58, 58, 58);
@@ -56,28 +56,24 @@
 /* 可爱粉 */
 .pink {
     --header-bg: rgb(250, 112, 167);
-    --player-controls-hover: rgb(250, 112, 167);
-    --player-controls-button: rgb(250, 112, 167);
-    --playlist-playing: rgb(250, 112, 167);
+    --player-theme: rgb(250, 112, 167);
+    --player-theme-light: rgb(250, 142, 187);
 }
 /* 天际蓝 */
 .blue {
     --header-bg: rgb(65, 167, 248);
-    --player-controls-hover: rgb(102, 158, 236);
-    --player-controls-button: rgb(102, 158, 236);
-    --playlist-playing: rgb(102, 158, 236);
+    --player-theme: rgb(102, 158, 236);
+    --player-theme-light: rgb(132, 178, 236);
 }
 /* 清新绿 */
 .green {
     --header-bg: rgb(51, 170, 126);
-    --player-controls-hover: rgb(93, 174, 112);
-    --player-controls-button: rgb(93, 174, 112);
-    --playlist-playing: rgb(93, 174, 112);
+    --player-theme: rgb(93, 174, 112);
+    --player-theme-light: rgb(140, 190, 112);
 }
 /* 土豪金 */
 .golden {
     --header-bg: rgb(224, 160, 79);
-    --player-controls-hover: rgb(251, 147, 72);
-    --player-controls-button: rgb(251, 147, 72);
-    --playlist-playing: rgb(251, 147, 72);
+    --player-theme: rgb(251, 147, 72);
+    --player-theme-light: rgb(255, 170, 102);
 }
