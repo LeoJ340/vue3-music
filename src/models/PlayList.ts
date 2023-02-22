@@ -3,6 +3,7 @@ import {Song} from "@/models/Song";
 export interface PlayList {
     id: number | undefined
     name: string
+    copywriter: string
     coverImgUrl: string
     createTime: number
     updateTime: number
