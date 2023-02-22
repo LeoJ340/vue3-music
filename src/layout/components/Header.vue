@@ -1,4 +1,5 @@
 <template>
+  <el-image :src="logo" class="logo" style="" />
   <span style="width: 180px;">网易云音乐</span>
   <el-row class="flex-1">
     <!-- 页头 -->
@@ -75,6 +76,7 @@ import {checkQR, getQR, getQrKey} from "@/api/login";
 import {useUserStore} from "@/stores/user";
 import {themeList} from "@/models/Theme";
 import waiting from '@/assets/waiting-authorization.png'
+import logo from '@/assets/logo.png'
 
 const userStore = useUserStore()
 const { hasLogin, userInfo } = storeToRefs(userStore)
@@ -145,6 +147,13 @@ function changeTheme(theme: string) {
 </script>
 
 <style lang="scss" scoped>
+.logo {
+  display: inline-flex;
+  width: 30px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background: #ffffff;
+}
 .setting {
   .login-icon {
     cursor: pointer;
