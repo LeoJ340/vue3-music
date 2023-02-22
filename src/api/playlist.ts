@@ -1,13 +1,7 @@
 import request from "@/utils/request";
 import {PlayList, TopList} from "@/models/PlayList";
 import { Song } from "@/models/Song";
-import { SongUrl } from "@/models/SongUrl";
 import {Category, HotCategory, HighQualityTag} from "@/models/Category";
-
-export async function getSongUrl(id: number) {
-    const { data } = await request.get<{ data: SongUrl[] }>('/song/url', { id, cookie: sessionStorage.getItem('cookie') })
-    return data[0]
-}
 
 export async function getPlayList(id: number) {
     const { playlist } = await request.get<{ playlist: PlayList }>('/playlist/detail', { id })
@@ -18,11 +12,6 @@ export async function getPlayList(id: number) {
 export async function getPlayListTrack(id: number) {
     const { songs } = await request.get<{ songs: Array<Song> }>('/playlist/track/all', { id, cookie: sessionStorage.getItem('cookie') })
     return songs
-}
-
-export async function getSong(ids: number[]) {
-    const { songs } = await request.get<{ songs: Song[] }>('/song/detail', { ids: ids.join(',') })
-    return songs[0]
 }
 
 // 榜单
@@ -60,7 +49,7 @@ export async function getTopPlaylistsByCategory(cat: string = '全部', limit: n
     const params = {
         cat,
         limit,
-        offset: page * limit
+        offset: (page - 1) * limit
     }
     const { playlists, total } = await request.get<{ playlists: Array<PlayList>, total: number, more: boolean }>('/top/playlist', params)
     return { playlists, total }

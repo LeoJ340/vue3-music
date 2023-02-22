@@ -40,7 +40,7 @@ import {Personalized} from "@/models/personalized";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import useFormatCount from "@/utils/count";
-import {getSong} from "@/api/playlist";
+import {getSong} from "@/api/song";
 import {usePlayerStore} from "@/stores/player";
 import dailySongsBg from '@/assets/dailySongsBg.jpg'
 
