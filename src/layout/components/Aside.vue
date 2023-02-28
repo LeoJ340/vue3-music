@@ -89,6 +89,7 @@ function isActive(path: string) {
   background-color: var(--main-bg);
   border-right: 1px solid var(--aside-border-right);
   .menu {
+    padding: 10px;
     .menu-group-title {
       margin-top: 20px;
       margin-bottom: 10px;

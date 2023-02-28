@@ -1,4 +1,5 @@
 <template>
+  <!-- banner -->
   <el-carousel :interval="4000" type="card" height="220px">
     <el-carousel-item v-for="(banner, index) in bannerList" :key="index" @click="clickBanner(banner)">
       <div class="banner-item">
@@ -9,7 +10,9 @@
   </el-carousel>
   <!-- 推荐歌单 -->
   <div class="playlists">
-    <h3 class="flex-vertical-center m-0">推荐歌单<Right theme="outline" size="22"/></h3>
+    <router-link to="/discover/playlist">
+      <h3 class="flex-vertical-center m-0">推荐歌单<Right theme="outline" size="22"/></h3>
+    </router-link>
     <ul class="playlists-content">
       <li v-if="hasLogin" class="playlist-item daily-songs" @click="toDailySongs">
         <el-image :src="dailySongsBg" />
@@ -56,6 +59,8 @@ function clickBanner(banner: Banner) {
     getSong([banner.targetId]).then(song => {
       playImmediately(song)
     })
+  } else if(banner.targetType === 10) {
+    router.push(`/playlist/${banner.targetId}`)
   } else {
     window.open(banner.url, '_blank')
   }

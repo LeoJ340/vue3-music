@@ -13,19 +13,26 @@
       <template #reference>
         <el-button round>{{currentCategoryName}}<Right theme="outline"/></el-button>
       </template>
-      <!-- TODO：这个popover需要优化 -->
       <div style="margin: 10px;">全部歌单</div>
       <el-divider />
       <div v-for="item in allCategory" class="sub-category">
         <span><Component :is="item.icon" theme="outline" size="24" :strokeWidth="2"/>{{item.name}}</span>
-        <el-link v-for="subCategory in item.sub" :underline="false" @click="changeCategory(subCategory.name)">
+        <el-link v-for="subCategory in item.sub"
+                 :class="{ active: subCategory.name === currentCategoryName }"
+                 :underline="false"
+                 @click="changeCategory(subCategory.name)">
           {{subCategory.name}}
           <span v-if="subCategory.hot" class="badge">hot</span>
         </el-link>
       </div>
     </el-popover>
     <div class="hot-category">
-      <el-link v-for="category in hotCategories" :underline="false" @click="changeCategory(category.name)">{{category.name}}</el-link>
+      <el-link v-for="category in hotCategories"
+               :class="{ active: category.name === currentCategoryName }"
+               :underline="false"
+               @click="changeCategory(category.name)">
+        {{category.name}}
+      </el-link>
     </div>
   </div>
   <PlayLists :playlists="playlistPage.list" />
@@ -90,7 +97,7 @@ const allCategory = reactive<{ name: string; icon: Icon; sub: Category[]; }[]>([
 const playlistPage = reactive<{ list: PlayList[]; page: number; size: number; total: number }>({
   list: [],
   page: 1,
-  size: 10,
+  size: 50,
   total: 0
 })
 
@@ -172,6 +179,7 @@ function changePage() {
     .el-button, .el-button:hover{
       color: rgb(231, 170, 90);
       border-color: rgb(231, 170, 90);
+      background-color: #ffffff;
     }
   }
 }
@@ -184,6 +192,9 @@ function changePage() {
     grid-row-start: 1;
     grid-row-end: 6;
   }
+  .active, .active:hover {
+    color: var(--player-theme);
+  }
   .badge {
     position: absolute;
     right: 0;
@@ -195,6 +206,13 @@ function changePage() {
 .hot-category {
   a+a {
     margin-left: 10px;
+  }
+  .el-link {
+    padding: 0 5px;
+    border-radius: 10px;
+    &.active, &.active:hover {
+      color: var(--player-theme);
+    }
   }
 }
 .el-pagination {

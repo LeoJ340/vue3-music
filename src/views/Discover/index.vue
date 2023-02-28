@@ -2,7 +2,6 @@
   <div class="main-wrapper">
     <el-menu :default-active="currentRoute.path" mode="horizontal" :router="true">
       <el-menu-item v-for="route in indexRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
-      <el-menu-item index="5" disabled>歌手</el-menu-item>
       <el-menu-item index="6" disabled>最新音乐</el-menu-item>
     </el-menu>
     <router-view />
@@ -32,6 +31,7 @@ const currentRoute = useRoute()
   .el-menu-item.is-active {
     font-size: 20px;
     font-weight: 700;
+    border-bottom: 2px solid var(--player-theme);
   }
 }
 </style>

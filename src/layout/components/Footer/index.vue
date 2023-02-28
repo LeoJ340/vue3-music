@@ -32,6 +32,6 @@ const { songs, currentPlay } = storeToRefs(usePlayerStore())
   padding: 0;
   border-top: 1px solid var(--player-border-top);
   background-color: var(--player-bg);
-  z-index: 999;
+  z-index: 9999;
 }
 </style>

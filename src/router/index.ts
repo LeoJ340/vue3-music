@@ -20,6 +20,12 @@ export const indexRoutes = [
         name: 'TopList',
         component: () => import('@/views/Discover/TopList.vue'),
         meta: { title: '排行榜' }
+    },
+    {
+        path: 'artist',
+        name: 'Artist',
+        component: () => import('@/views/Discover/Artist.vue'),
+        meta: { title: '歌手' }
     }
 ]
 

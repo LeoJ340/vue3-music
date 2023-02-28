@@ -8,7 +8,14 @@
         <div class="flex-vertical-center">
           <el-avatar :src="playlistInfo.creator.avatarUrl" />
           <span style="margin-left: 10px; font-size: 12px;">{{playlistInfo.creator.nickname}}</span>
-          <span style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">{{useFormatTime(playlistInfo.createTime)}}创建</span>
+          <span v-if="playlistInfo.updateTime"
+                style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">
+            最近更新{{useFormatTime(playlistInfo.updateTime)}}
+          </span>
+          <span v-else
+                style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">
+            {{useFormatTime(playlistInfo.createTime)}}创建
+          </span>
         </div>
         <!-- 操作按钮组 -->
         <div class="flex" style="margin: 15px 0;">
@@ -23,6 +30,9 @@
         <div class="text-14">
           <span>歌曲：{{playlistInfo.trackCount}}</span>
           <span style="margin-left: 10px;">播放：{{useFormatCount(playlistInfo.playCount)}}</span>
+        </div>
+        <div class="text-14" style="margin-top: 2px;">
+          <span>简介：{{playlistInfo.description}}</span>
         </div>
       </div>
     </div>

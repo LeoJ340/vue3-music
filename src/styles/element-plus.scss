@@ -22,6 +22,9 @@
     background-color: var(--main-bg);
   }
 }
+.el-scrollbar {
+  width: 100%;
+}
 .el-scrollbar__bar {
   z-index: 0;
 }
@@ -39,4 +42,7 @@
     border-right-color: var(--el-button-divide-border-color) !important;
     border-left-color: var(--el-button-divide-border-color) !important;
   }
+}
+.el-link:hover {
+  color: inherit;
 }

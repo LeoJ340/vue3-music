@@ -4,7 +4,7 @@
       <Header />
     </el-header>
 
-    <el-container style="height: calc(100vh - 130px);">
+    <el-container style="height: calc(100vh - 130px); margin-top: 60px;">
       <Aside />
       <el-main>
         <router-view />
@@ -23,6 +23,10 @@ import Footer from './components/Footer/index.vue'
 
 <style lang="scss" scoped>
 .el-header {
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+  width: 100%;
   background-color: var(--header-bg);
   line-height: 60px;
   color: #ffffff;
