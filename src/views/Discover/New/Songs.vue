@@ -4,8 +4,8 @@
       <span v-for="type in types" :class="{ active: type.key === currentType.key }" @click="selectType(type)">{{type.text}}</span>
     </div>
     <div class="right">
-      <el-button type="primary" size="small" @click="playAll"><PlayOne theme="filled" size="18" :strokeWidth="2"/>播放全部</el-button>
-      <el-button size="small">收藏全部</el-button>
+      <el-button type="primary" size="small" round @click="playAll"><PlayOne theme="filled" size="18" :strokeWidth="2"/>播放全部</el-button>
+      <el-button size="small" round><FolderPlus theme="outline" size="18" :strokeWidth="2"/>收藏全部</el-button>
     </div>
   </div>
   <!-- 列表 -->
@@ -14,8 +14,7 @@
     <el-table-column label="封面" show-overflow-tooltip>
       <template #default="scope">
         <div class="cover">
-          <!-- TODO：播放单个歌曲 -->
-          <div class="cover-img">
+          <div class="cover-img" @click="playImmediately(useToSong(scope.row))">
             <el-image :src="scope.row.album.picUrl" lazy/>
             <PlayOne theme="filled" size="22" :strokeWidth="2"/>
           </div>
@@ -48,8 +47,8 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {getTopSongs} from "@/api/song";
-import {TopSong} from "@/models/Song";
-import {PlayOne} from "@icon-park/vue-next";
+import {Song, TopSong} from "@/models/Song";
+import {PlayOne, FolderPlus} from "@icon-park/vue-next";
 import {useFormatSeconds} from "@/utils/time";
 import {useRouter} from "vue-router";
 import {usePlayerStore} from "@/stores/player";
@@ -82,21 +81,39 @@ const types = [
 const currentType = ref(types[0])
 const topSongs = ref<TopSong[]>([])
 
-getTopSongs(currentType.value.key).then(res => {
-  topSongs.value = res
-})
-
-function selectType(type: { key: number, text: string }) {
-  currentType.value = type
+function getData() {
   getTopSongs(currentType.value.key).then(res => {
     topSongs.value = res
   })
 }
 
+getData()
+
+function selectType(type: { key: number, text: string }) {
+  currentType.value = type
+  getData()
+}
+
+// TopSong类型转换Song
+function useToSong(topSong: TopSong): Song {
+  return {
+    id: topSong.id,
+    name: topSong.name,
+    al: topSong.album,
+    alia: topSong.alias,
+    ar: topSong.artists,
+    dt: topSong.duration,
+    noCopyrightRcmd: {
+      type: 0,
+      typeDesc: ''
+    },
+    publishTime: topSong.album.publishTime
+  }
+}
+
+const { push, playImmediately } = usePlayerStore()
 function playAll() {
-  const { push } = usePlayerStore()
-  // TODO：兼容Song类型
-  // push(topSongs.value, true)
+  push(topSongs.value.map(useToSong), true)
 }
 
 function toPlayList(id: number) {

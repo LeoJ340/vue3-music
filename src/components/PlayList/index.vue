@@ -37,7 +37,7 @@
             <p v-show="collapse" v-html="playlistInfo.description.split('\n').slice(1,playlistInfo.description.split('\n').length).join('<br>')"></p>
           </div>
           <Component
-              v-if="playlistInfo.description.split('\n').length"
+              v-if="playlistInfo.description.split('\n').length > 1"
               :is="collapse ? UpOne : DownOne"
               theme="filled" size="20" :strokeWidth="3"
               @click="collapse = !collapse"

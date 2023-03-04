@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts">
-// TODO：整合otherPlayList
 import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
 import {computed, defineAsyncComponent, ref} from "vue";
 import {storeToRefs} from "pinia";
