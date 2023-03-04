@@ -46,6 +46,7 @@ export const useUserStore = defineStore('user', () => {
     const noPlayList = {
         id: undefined,
         name: '我喜欢的音乐',
+        copywriter: '',
         coverImgUrl: playlistDefaultCover,
         createTime: 0,
         updateTime: 0,
@@ -55,6 +56,7 @@ export const useUserStore = defineStore('user', () => {
             nickname: logoutUserInfo.userName,
             avatarUrl: logoutUserInfo.avatarUrl
         },
+        description: '',
         tags: [],
         trackCount: 0,
         tracks: [],

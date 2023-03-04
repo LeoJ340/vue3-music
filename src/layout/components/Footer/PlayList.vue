@@ -8,7 +8,8 @@
     <el-table
         :data="songs" stripe :show-header="false"
         tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }"
-        :row-class-name="playingClass">
+        :row-class-name="playingClass"
+        @row-dblclick="dblclickPlay">
       <el-table-column label="标题" show-overflow-tooltip>
         <template #default="scope">
           <span v-show="isPlaying(scope.row)" style="margin-right: 5px;">
@@ -42,7 +43,7 @@ import { Pause, PlayOne } from '@icon-park/vue-next';
 
 const playerStore = usePlayerStore()
 const { songs, currentPlay, player } = storeToRefs(playerStore)
-const { clear } = playerStore
+const { push, clear } = playerStore
 
 function isPlaying(song: Song) {
   return song.id === currentPlay.value?.id
@@ -50,6 +51,12 @@ function isPlaying(song: Song) {
 
 function playingClass(row: { row: Song, rowIndex: number }) {
   return isPlaying(row.row) ? 'playing' : ''
+}
+
+function dblclickPlay(song: Song) {
+  if (song.noCopyrightRcmd) return
+  const index = songs.value.findIndex(item => item.id === song.id)
+  push(songs.value.filter(item => !item.noCopyrightRcmd), true, index)
 }
 </script>
 

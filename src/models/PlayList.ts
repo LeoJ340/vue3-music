@@ -14,6 +14,7 @@ export interface PlayList {
         nickname: string
         avatarUrl: string
     }
+    description: string
     tags: Array<string>
     trackCount: number
     tracks: Array<Song> | any

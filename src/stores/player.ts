@@ -66,14 +66,15 @@ export const usePlayerStore = defineStore('player', () => {
         })
     }
 
-    function push(list: Array<Song>, replace: boolean = true) {
+    function push(list: Array<Song>, replace: boolean = true, starIndex: number = 0) {
         if (!list.length) return
         if (replace) {
             clear()
             songs.push(...list)
-            player.currentId = songs[0].id
+            player.currentId = songs[starIndex].id
             play()
         } else {
+            // 加入播放列表（去重）
             songs.splice(index.value + 1, 0, ...list)
             push([...new Set(songs)], true)
         }
@@ -202,6 +203,7 @@ export const usePlayerStore = defineStore('player', () => {
         audio.volume = val / 100
     }
 
+    // 立即播放（插入当前播放列表）
     function playImmediately(song: Song) {
         if (songs.map(item => item.id).includes(song.id)) return
         audio.pause()

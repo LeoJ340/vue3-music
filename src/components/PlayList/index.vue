@@ -31,20 +31,37 @@
           <span>歌曲：{{playlistInfo.trackCount}}</span>
           <span style="margin-left: 10px;">播放：{{useFormatCount(playlistInfo.playCount)}}</span>
         </div>
-        <div class="text-14" style="margin-top: 2px;">
-          <span>简介：{{playlistInfo.description}}</span>
+        <div class="flex justify-between text-14" style="margin-top: 2px;">
+          <div>
+            <span>简介：{{playlistInfo.description.split('\n')[0]}}</span>
+            <p v-show="collapse" v-html="playlistInfo.description.split('\n').slice(1,playlistInfo.description.split('\n').length).join('<br>')"></p>
+          </div>
+          <Component
+              v-if="playlistInfo.description.split('\n').length"
+              :is="collapse ? UpOne : DownOne"
+              theme="filled" size="20" :strokeWidth="3"
+              @click="collapse = !collapse"
+          />
         </div>
       </div>
     </div>
     <div></div>
     <!-- 歌单列表 -->
-    <el-table :data="songs" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
-      <el-table-column type="index" width="50" />
+    <el-table
+        :data="songs"
+        stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }"
+        @row-dblclick="dblclickPlay">
+      <el-table-column label="" width="50" align="center">
+        <template #default="scope">
+          <span>{{scope.$index + 1}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="80">
         <template #default="scope">
           <div style="display: flex; justify-content: space-around;">
-            <el-link :underline="false">
-              <Like theme="filled" size="20" fill="#ec4141" :strokeWidth="2"/>
+            <el-link :underline="false" title="喜欢">
+              <Like v-if="myPlayListIds.includes(scope.row.id)" theme="filled" size="20" fill="#ec4141" :strokeWidth="2"/>
+              <Like v-else theme="outline" size="20" :strokeWidth="2"/>
             </el-link>
             <el-link :underline="false">
               <Download theme="outline" size="20" :strokeWidth="2"/>
@@ -56,6 +73,7 @@
         <template #default="scope">
           <span>{{scope.row.name}}</span>
           <span v-if="scope.row.alia.length" style="color:#919192;">（{{scope.row.alia.join('')}}）</span>
+          <span v-if="scope.row.noCopyrightRcmd">无音源</span>
         </template>
       </el-table-column>
       <el-table-column label="歌手" show-overflow-tooltip>
@@ -63,7 +81,13 @@
           <span>{{scope.row.ar.map(ar => ar.name).join('/')}}</span>
         </template>
       </el-table-column>
-      <el-table-column prop="al.name" label="专辑" show-overflow-tooltip />
+      <el-table-column label="专辑" show-overflow-tooltip>
+        <template #default="scope">
+          <router-link :to="`/playlist/${scope.row.al.id}`">
+            {{scope.row.al.name}}
+          </router-link>
+        </template>
+      </el-table-column>
       <el-table-column label="时间" width="100">
         <template #default="scope">
           <span>{{useFormatSeconds(scope.row.dt / 1000)}}</span>
@@ -78,13 +102,15 @@
 </template>
 
 <script setup lang="ts">
-import {PropType} from "vue";
+import {PropType, ref} from "vue";
 import {PlayList} from "@/models/PlayList";
 import {Song} from "@/models/Song";
 import { useFormatSeconds, useFormatTime } from "@/utils/time";
-import { PlayOne, Plus, FolderPlus, Share, Download, Like } from '@icon-park/vue-next';
+import { PlayOne, Plus, FolderPlus, Share, Download, DownOne, UpOne, Like } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
 import useFormatCount from "@/utils/count";
+import { useUserStore } from "@/stores/user";
+import {storeToRefs} from "pinia";
 
 const { playlistInfo, songs } = defineProps({
   playlistInfo: {
@@ -97,9 +123,20 @@ const { playlistInfo, songs } = defineProps({
   }
 })
 
+const collapse = ref(false)
+
+const { myPlayList } = storeToRefs(useUserStore())
+const myPlayListIds = myPlayList.value.map(item => item.id)
+
 const { push } = usePlayerStore()
 function playAll(replace:boolean = true) {
   push(songs.filter(item => !item.noCopyrightRcmd), replace)
+}
+
+function dblclickPlay(song: Song) {
+  if (song.noCopyrightRcmd) return
+  const index = songs.findIndex(item => item.id === song.id)
+  push(songs.filter(item => !item.noCopyrightRcmd), true, index)
 }
 </script>
 

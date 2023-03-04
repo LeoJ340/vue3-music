@@ -99,7 +99,7 @@ const router = createRouter({
                 {
                     path: ':id',
                     name: 'OtherPlayList',
-                    component: () => import('@/views/OtherPlayList.vue')
+                    component: () => import('@/views/common/PlayList.vue')
                 }
             ]
         }
