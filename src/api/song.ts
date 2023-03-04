@@ -1,6 +1,6 @@
 import request from "@/utils/request";
 import {SongUrl} from "@/models/SongUrl";
-import {Song} from "@/models/Song";
+import {Song, TopSong} from "@/models/Song";
 
 export async function getSongUrl(id: number) {
     const { data } = await request.get<{ data: SongUrl[] }>('/song/url', { id, cookie: sessionStorage.getItem('cookie') })
@@ -15,4 +15,9 @@ export async function getSong(ids: number[]) {
 export async function getDailySongs() {
     const { data } = await request.get<{ data: { dailySongs: Song[] } }>('/recommend/songs', { cookie: sessionStorage.getItem('cookie') })
     return data.dailySongs
+}
+
+export async function getTopSongs(type: number = 0) {
+    const { data } = await request.get<{ data: TopSong[] }>('/top/song', { type })
+    return data
 }

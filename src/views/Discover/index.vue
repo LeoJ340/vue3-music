@@ -1,8 +1,7 @@
 <template>
   <div class="main-wrapper">
-    <el-menu :default-active="currentRoute.path" mode="horizontal" :router="true">
+    <el-menu :default-active="active" mode="horizontal" :router="true">
       <el-menu-item v-for="route in indexRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
-      <el-menu-item index="6" disabled>最新音乐</el-menu-item>
     </el-menu>
     <router-view />
   </div>
@@ -11,8 +10,16 @@
 <script setup lang="ts">
 import {indexRoutes} from "@/router";
 import {useRoute} from "vue-router";
+import {computed} from "vue";
 
 const currentRoute = useRoute()
+
+const active = computed(() => {
+  const currentPath = currentRoute.path.replace('/discover', '').split('/')
+  const activeRoute = indexRoutes.find(item => item.path === currentPath[1])
+  if (activeRoute) return `/discover/${activeRoute.path}`
+  return ''
+})
 </script>
 
 <style scoped lang="scss">

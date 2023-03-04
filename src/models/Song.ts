@@ -1,3 +1,5 @@
+import {Artist} from "@/models/Artist";
+
 export interface Song {
     id: number
     name: string
@@ -17,4 +19,32 @@ export interface Song {
         typeDesc: string
     }
     publishTime: number
+}
+
+export interface TopSong{
+    id: number
+    name: string
+    duration: number
+    album: {
+        company: string
+        status: number
+        tags: string
+        alias: string[]
+        artists: Artist[]
+        pic: number
+        companyId: number
+        picId: number
+        publishTime: number
+        picUrl: string
+        blurPicUrl: string
+        subType: string
+        description: string
+        name: string
+        id: number
+        type: string
+        size: number
+        picId_str: string
+    }
+    alias: string[]
+    artists: Artist[]
 }
