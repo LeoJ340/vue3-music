@@ -56,14 +56,14 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {getDailySongs} from "@/api/song";
+import {recommendSongs} from "@/api/recommend";
 import {Song} from "@/models/Song";
 import { Calendar, PlayOne, Plus, FolderPlus, Download, Like } from '@icon-park/vue-next';
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
 
 const dailySongs = ref<Song[]>([])
-getDailySongs().then(res => {
+recommendSongs().then(res => {
   dailySongs.value = res
 })
 

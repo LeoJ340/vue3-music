@@ -53,17 +53,16 @@ const menuGroups = computed(() => {
           path: `/my/playlist/${myPlayList.value[0].id}`,
           text: '我喜欢的音乐',
           icon: Like
-        },
-        //  TODO：联调接口，根据登录状态显示。暂时写隐藏
-        // {
-        //   path: '/my/cloud',
-        //   text: '我的音乐云盘',
-        //   icon: Download
-        // }
+        }
       ]
     }
   ]
   if (hasLogin) {
+    group[1].list.push({
+      path: '/my/cloud',
+      text: '我的音乐云盘',
+      icon: Download
+    })
     const createPlaylist = myPlayList.value.slice(1, myPlayList.value.length).map(item => {
       return {
         path: `/my/playlist/${item.id}`,

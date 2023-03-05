@@ -123,6 +123,7 @@ const { playlistInfo, songs } = defineProps({
   }
 })
 
+// 简介下拉完全展示
 const collapse = ref(false)
 
 const { myPlayList } = storeToRefs(useUserStore())

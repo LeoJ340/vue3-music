@@ -12,11 +12,6 @@ export async function getSong(ids: number[]) {
     return songs[0]
 }
 
-export async function getDailySongs() {
-    const { data } = await request.get<{ data: { dailySongs: Song[] } }>('/recommend/songs', { cookie: sessionStorage.getItem('cookie') })
-    return data.dailySongs
-}
-
 export async function getTopSongs(type: number = 0) {
     const { data } = await request.get<{ data: TopSong[] }>('/top/song', { type })
     return data
