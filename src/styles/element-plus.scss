@@ -43,6 +43,28 @@
     border-left-color: var(--el-button-divide-border-color) !important;
   }
 }
+// 主题化改造按钮
+.el-button {
+  --el-button-bg-color: var(--main-bg);
+  --el-button-text-color: var(--main-text);
+  --el-button-hover-bg-color: var(--main-bg-light);
+  --el-button-hover-text-color: var(--main-text);
+  --el-button-border-color: rgb(75, 75, 75);
+  --el-button-hover-border-color: rgb(75, 75, 75);
+  --el-button-active-border-color: rgb(75, 75, 75);
+}
+.el-button--primary {
+  --el-button-bg-color: var(--player-theme);
+  --el-button-border-color: var(--player-theme);
+  --el-button-hover-bg-color: var(--player-theme-light);
+  --el-button-hover-border-color: var(--player-theme-light);
+  --el-button-disabled-bg-color: var(--player-theme-light);
+  --el-button-disabled-border-color: var(--player-theme-light);
+  --el-button-active-bg-color: var(--player-theme);
+  --el-button-active-border-color: var(--player-theme);
+  --el-button-text-color: #ffffff;
+  --el-button-hover-text-color: #ffffff;
+}
 .el-link:hover {
   color: inherit;
 }

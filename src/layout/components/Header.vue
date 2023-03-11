@@ -74,6 +74,7 @@ import {storeToRefs} from "pinia";
 import { Left, Right, DownOne, Theme, SettingTwo, Mail, Power, CheckOne } from '@icon-park/vue-next';
 import {checkQR, getQR, getQrKey} from "@/api/login";
 import {useUserStore} from "@/stores/user";
+import {useAppStore} from "@/stores/app";
 import {themeList} from "@/models/Theme";
 import waiting from '@/assets/waiting-authorization.png'
 import logo from '@/assets/logo.png'
@@ -138,8 +139,7 @@ watch(loginVisible, val => {
   }
 })
 
-const currentTheme = ref('red')
-
+const { currentTheme } = storeToRefs(useAppStore())
 function changeTheme(theme: string) {
   currentTheme.value = theme
   document.body.className = theme === 'red' ? '' : theme
