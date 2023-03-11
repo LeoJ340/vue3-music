@@ -70,6 +70,12 @@ const router = createRouter({
                     name: 'DailySongs',
                     component: () => import('@/views/Discover/DaySongs.vue'),
                     meta: { title: '每日歌曲推荐' }
+                },
+                {
+                    path: 'highQualityPlayList',
+                    name: 'HighQualityPlayList',
+                    component: () => import('@/views/Discover/HighQualityPlayList.vue'),
+                    meta: { title: '精选歌单' }
                 }
             ]
         },

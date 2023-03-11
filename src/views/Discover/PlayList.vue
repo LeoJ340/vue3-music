@@ -1,6 +1,5 @@
 <template>
-  <!-- TODO：精品歌单页面 -->
-  <div v-if="highQualityPlayList" class="top-playlist flex" @click="router.push(`/`)">
+  <div v-if="highQualityPlayList" class="top-playlist flex" @click="toHighQualityPlayList">
     <div class="top-playlist-bg" :style="{ backgroundImage: `url(${highQualityPlayList.coverImgUrl})` }"></div>
     <el-image :src="highQualityPlayList.coverImgUrl" />
     <div class="cover-info">
@@ -142,8 +141,17 @@ watch(currentCategoryName, val => {
     getTopPlayListsByHighQualityCategories(val, 1).then(res => {
       highQualityPlayList.value = res.playlists[0]
     })
+  } else {
+    highQualityPlayList.value = undefined
   }
 })
+
+function toHighQualityPlayList() {
+  router.push({
+    path: '/highQualityPlayList',
+    query: highQualityCategories.value.map(item => item.name).includes(currentCategoryName.value) ? { cat: currentCategoryName.value } : {}
+  })
+}
 
 function changeCategory(category: string) {
   playlistPage.page = 1

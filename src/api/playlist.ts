@@ -20,21 +20,25 @@ export async function getTopList() {
     return list
 }
 
+// 热门分类
 export async function getHotCategories() {
     const { tags } = await request.get<{ tags: Array<HotCategory> }>('/playlist/hot')
     return tags
 }
 
+// 全部分类
 export async function getSubCategories() {
     const { sub } = await request.get<{ all: Category, sub: Array<Category> }>('/playlist/catlist')
     return sub
 }
 
+// 精选分类
 export async function getHighQualityCategories() {
     const { tags } = await request.get<{ tags: Array<HighQualityTag> }>('/playlist/highquality/tags')
     return tags
 }
 
+// 精选歌单
 export async function getTopPlayListsByHighQualityCategories(cat: string = '全部', limit: number = 50, before?: number) {
     const params = {
         cat,
@@ -45,6 +49,7 @@ export async function getTopPlayListsByHighQualityCategories(cat: string = '全�
     return { playlists, total }
 }
 
+// 网友精选碟歌单
 export async function getTopPlaylistsByCategory(cat: string = '全部', limit: number = 50, page: number) {
     const params = {
         cat,
