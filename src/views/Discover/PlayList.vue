@@ -35,7 +35,7 @@
       </el-link>
     </div>
   </div>
-  <PlayLists :playlists="playlistPage.list" />
+  <PlayLists v-loading="loading" element-loading-text="载入中..." :playlists="playlistPage.list" />
   <el-pagination
       small
       background
@@ -113,15 +113,19 @@ const playlistPage = reactive<{ list: PlayList[]; page: number; size: number; to
   total: 0
 })
 
+const loading = ref(false)
+
 const hotCategories = ref<HotCategory[]>([])
 const highQualityCategories = ref<HighQualityTag[]>([])
 
 async function init() {
+  loading.value = true
   const initRes = await Promise.allSettled([await getHotCategories(), await getHighQualityCategories()])
   hotCategories.value = initRes[0].value
   highQualityCategories.value = initRes[1].value
   currentCategoryName.value = hotCategories.value[0].name
   const { playlists, total } = await getTopPlaylistsByCategory(currentCategoryName.value, playlistPage.size, playlistPage.page)
+  loading.value = false
   playlistPage.list = playlists
   playlistPage.total = total
   // 异步获取全部分类
@@ -154,20 +158,27 @@ function toHighQualityPlayList() {
 }
 
 function changeCategory(category: string) {
+  loading.value = true
   playlistPage.page = 1
   currentCategoryName.value = category
   getTopPlaylistsByCategory(currentCategoryName.value, playlistPage.size, playlistPage.page).then(res => {
     const { playlists, total } = res
     playlistPage.total = total
     playlistPage.list = playlists
+  }).finally(() => {
+    loading.value = false
   })
 }
 
-function changePage() {
+function changePage(page: number) {
+  loading.value = true
+  playlistPage.page = page
   getTopPlaylistsByCategory(currentCategoryName.value, playlistPage.size, playlistPage.page).then(res => {
     const { playlists, total } = res
     playlistPage.total = total
     playlistPage.list = playlists
+  }).finally(() => {
+    loading.value = false
   })
 }
 </script>
