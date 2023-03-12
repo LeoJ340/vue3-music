@@ -46,12 +46,13 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
+import {useRouter} from "vue-router";
 import {getTopSongs} from "@/api/song";
-import {Song, TopSong} from "@/models/Song";
+import {TopSong} from "@/models/Song";
 import {PlayOne, FolderPlus} from "@icon-park/vue-next";
 import {useFormatSeconds} from "@/utils/time";
-import {useRouter} from "vue-router";
 import {usePlayerStore} from "@/stores/player";
+import {useToSong} from "@/utils/typeFormate";
 
 const router = useRouter()
 
@@ -97,23 +98,6 @@ function selectType(type: { key: number, text: string }) {
   topSongs.value.length = 0
   currentType.value = type
   getData()
-}
-
-// TopSong类型转换Song
-function useToSong(topSong: TopSong): Song {
-  return {
-    id: topSong.id,
-    name: topSong.name,
-    al: topSong.album,
-    alia: topSong.alias,
-    ar: topSong.artists,
-    dt: topSong.duration,
-    noCopyrightRcmd: {
-      type: 0,
-      typeDesc: ''
-    },
-    publishTime: topSong.album.publishTime
-  }
 }
 
 const { push, playImmediately } = usePlayerStore()

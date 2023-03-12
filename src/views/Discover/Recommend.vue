@@ -1,6 +1,7 @@
 <template>
   <!-- banner -->
   <el-carousel :interval="4000" type="card" height="220px">
+    <!-- TODO：阻止点击未激活item -->
     <el-carousel-item v-for="(banner, index) in bannerList" :key="index" @click="clickBanner(banner)">
       <div class="banner-item">
         <el-image :src="banner.imageUrl" />
@@ -14,6 +15,7 @@
       <h3 class="flex-vertical-center m-0">推荐歌单<Right theme="outline" size="22"/></h3>
     </router-link>
     <ul class="playlists-content">
+      <!-- TODO：玻璃化背景 -->
       <li v-if="hasLogin" class="playlist-item daily-songs" @click="toDailySongs">
         <el-image :src="dailySongsBg" />
         <Calendar theme="outline" fill="#ffffff"/>
@@ -36,36 +38,35 @@
     <router-link to="/discover/new/songs">
       <h3 class="flex-vertical-center m-0">最新音乐<Right theme="outline" size="22"/></h3>
     </router-link>
-    <ul class="top-songs-content">
-      <li v-for="item in topSongs" class="top-songs-item">
-        <div class="image">
-          <el-image :src="item.album.picUrl" />
-          <PlayOne class="to-play" theme="filled" size="32" :strokeWidth="2"/>
-        </div>
-        <div class="info">
-          <span class="info-name">{{item.name}}</span>
-          <span class="text-12">{{item.artists.map(artist => artist.name).join('/')}}</span>
-        </div>
-      </li>
-    </ul>
+    <CoverHorizontal
+        :list="topSongsFilter" :columns="3" imageSize="100px" :showPlayCount="false" playPlacement="center"
+        class="top-songs"
+        v-slot="{ item }" @click="clickTopSong">
+      <span>{{item.name}}</span>
+      <span class="text-12">{{item.artists}}</span>
+    </CoverHorizontal>
   </div>
 </template>
 
 <script setup lang="ts">
-import {ref, watch} from "vue";
+import dailySongsBg from '@/assets/dailySongsBg.jpg'
+import CoverHorizontal from '@/components/CoverHorizontal/index.vue'
+import {Right, PlayOne, Calendar} from "@icon-park/vue-next";
+import {computed, reactive, ref, watch} from "vue";
+import {useRouter} from "vue-router";
+import {storeToRefs} from "pinia";
 import {banners, personalized, recommendPlaylists} from "@/api/recommend";
 import {Banner} from "@/models/Banner";
 import {useUserStore} from "@/stores/user";
-import {Right, PlayOne, Calendar} from "@icon-park/vue-next";
 import {Personalized} from "@/models/personalized";
-import {useRouter} from "vue-router";
-import {storeToRefs} from "pinia";
 import useFormatCount from "@/utils/count";
 import {getSong, getTopSongs} from "@/api/song";
 import {usePlayerStore} from "@/stores/player";
-import dailySongsBg from '@/assets/dailySongsBg.jpg'
 import {TopSong} from "@/models/Song";
+import {useToSong} from "@/utils/typeFormate";
 
+const router = useRouter()
+const { playImmediately } = usePlayerStore()
 /**
  * banner
  */
@@ -74,7 +75,6 @@ banners().then(res => {
   bannerList.value = res
 })
 
-const { playImmediately } = usePlayerStore()
 function clickBanner(banner: Banner) {
   if (banner.targetType === 1) {
     getSong([banner.targetId]).then(song => {
@@ -105,7 +105,6 @@ watch(hasLogin, value => {
 }, { immediate: true })
 
 // 去歌单页
-const router = useRouter()
 function toPlayList(id: number) {
   router.push(`/playlist/${id}`)
 }
@@ -117,10 +116,26 @@ function toDailySongs() {
 /**
  * 最新音乐
  */
-const topSongs = ref<TopSong[]>([])
+const topSongs = reactive<TopSong[]>([])
+// 过滤给组件的数据
+const topSongsFilter = computed(() => {
+  return topSongs.map(item => {
+    return {
+      id: item.id,
+      coverImgUrl: item.album.picUrl,
+      name: item.name,
+      artists: item.artists.map(artist => artist.name).join('/')
+    }
+  })
+})
+
+function clickTopSong(id: number) {
+  const index = topSongs.findIndex(item => item.id === id)
+  playImmediately(useToSong(topSongs[index]))
+}
 
 getTopSongs(0).then(res => {
-  topSongs.value = res.slice(0, 12)
+  topSongs.push(...res.slice(0, 12))
 })
 </script>
 
@@ -188,39 +203,6 @@ getTopSongs(0).then(res => {
         visibility: visible;
         opacity: 1;
       }
-    }
-  }
-}
-.top-songs-content {
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: auto;
-  grid-gap: 10px;
-  .top-songs-item {
-    display: flex;
-    .image {
-      position: relative;
-      cursor: pointer;
-      .el-image {
-        width: 100px;
-      }
-      .to-play {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border-radius: 50%;
-        background-color: rgba(255, 255, 255, 0.8);
-        color: var(--player-theme);
-      }
-    }
-    .info {
-      flex: 1;
-      margin-left: 10px;
-      display: flex;
-      flex-flow: column;
-      justify-content: space-around;
     }
   }
 }
