@@ -13,6 +13,11 @@ export interface PlayList {
         userId: number
         nickname: string
         avatarUrl: string
+        avatarDetail: {
+            identityIconUrl: string
+            identityLevel: number
+            userType: number
+        }
     }
     description: string
     tags: Array<string>
