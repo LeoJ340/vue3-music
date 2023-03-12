@@ -2,7 +2,7 @@
   <el-menu :default-active="active" mode="horizontal" :router="true">
     <el-menu-item v-for="route in indexRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
   </el-menu>
-  <el-scrollbar view-class="discover-main" view-style="padding: 0 20px;">
+  <el-scrollbar view-style="padding: 0 20px;">
     <router-view />
   </el-scrollbar>
 </template>
@@ -27,6 +27,7 @@ const active = computed(() => {
   border-bottom: none;
   position: fixed;
   width: 100%;
+  padding-left: 20px;
   --el-menu-bg-color: var(--main-bg);
   --el-menu-text-color: var(--main-text);
   --el-menu-hover-bg-color: var(--main-bg);

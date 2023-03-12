@@ -1,7 +1,6 @@
 <template>
   <!-- banner -->
-  <el-carousel :interval="4000" type="card" height="220px">
-    <!-- TODO：阻止点击未激活item -->
+  <el-carousel :interval="4000" type="card" height="220px" @change="changeBanner">
     <el-carousel-item v-for="(banner, index) in bannerList" :key="index" @click="clickBanner(banner)">
       <div class="banner-item">
         <el-image :src="banner.imageUrl" />
@@ -15,9 +14,8 @@
       <h3 class="flex-vertical-center m-0">推荐歌单<Right theme="outline" size="22"/></h3>
     </router-link>
     <ul class="playlists-content">
-      <!-- TODO：玻璃化背景 -->
-      <li v-if="hasLogin" class="playlist-item daily-songs" @click="toDailySongs">
-        <el-image :src="dailySongsBg" />
+      <li v-if="hasLogin" class="playlist-item" @click="toDailySongs">
+        <el-image :src="dailySongsBg" class="daily-songs-bg" />
         <Calendar theme="outline" fill="#ffffff"/>
         <div style="margin-top: 5px;">每日歌曲推荐</div>
         <PlayOne class="to-play" theme="filled" size="32" :strokeWidth="2"/>
@@ -75,7 +73,14 @@ banners().then(res => {
   bannerList.value = res
 })
 
+const currentBannerIndex = ref(0)
+function changeBanner(index: number) {
+  currentBannerIndex.value = index
+}
+
 function clickBanner(banner: Banner) {
+  const index = bannerList.value.findIndex(item => item.imageUrl === banner.imageUrl)
+  if (currentBannerIndex.value !== index) return
   if (banner.targetType === 1) {
     getSong([banner.targetId]).then(song => {
       playImmediately(song)
@@ -166,12 +171,14 @@ getTopSongs(0).then(res => {
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   grid-template-rows: auto;
   grid-gap: 10px;
-  .daily-songs .el-image{
-    width: 100%;
-  }
   .playlist-item {
     position: relative;
     cursor: pointer;
+    overflow: hidden;
+    .daily-songs-bg {
+      width: 100%;
+      filter: blur(4px);
+    }
     .i-icon-calendar {
       position: absolute;
       top: 40%;
