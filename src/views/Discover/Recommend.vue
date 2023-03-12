@@ -31,6 +31,24 @@
       </li>
     </ul>
   </div>
+  <!-- 最新音乐 -->
+  <div class="top-songs">
+    <router-link to="/discover/new/songs">
+      <h3 class="flex-vertical-center m-0">最新音乐<Right theme="outline" size="22"/></h3>
+    </router-link>
+    <ul class="top-songs-content">
+      <li v-for="item in topSongs" class="top-songs-item">
+        <div class="image">
+          <el-image :src="item.album.picUrl" />
+          <PlayOne class="to-play" theme="filled" size="32" :strokeWidth="2"/>
+        </div>
+        <div class="info">
+          <span class="info-name">{{item.name}}</span>
+          <span class="text-12">{{item.artists.map(artist => artist.name).join('/')}}</span>
+        </div>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -43,11 +61,14 @@ import {Personalized} from "@/models/personalized";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import useFormatCount from "@/utils/count";
-import {getSong} from "@/api/song";
+import {getSong, getTopSongs} from "@/api/song";
 import {usePlayerStore} from "@/stores/player";
 import dailySongsBg from '@/assets/dailySongsBg.jpg'
+import {TopSong} from "@/models/Song";
 
-// banner
+/**
+ * banner
+ */
 const bannerList = ref<Banner[]>([])
 banners().then(res => {
   bannerList.value = res
@@ -66,7 +87,9 @@ function clickBanner(banner: Banner) {
   }
 }
 
-// 推荐歌单
+/**
+ * 推荐歌单
+ */
 const playlists = ref<Personalized[]>([])
 const { hasLogin } = storeToRefs(useUserStore())
 watch(hasLogin, value => {
@@ -90,6 +113,15 @@ function toPlayList(id: number) {
 function toDailySongs() {
   router.push('/dailySongs')
 }
+
+/**
+ * 最新音乐
+ */
+const topSongs = ref<TopSong[]>([])
+
+getTopSongs(0).then(res => {
+  topSongs.value = res.slice(0, 12)
+})
 </script>
 
 <style scoped lang="scss">
@@ -156,6 +188,39 @@ function toDailySongs() {
         visibility: visible;
         opacity: 1;
       }
+    }
+  }
+}
+.top-songs-content {
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-gap: 10px;
+  .top-songs-item {
+    display: flex;
+    .image {
+      position: relative;
+      cursor: pointer;
+      .el-image {
+        width: 100px;
+      }
+      .to-play {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.8);
+        color: var(--player-theme);
+      }
+    }
+    .info {
+      flex: 1;
+      margin-left: 10px;
+      display: flex;
+      flex-flow: column;
+      justify-content: space-around;
     }
   }
 }
