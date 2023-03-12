@@ -1,10 +1,10 @@
 <template>
-  <div class="main-wrapper">
-    <el-menu :default-active="active" mode="horizontal" :router="true">
-      <el-menu-item v-for="route in indexRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
-    </el-menu>
+  <el-menu :default-active="active" mode="horizontal" :router="true">
+    <el-menu-item v-for="route in indexRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
+  </el-menu>
+  <el-scrollbar view-class="discover-main" view-style="padding: 0 20px;">
     <router-view />
-  </div>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -23,12 +23,10 @@ const active = computed(() => {
 </script>
 
 <style scoped lang="scss">
-.main-wrapper {
-  margin: 20px;
-}
 .el-menu {
   border-bottom: none;
-  margin-bottom: 10px;
+  position: fixed;
+  width: 100%;
   --el-menu-bg-color: var(--main-bg);
   --el-menu-text-color: var(--main-text);
   --el-menu-hover-bg-color: var(--main-bg);
@@ -40,5 +38,9 @@ const active = computed(() => {
     font-weight: 700;
     border-bottom: 2px solid var(--player-theme);
   }
+}
+.el-scrollbar {
+  height: calc(100% - 70px);
+  margin-top: 70px;
 }
 </style>

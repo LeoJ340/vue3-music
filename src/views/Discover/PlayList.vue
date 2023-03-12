@@ -41,7 +41,7 @@
       background
       layout="prev, pager, next"
       :page-size="playlistPage.size"
-      v-model:current-page="playlistPage.index"
+      v-model:current-page="playlistPage.page"
       :total="playlistPage.total"
       :hide-on-single-page="playlistPage.total < playlistPage.size"
       @current-change="changePage"
