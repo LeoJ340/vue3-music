@@ -9,7 +9,7 @@
     </div>
   </div>
   <!-- 列表 -->
-  <el-table :data="topSongs" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
+  <el-table v-loading="loading" element-loading-text="载入中..." :data="topSongs" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
     <el-table-column type="index" width="50" />
     <el-table-column label="封面" show-overflow-tooltip>
       <template #default="scope">
@@ -80,16 +80,21 @@ const types = [
 
 const currentType = ref(types[0])
 const topSongs = ref<TopSong[]>([])
+const loading = ref(false)
 
 function getData() {
+  loading.value = true
   getTopSongs(currentType.value.key).then(res => {
     topSongs.value = res
+  }).finally(() => {
+    loading.value = false
   })
 }
 
 getData()
 
 function selectType(type: { key: number, text: string }) {
+  topSongs.value.length = 0
   currentType.value = type
   getData()
 }
