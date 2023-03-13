@@ -24,6 +24,7 @@ export interface PlayList {
     trackCount: number
     tracks: Array<Song> | any
     userId: number
+    privacy: number
 }
 
 export interface TopList extends PlayList{

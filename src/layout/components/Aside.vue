@@ -18,12 +18,12 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { Like, Download, MusicMenu } from '@icon-park/vue-next';
+import { Like, Download, MusicMenu, Lock } from '@icon-park/vue-next';
 import {useUserStore} from "@/stores/user";
 import {computed} from "vue";
 import {storeToRefs} from "pinia";
 
-const { hasLogin, myPlayList } = storeToRefs(useUserStore())
+const { hasLogin, userInfo, myPlayList } = storeToRefs(useUserStore())
 
 const router = useRouter()
 
@@ -63,17 +63,30 @@ const menuGroups = computed(() => {
       text: '我的音乐云盘',
       icon: Download
     })
-    const createPlaylist = myPlayList.value.slice(1, myPlayList.value.length).map(item => {
+    const createPlaylist = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator.userId === userInfo.value.userId).map(item => {
       return {
         path: `/my/playlist/${item.id}`,
         text: item.name,
-        icon: MusicMenu
+        icon: item.privacy ? Lock : MusicMenu
       }
     })
     group.push({
       title: '创建的歌单',
       list: createPlaylist
     })
+    const favorPlaylist = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator.userId !== userInfo.value.userId).map(item => {
+          return {
+            path: `/playlist/${item.id}`,
+            text: item.name,
+            icon: MusicMenu
+          }
+        })
+    if (favorPlaylist.length) {
+      group.push({
+        title: '收藏的歌单',
+        list: favorPlaylist
+      })
+    }
   }
   return group
 })
@@ -88,7 +101,6 @@ function isActive(path: string) {
   background-color: var(--main-bg);
   border-right: 1px solid var(--aside-border-right);
   .menu {
-    padding: 10px;
     .menu-group-title {
       margin-top: 20px;
       margin-bottom: 10px;
@@ -101,6 +113,9 @@ function isActive(path: string) {
       align-items: center;
       padding: 10px 20px 10px 20px;
       color: var(--main-text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
       &.active, &:hover {
         background-color: var(--aside-active-bg);
         color: var(--aside-active-text);

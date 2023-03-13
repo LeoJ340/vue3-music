@@ -17,7 +17,7 @@ const currentPlaylistId = ref(currentRoute.params.id)
 const { hasLogin, myPlayList } = storeToRefs(useUserStore())
 
 // 路由拦截
-if (!hasLogin && currentPlaylistId.value !== 'undefined') {
+if (!hasLogin && currentPlaylistId.value !== '7631877215') {
   router.push(`/playlist/${currentPlaylistId.value}`)
 }
 const playlistInfo = computed(() => {
