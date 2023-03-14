@@ -43,6 +43,10 @@ const menuGroups = computed(() => {
         {
           path: '/discover',
           text: '发现音乐'
+        },
+        {
+          path: '/video',
+          text: '视频'
         }
       ]
     },

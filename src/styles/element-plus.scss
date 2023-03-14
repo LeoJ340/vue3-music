@@ -1,3 +1,19 @@
+.el-menu {
+  width: 100%;
+  padding-left: 20px !important;
+  border-bottom: none !important;
+  --el-menu-bg-color: var(--main-bg);
+  --el-menu-text-color: var(--main-text);
+  --el-menu-hover-bg-color: var(--main-bg);
+  --el-menu-hover-text-color: var(--main-text);
+  --el-menu-active-color: var(--main-text);
+  --el-menu-item-font-size: 16px;
+  .el-menu-item.is-active {
+    font-size: 20px;
+    font-weight: 700;
+    border-bottom: 2px solid var(--player-theme) !important;
+  }
+}
 .el-table {
   th.el-table__cell {
     background-color: var(--playlist-row-striped) !important;

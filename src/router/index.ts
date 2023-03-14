@@ -76,7 +76,30 @@ const router = createRouter({
                     name: 'HighQualityPlayList',
                     component: () => import('@/views/Discover/HighQualityPlayList.vue'),
                     meta: { title: '精选歌单' }
-                }
+                },
+                /**
+                 * 视频
+                 */
+                {
+                    path: '/video',
+                    component: () => import('@/views/Video/index.vue'),
+                    redirect: '/video/video',
+                    meta: { title: '视频' },
+                    children: [
+                        {
+                            path: 'video',
+                            name: 'Video',
+                            component: () => import('@/views/Video/Video.vue'),
+                            meta: { title: '视频' }
+                        },
+                        {
+                            path: 'mv',
+                            name: 'MV',
+                            component: () => import('@/views/Video/MV.vue'),
+                            meta: { title: 'MV' }
+                        }
+                    ]
+                },
             ]
         },
         {
