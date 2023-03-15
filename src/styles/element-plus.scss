@@ -84,3 +84,9 @@
 .el-link:hover {
   color: inherit;
 }
+.el-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  --el-color-primary: var(--player-theme);
+}

@@ -81,7 +81,7 @@ const router = createRouter({
                  * 视频
                  */
                 {
-                    path: '/video',
+                    path: 'video',
                     component: () => import('@/views/Video/index.vue'),
                     redirect: '/video/video',
                     meta: { title: '视频' },
@@ -100,6 +100,18 @@ const router = createRouter({
                         }
                     ]
                 },
+                {
+                    path: 'topMV',
+                    name: 'TopMV',
+                    component: () => import('@/views/Video/TopMV.vue'),
+                    meta: { title: 'MV排行榜' }
+                },
+                {
+                    path: 'allMV',
+                    name: 'AllMV',
+                    component: () => import('@/views/Video/AllMV.vue'),
+                    meta: { title: '全部MV' }
+                }
             ]
         },
         {

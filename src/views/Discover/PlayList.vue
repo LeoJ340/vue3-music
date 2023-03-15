@@ -264,10 +264,4 @@ function changePage(page: number) {
     }
   }
 }
-.el-pagination {
-  display: flex;
-  justify-content: center;
-  margin-top: 20px;
-  --el-color-primary: var(--player-theme);
-}
 </style>

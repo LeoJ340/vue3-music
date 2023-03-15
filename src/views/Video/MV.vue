@@ -1,7 +1,7 @@
 <template>
   <!-- 最新MV -->
   <div class="flex justify-between" style="margin-top: 10px;">
-    <router-link to="/">
+    <router-link :to="`/allMV?area=${firstReq.area}`">
       <h3 class="flex-vertical-center m-0">最新MV<Right theme="outline" size="22"/></h3>
     </router-link>
     <div class="area-list">
@@ -20,7 +20,7 @@
   </ul>
   <!-- 网易出品 -->
   <div class="flex justify-between" style="margin-top: 10px;">
-    <router-link to="/">
+    <router-link to="/allMV?type=网易出品">
       <h3 class="flex-vertical-center m-0">网易出品<Right theme="outline" size="22"/></h3>
     </router-link>
   </div>
@@ -35,8 +35,8 @@
     </li>
   </ul>
   <!-- MV排行榜 -->
-  <div class="flex justify-between" style="margin-top: 10px;">
-    <router-link to="/">
+  <div class="flex justify-between" style="margin-top: 30px;">
+    <router-link :to="`/topMV?area=${topReq.area}`">
       <h3 class="flex-vertical-center m-0">MV排行榜<Right theme="outline" size="22"/></h3>
     </router-link>
     <div class="area-list">
@@ -47,12 +47,19 @@
     <li v-for="(mv, no) in topMv" class="top-mv-item">
       <div class="flex-center" style="width: 10%;">
         <div>
-          <span>{{no+1}}</span>
-          <p class="text-center">-</p>
+          <h2 style="font-weight: 100; opacity: 0.6;">{{no+1 < 10 ? '0' : ''}}{{no+1}}</h2>
+          <div class="text-center">
+            <span v-if="no+1 === mv.lastRank">-</span>
+            <Component
+                v-else
+                :is="no+1 > mv.lastRank ? UpSmall : DownSmall"
+                theme="outline" size="18" :strokeWidth="3"
+            />
+          </div>
         </div>
       </div>
       <div style="width: 45%;">
-        <el-image :src="mv.cover" fit="contain" />
+        <el-image :src="mv.cover" fit="contain" lazy />
       </div>
       <div class="info">
         <p class="text-14">{{mv.name}}</p>
@@ -63,10 +70,10 @@
 </template>
 
 <script setup lang="ts">
-import {Right, PlayOne} from "@icon-park/vue-next";
-import {getExclusiveMV, getFirstMV, getTopMV} from "@/api/mv";
+import {reactive, ref} from "vue";
+import {Right, PlayOne, UpSmall, DownSmall} from "@icon-park/vue-next";
 import useFormatCount from "@/utils/count";
-import {ref} from "vue";
+import {getExclusiveMV, getFirstMV, getTopMV} from "@/api/mv";
 import {MV, TopMV} from "@/models/MV";
 
 const areas = ['内地','港台','欧美','日本','韩国']
@@ -74,10 +81,10 @@ const areas = ['内地','港台','欧美','日本','韩国']
 /**
  * 最新MV
  */
-const firstReq = {
+const firstReq = reactive({
   area: '内地',
   limit: 8
-}
+})
 
 const firstMV = ref<MV[]>([])
 
@@ -106,10 +113,10 @@ getExclusiveMV(8, 1).then(res => {
 /**
  * MV排行榜
  */
-const topReq = {
+const topReq = reactive({
   area: '内地',
   limit: 10
-}
+})
 const topMv = ref<TopMV[]>([])
 
 function toGetTopMV() {
@@ -134,6 +141,10 @@ toGetTopMV()
     width: 60px;
     text-align: center;
     cursor: pointer;
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    &:last-child {
+      border-right: none;
+    }
     &.active {
       color: var(--player-theme);
     }
@@ -145,9 +156,16 @@ toGetTopMV()
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 200px;
   grid-gap: 15px;
+  //display: flex;
+  //flex-wrap: wrap;
   .mv-item {
     position: relative;
     cursor: pointer;
+    //width: 23.5%;
+    //margin-right: 2%;
+    //&:nth-child(4n) {
+    //  margin-right: 0;
+    //}
     .el-image {
       width: 100%;
       height: 80%;
@@ -173,9 +191,19 @@ toGetTopMV()
     box-sizing: border-box;
     width: 50%;
     padding: 20px 20px 20px 0;
-    border-right: 0.5px solid;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
     &:nth-child(2n) {
       border-right: none;
+    }
+    &:nth-last-child(1), &:nth-last-child(2) {
+      border-bottom: none;
+    }
+    .i-icon-up-small {
+      color: rgb(236, 65, 65);
+    }
+    .i-icon-down-small {
+      color: rgb(44, 119, 202);
     }
     .info {
       width: 45%;
