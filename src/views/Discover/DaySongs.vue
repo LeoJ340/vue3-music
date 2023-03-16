@@ -68,8 +68,8 @@ recommendSongs().then(res => {
 })
 
 const { push } = usePlayerStore()
-function playAll(replace:boolean = true) {
-  push(dailySongs.value.filter(item => !item.noCopyrightRcmd), replace)
+function playAll(replace: boolean = true) {
+  push(dailySongs.value.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
 }
 </script>
 

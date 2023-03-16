@@ -55,8 +55,8 @@ function playingClass(row: { row: Song, rowIndex: number }) {
 
 function dblclickPlay(song: Song) {
   if (song.noCopyrightRcmd) return
-  const index = songs.value.findIndex(item => item.id === song.id)
-  push(songs.value.filter(item => !item.noCopyrightRcmd), true, index)
+  const starIndex = songs.value.findIndex(item => item.id === song.id)
+  push(songs.value.filter(item => !item.noCopyrightRcmd), { replace: true, starIndex, trigger: 'doubleClick' })
 }
 </script>
 

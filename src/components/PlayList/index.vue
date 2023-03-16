@@ -130,14 +130,14 @@ const { myPlayList } = storeToRefs(useUserStore())
 const myPlayListIds = myPlayList.value.map(item => item.id)
 
 const { push } = usePlayerStore()
-function playAll(replace:boolean = true) {
-  push(songs.filter(item => !item.noCopyrightRcmd), replace)
+function playAll(replace: boolean = true) {
+  push(songs.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
 }
 
 function dblclickPlay(song: Song) {
   if (song.noCopyrightRcmd) return
-  const index = songs.findIndex(item => item.id === song.id)
-  push(songs.filter(item => !item.noCopyrightRcmd), true, index)
+  const starIndex = songs.findIndex(item => item.id === song.id)
+  push(songs.filter(item => !item.noCopyrightRcmd), { replace: true, starIndex, trigger: 'doubleClick' })
 }
 </script>
 

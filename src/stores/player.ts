@@ -66,17 +66,48 @@ export const usePlayerStore = defineStore('player', () => {
         })
     }
 
-    function push(list: Array<Song>, replace: boolean = true, starIndex: number = 0) {
+    function playAll(list: Array<Song>, starIndex: number = 0) {
+        songs.length ? clear() : ''
+        songs.push(...list)
+        player.currentId = songs[starIndex].id
+        play()
+    }
+
+    const songIds = computed(() => songs.map(item => item.id))
+
+    function push(list: Array<Song>, options?: { replace: boolean, starIndex?: number, trigger?: 'playAll' | 'doubleClick' }) {
         if (!list.length) return
+        if (!songs.length) {
+            playAll(list)
+            return
+        }
+        // 列表重复退出方法
+        if (list.map(item => item.id).toString() === songs.map(item => item.id).toString()) return
+        const { replace = true, starIndex = 0, trigger } = options || {}
         if (replace) {
-            clear()
-            songs.push(...list)
-            player.currentId = songs[starIndex].id
-            play()
+            if (trigger) {
+                // trigger触发，区分提示词
+                const content = trigger === 'doubleClick' ? '“双击播放”会用当前列表的音乐替换播放列表，是否继续？' : '“播放全部”将会替换当前播放列表，是否继续？'
+                ElMessageBox.confirm(
+                    content,
+                    '替换播放列表',
+                    {
+                        confirmButtonText: '继续',
+                        cancelButtonText: '取消',
+                        center: true,
+                        draggable: true,
+                    }
+                ).then(() => {
+                    playAll(list, starIndex)
+                })
+            } else {
+                playAll(list, starIndex)
+            }
         } else {
-            // 加入播放列表（去重）
+            // 加入播放列表
+            if (list.every(item => songIds.value.includes(item.id))) return// 均包含于当前播放列表，退出方法
             songs.splice(index.value + 1, 0, ...list)
-            push([...new Set(songs)], true)
+            push([...new Set(songs)], { replace: true })
         }
     }
 

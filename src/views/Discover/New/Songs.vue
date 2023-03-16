@@ -102,7 +102,7 @@ function selectType(type: { key: number, text: string }) {
 
 const { push, playImmediately } = usePlayerStore()
 function playAll() {
-  push(topSongs.value.map(useToSong), true)
+  push(topSongs.value.map(useToSong), { replace: true, trigger: 'playAll' })
 }
 
 function toPlayList(id: number) {
