@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import {indexRoutes} from "@/router";
+import discoverRoutes from "@/router/discover";
 import {useRoute} from "vue-router";
 import {computed} from "vue";
 
@@ -16,7 +16,7 @@ const currentRoute = useRoute()
 
 const active = computed(() => {
   const currentPath = currentRoute.path.replace('/discover', '').split('/')
-  const activeRoute = indexRoutes.find(item => item.path === currentPath[1])
+  const activeRoute = discoverRoutes.find(item => item.path === currentPath[1])
   if (activeRoute) return `/discover/${activeRoute.path}`
   return ''
 })

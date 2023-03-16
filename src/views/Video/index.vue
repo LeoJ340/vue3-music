@@ -10,21 +10,7 @@
 <script setup lang="ts">
 import {useRoute} from "vue-router";
 import {computed} from "vue";
-
-const videoRoutes = [
-  {
-    path: 'video',
-    name: 'Video',
-    component: () => import('@/views/Video/Video.vue'),
-    meta: { title: '视频' }
-  },
-  {
-    path: 'mv',
-    name: 'MV',
-    component: () => import('@/views/Video/MV.vue'),
-    meta: { title: 'MV' }
-  }
-]
+import videoRoutes from "@/router/video";
 
 const currentRoute = useRoute()
 
