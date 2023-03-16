@@ -9,7 +9,7 @@
     </div>
   </div>
   <ul class="mv-list">
-    <li v-for="mv in firstMV" class="mv-item">
+    <li v-for="mv in firstMV" class="mv-item" @click="toDetail(mv.id)">
       <el-image :src="mv.cover" fit="cover" />
       <div style="margin-top: 5px;">{{mv.name}}</div>
       <div class="play-count">
@@ -25,7 +25,7 @@
     </router-link>
   </div>
   <ul class="mv-list">
-    <li v-for="mv in exclusiveMV" class="mv-item">
+    <li v-for="mv in exclusiveMV" class="mv-item" @click="toDetail(mv.id)">
       <el-image :src="mv.cover" fit="contain" />
       <div style="margin-top: 5px;">{{mv.name}}</div>
       <div class="play-count">
@@ -58,9 +58,9 @@
           </div>
         </div>
       </div>
-      <div style="width: 45%;">
+      <el-link style="width: 45%;" @click="toDetail(mv.id)">
         <el-image :src="mv.cover" fit="contain" lazy />
-      </div>
+      </el-link>
       <div class="info">
         <p class="text-14">{{mv.name}}</p>
         <p class="text-12">{{mv.artistName}}</p>
@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import {reactive, ref} from "vue";
+import {useRouter} from "vue-router";
 import {Right, PlayOne, UpSmall, DownSmall} from "@icon-park/vue-next";
 import useFormatCount from "@/utils/count";
 import {getExclusiveMV, getFirstMV, getTopMV} from "@/api/mv";
@@ -131,6 +132,11 @@ function changeTopMVArea(area: string) {
 }
 
 toGetTopMV()
+
+const router = useRouter()
+function toDetail(id: number) {
+  router.push(`/mv/${id}`)
+}
 
 </script>
 

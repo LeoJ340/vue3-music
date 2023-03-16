@@ -83,7 +83,7 @@ const router = createRouter({
                 {
                     path: 'video',
                     component: () => import('@/views/Video/index.vue'),
-                    redirect: '/video/video',
+                    redirect: '/video/mv',
                     meta: { title: '视频' },
                     children: [
                         {
@@ -111,6 +111,12 @@ const router = createRouter({
                     name: 'AllMV',
                     component: () => import('@/views/Video/AllMV.vue'),
                     meta: { title: '全部MV' }
+                },
+                {
+                    path: 'mv/:id',
+                    name: 'MVDetail',
+                    component: () => import('@/views/Video/MVDetail.vue'),
+                    meta: { title: 'MV详情' }
                 }
             ]
         },
@@ -145,6 +151,12 @@ const router = createRouter({
             ]
         }
     ]
+})
+
+router.beforeEach(async(to, from, next) => {
+    // @ts-ignore
+    document.title = to.meta.title
+    next()
 })
 
 export default router

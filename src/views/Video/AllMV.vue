@@ -24,7 +24,7 @@
     </div>
     <!-- MV列表 -->
     <ul v-loading="loading" element-loading-text="载入中..." class="mv-list">
-      <li v-for="mv in mvList" class="mv-item">
+      <li v-for="mv in mvList" class="mv-item" @click="toDetail(mv.id)">
         <el-image :src="mv.cover" fit="cover" />
         <div style="margin-top: 5px;">{{mv.name}}</div>
         <div class="play-count">
@@ -50,7 +50,7 @@
 <script setup lang="ts">
 import {PlayOne} from "@icon-park/vue-next";
 import useFormatCount from "@/utils/count";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {reactive, ref} from "vue";
 import {getMVList} from "@/api/mv";
 import {MV} from "@/models/MV";
@@ -110,6 +110,11 @@ function selectOrder(order: string) {
 function changePage(page: number) {
   params.page = page
   getData()
+}
+
+const router = useRouter()
+function toDetail(id: number) {
+  router.push(`/mv/${id}`)
 }
 </script>
 

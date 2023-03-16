@@ -17,9 +17,9 @@
             </p>
           </div>
         </div>
-        <div style="width: 45%;">
+        <el-link style="width: 45%;" @click="toDetail(mv.id)">
           <el-image :src="mv.cover" fit="contain" lazy />
-        </div>
+        </el-link>
         <div class="info">
           <p class="text-14">{{mv.name}}</p>
           <p class="text-12">{{mv.artistName}}</p>
@@ -32,7 +32,7 @@
 <script setup lang="ts">
 import {DownSmall, UpSmall} from "@icon-park/vue-next";
 import {reactive, ref} from "vue";
-import {useRoute} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {TopMV} from "@/models/MV";
 import {getTopMV} from "@/api/mv";
 
@@ -61,6 +61,11 @@ function changeTopMVArea(area: string) {
 }
 
 toGetTopMV()
+
+const router = useRouter()
+function toDetail(id: number) {
+  router.push(`/mv/${id}`)
+}
 </script>
 
 <style scoped lang="scss">

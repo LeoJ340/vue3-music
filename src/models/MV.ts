@@ -1,19 +1,24 @@
 import {Artist} from "@/models/Artist";
+import {VideoGroup} from "@/models/Video";
 
 export interface MV {
     id: number
     cover: string
     name: string
     playCount: number
-    briefDesc: unknown
-    desc: unknown
+    subCount: number
+    shareCount: number
+    commentCount: number
+    briefDesc: string | null
+    desc: string | null
     artistName: string
     artistId: number
     duration: number
-    mark: number
-    subed: boolean
     artists: Array<Artist>
     alias?: Array<string>
+    videoGroup?: Array<VideoGroup>
+    commentThreadId?: string
+    publishTime?: string
 }
 
 export interface TopMV extends MV{
@@ -55,4 +60,19 @@ export interface TopMV extends MV{
     },
     lastRank: number
     score: number
+}
+
+export interface MVUrl {
+    id: number
+    url: string
+    r: number
+    size: number
+    md5: string
+    code: number
+    expi: number
+    fee: number
+    mvFee: number
+    st: number
+    promotionVo?: any
+    msg: string
 }
