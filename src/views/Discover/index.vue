@@ -1,6 +1,6 @@
 <template>
   <el-menu :default-active="active" mode="horizontal" :router="true">
-    <el-menu-item v-for="route in indexRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
+    <el-menu-item v-for="route in discoverRoutes" :index="`/discover/${route.path}`">{{route.meta.title}}</el-menu-item>
   </el-menu>
   <el-scrollbar view-style="padding: 0 20px;">
     <router-view />
@@ -8,9 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import discoverRoutes from "@/router/discover";
 import {useRoute} from "vue-router";
 import {computed} from "vue";
+import discoverRoutes from "@/router/discover";
 
 const currentRoute = useRoute()
 
