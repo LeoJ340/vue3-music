@@ -114,3 +114,17 @@
 .relative {
   position: relative;
 }
+
+// grid
+.grid-col3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-gap: 10px;
+}
+.grid-col5 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  grid-gap: 10px;
+}

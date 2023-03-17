@@ -9,7 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    CoverHorizontal: typeof import('./src/components/CoverHorizontal/index.vue')['default']
+    Cover: typeof import('./src/components/Cover/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -38,7 +38,6 @@ declare module '@vue/runtime-core' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     PlayList: typeof import('./src/components/PlayList/index.vue')['default']
-    PlayLists: typeof import('./src/components/PlayLists/index.vue')['default']
     ReplacePlayListConfirm: typeof import('./src/components/ReplacePlayListConfirm/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']

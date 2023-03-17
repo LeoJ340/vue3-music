@@ -35,7 +35,13 @@
       </el-link>
     </div>
   </div>
-  <PlayLists v-loading="loading" element-loading-text="载入中..." :playlists="playlistPage.list" />
+  <div v-loading="loading" element-loading-text="载入中..." class="grid-col5">
+    <Cover v-for="item in playlistPage.list"
+           mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
+           icon-placement="bottom-right" icon-transition="" @click="toPlayList(item.id)">
+      <el-link :underline="false">{{item.name}}</el-link>
+    </Cover>
+  </div>
   <el-pagination
       small
       background
@@ -49,7 +55,7 @@
 </template>
 
 <script setup lang="ts">
-import PlayLists from '@/components/PlayLists/index.vue'
+import Cover from '@/components/Cover/index.vue'
 import {CrownThree, Right ,Earth, Piano, Cup, SlightlySmilingFace, GridTwo} from "@icon-park/vue-next";
 import {reactive, ref, ShallowRef, shallowRef, watch} from "vue";
 import {
@@ -72,7 +78,6 @@ const router = useRouter()
 // 精选歌单
 const highQualityPlayList = ref<PlayList>()
 const currentCategoryName = ref('全部歌单')
-
 const allCategory = reactive<{ name: string; icon: ShallowRef<Icon>; sub: Category[]; row: number }[]>([
   {
     name: '语种',
@@ -180,6 +185,10 @@ function changePage(page: number) {
   }).finally(() => {
     loading.value = false
   })
+}
+
+function toPlayList(id: number) {
+  router.push(`/playlist/${id}`)
 }
 </script>
 

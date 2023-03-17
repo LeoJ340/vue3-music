@@ -15,23 +15,24 @@
         </div>
       </el-popover>
     </header>
-    <!-- TODO：下拉滚动 -->
-    <CoverHorizontal
-        :list="listData" :columns="3" :showPlayCount="true" playPlacement="bottom-right"
-        v-slot="{ item }" @click="toPlayList">
-      <span class="info-name">{{item.name}}</span>
-      <p class="text-12 flex">
-        by {{item.creator.nickname}}
-        <el-image v-if="item.creator.avatarDetail" :src="item.creator.avatarDetail?.identityIconUrl" style="margin-left: 2px; width: 15px;" />
-      </p>
-      <p class="text-12">{{item.copywriter}}</p>
-    </CoverHorizontal>
+    <div class="grid-col3">
+      <Cover v-for="item in playLists"
+             mode="horizontal" :image-url="item.coverImgUrl" image-size="200px"
+             icon-placement="bottom-right" icon-transition="" @click="toPlayList(item.id)">
+        <span class="info-name">{{item.name}}</span>
+        <p class="text-12 flex">
+          by {{item.creator.nickname}}
+          <el-image v-if="item.creator.avatarDetail" :src="item.creator.avatarDetail?.identityIconUrl" style="margin-left: 2px; width: 15px;" />
+        </p>
+        <p class="text-12">{{item.copywriter}}</p>
+      </Cover>
+    </div>
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
-import CoverHorizontal from '@/components/CoverHorizontal/index.vue'
-import {computed, reactive, ref} from "vue";
+import Cover from '@/components/Cover/index.vue'
+import {reactive, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
 import {getHighQualityCategories, getTopPlayListsByHighQualityCategories} from "@/api/playlist";
 import {HighQualityTag} from "@/models/Category";
@@ -52,19 +53,6 @@ const cat = ref(currentRoute.query.cat || '全部')
 const limit = 50
 
 const playLists = reactive<PlayList[]>([])
-// 过滤组件数据
-const listData = computed(() => {
-  return playLists.map(item => {
-    return {
-      id: item.id,
-      coverImgUrl: item.coverImgUrl,
-      playCount: item.playCount || item.playcount,
-      name: item.name,
-      creator: item.creator,
-      copywriter: item.copywriter
-    }
-  })
-})
 
 getTopPlayListsByHighQualityCategories(cat.value as string, limit).then(res => {
   playLists.push(...res.playlists)
@@ -86,9 +74,6 @@ function toPlayList(id: number) {
 </script>
 
 <style scoped lang="scss">
-main {
-  margin: 20px;
-}
 .all-cate {
   margin: 10px;
   cursor: pointer;

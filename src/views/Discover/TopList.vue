@@ -23,16 +23,22 @@
   </div>
 
   <h3>全球榜</h3>
-  <PlayLists :playlists="topList.slice(4)" />
+  <div class="grid-col5">
+    <Cover v-for="item in topList.slice(4)"
+           mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
+           icon-placement="bottom-right" icon-transition="" @click="toPlayList(item.id)">
+      <el-link :underline="false">{{item.name}}</el-link>
+    </Cover>
+  </div>
 </template>
 
 <script setup lang="ts">
-import {ref} from "vue";
+import Cover from '@/components/Cover/index.vue'
 import { PlayOne, Right } from "@icon-park/vue-next";
+import {ref} from "vue";
+import {useRouter} from "vue-router";
 import {getTopList} from "@/api/playlist";
 import {TopList} from "@/models/PlayList";
-import {useRouter} from "vue-router";
-import PlayLists from '@/components/PlayLists/index.vue'
 import {useFormatTime} from "@/utils/time";
 
 const topList = ref<TopList[]>([])
