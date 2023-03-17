@@ -1,6 +1,5 @@
 import request from "@/utils/request";
-import {SongUrl} from "@/models/SongUrl";
-import {Song, TopSong} from "@/models/Song";
+import {Song, TopSong, SongUrl} from "@/models/Song";
 
 export async function getSongUrl(id: number) {
     const { data } = await request.get<{ data: SongUrl[] }>('/song/url', { id, cookie: sessionStorage.getItem('cookie') })

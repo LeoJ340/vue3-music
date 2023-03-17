@@ -1,7 +1,7 @@
 <template>
-  <main>
+  <el-scrollbar view-style="padding: 0 20px;">
     <header class="flex justify-between items-center">
-      <h3>精品歌单<el-link href="https://music.163.com/#/topic?id=202001" target="_blank" :underline="false"><help theme="outline" size="18" :strokeWidth="3"/></el-link></h3>
+      <h3>精品歌单<el-link href="https://music.163.com/#/topic?id=202001" target="_blank" :underline="false" title="如何成为精品歌单？"><help theme="outline" size="18" :strokeWidth="3"/></el-link></h3>
       <el-popover placement="bottom-start" width="600" trigger="click" :effect="currentTheme === 'dark' ? 'dark' : 'light'">
         <template #reference>
           <el-button round><Filter theme="outline" size="16" :strokeWidth="3"/>{{cat}}</el-button>
@@ -26,7 +26,7 @@
       </p>
       <p class="text-12">{{item.copywriter}}</p>
     </CoverHorizontal>
-  </main>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">

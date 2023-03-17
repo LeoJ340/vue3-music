@@ -9,7 +9,10 @@
     </div>
   </div>
   <!-- 列表 -->
-  <el-table v-loading="loading" element-loading-text="载入中..." :data="topSongs" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
+  <el-table v-loading="loading" element-loading-text="载入中..."
+            :data="topSongs" stripe :show-header="false"
+            tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }"
+            @row-dblclick="dblclickPlay">
     <el-table-column type="index" width="50" />
     <el-table-column label="封面" show-overflow-tooltip>
       <template #default="scope">
@@ -48,7 +51,7 @@
 import {ref} from "vue";
 import {useRouter} from "vue-router";
 import {getTopSongs} from "@/api/song";
-import {TopSong} from "@/models/Song";
+import {Song, TopSong} from "@/models/Song";
 import {PlayOne, FolderPlus} from "@icon-park/vue-next";
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
@@ -103,6 +106,12 @@ function selectType(type: { key: number, text: string }) {
 const { push, playImmediately } = usePlayerStore()
 function playAll() {
   push(topSongs.value.map(useToSong), { replace: true, trigger: 'playAll' })
+}
+
+function dblclickPlay(song: Song) {
+  if (song.noCopyrightRcmd) return
+  const starIndex = topSongs.value.findIndex(item => item.id === song.id)
+  push(topSongs.value.map(useToSong), { replace: true, starIndex, trigger: 'doubleClick' })
 }
 
 function toPlayList(id: number) {
