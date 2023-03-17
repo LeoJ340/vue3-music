@@ -4,7 +4,7 @@ import discoverChildren from "@/router/discover";
 import videoChildren from "@/router/video";
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',

@@ -1,7 +1,8 @@
 import axios, { type AxiosRequestConfig } from 'axios'
 
 const service = axios.create({
-    baseURL: 'http://localhost:3000',
+    baseURL: 'https://service-flgzov7m-1259174451.gz.apigw.tencentcs.com/',
+    // baseURL: 'http://localhost:3000',
     timeout: 5000
 })
 
