@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar>
     <!-- 歌单信息 -->
-    <div v-if="playlistInfo.name" class="flex" style="margin: 20px;">
+    <div v-if="playlistInfo" class="flex" style="margin: 20px;">
       <el-image :src="playlistInfo.coverImgUrl" class="coverImage" />
       <div class="flex-1" style="margin-left: 20px;">
         <h2>{{playlistInfo.name}}</h2>
@@ -102,7 +102,7 @@
 </template>
 
 <script setup lang="ts">
-import {PropType, ref} from "vue";
+import {ref} from "vue";
 import {PlayList} from "@/models/PlayList";
 import {Song} from "@/models/Song";
 import { useFormatSeconds, useFormatTime } from "@/utils/time";
@@ -112,16 +112,10 @@ import useFormatCount from "@/utils/count";
 import { useUserStore } from "@/stores/user";
 import {storeToRefs} from "pinia";
 
-const { playlistInfo, songs } = defineProps({
-  playlistInfo: {
-    type: Object as PropType<PlayList>,
-    required: true
-  },
-  songs: {
-    type: Array as PropType<Song[]>,
-    required: true
-  }
-})
+const props = defineProps<{
+  playlistInfo: PlayList | null
+  songs: Song[]
+}>()
 
 // 简介下拉完全展示
 const collapse = ref(false)
@@ -131,13 +125,13 @@ const myPlayListIds = myPlayList.value.map(item => item.id)
 
 const { push } = usePlayerStore()
 function playAll(replace: boolean = true) {
-  push(songs.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
+  push(props.songs.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
 }
 
 function dblclickPlay(song: Song) {
   if (song.noCopyrightRcmd) return
-  const starIndex = songs.findIndex(item => item.id === song.id)
-  push(songs.filter(item => !item.noCopyrightRcmd), { replace: true, starIndex, trigger: 'doubleClick' })
+  const starIndex = props.songs.findIndex(item => item.id === song.id)
+  push(props.songs.filter(item => !item.noCopyrightRcmd), { replace: true, starIndex, trigger: 'doubleClick' })
 }
 </script>
 

@@ -3,7 +3,6 @@ import {reactive, ref} from "vue";
 import {checkLogin, logout} from "@/api/login";
 import {playList} from "@/api/user";
 import {PlayList} from "@/models/PlayList";
-import playlistDefaultCover from '@/assets/playlist-cover.png'
 
 export const useUserStore = defineStore('user', () => {
     const hasLogin = ref(false)
@@ -39,30 +38,10 @@ export const useUserStore = defineStore('user', () => {
             userInfo.userId = logoutUserInfo.userId
             userInfo.userName = logoutUserInfo.userName
             userInfo.avatarUrl = logoutUserInfo.avatarUrl
-            myPlayList.value = [noPlayList]
         })
     }
 
-    const noPlayList = {
-        id: undefined,
-        name: '我喜欢的音乐',
-        copywriter: '',
-        coverImgUrl: playlistDefaultCover,
-        createTime: 0,
-        updateTime: 0,
-        playCount: 0,
-        creator: {
-            userId: logoutUserInfo.userId,
-            nickname: logoutUserInfo.userName,
-            avatarUrl: logoutUserInfo.avatarUrl
-        },
-        description: '',
-        tags: [],
-        trackCount: 0,
-        tracks: [],
-        userId: logoutUserInfo.userId
-    }
-    const myPlayList = ref<PlayList[]>([noPlayList])
+    const myPlayList = ref<PlayList[]>([])
 
     function getMyPlayList() {
         playList(userInfo.userId).then(res => {

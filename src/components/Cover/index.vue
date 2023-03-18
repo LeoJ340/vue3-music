@@ -6,7 +6,7 @@
         <PlayOne theme="outline" size="22" :strokeWidth="2"/>
         <span>{{useFormatCount(playCount)}}</span>
       </div>
-      <PlayOne class="play-icon" :style="[playIconPosition]" theme="filled" size="32" :strokeWidth="2"/>
+      <PlayOne v-if="iconPlacement" class="play-icon" :style="[playIconPosition]" theme="filled" size="32" :strokeWidth="2"/>
     </div>
     <div :class="{ 'mt-5': mode === 'vertical', 'ml-5': mode === 'horizontal' }">
       <slot></slot>
@@ -24,8 +24,8 @@ const props = defineProps<{
   imageUrl: string
   imageSize?: string // 图片尺寸（水平模式时生效）
   playCount?: number
-  iconPlacement: 'center' | 'bottom-right' // 播放图标摆放位置
-  iconTransition: 'fade' // 播放图标过渡模式
+  iconPlacement?: 'center' | 'bottom-right' // 播放图标摆放位置
+  iconTransition?: 'fade' // 播放图标过渡模式
 }>()
 
 // playIcon位置样式

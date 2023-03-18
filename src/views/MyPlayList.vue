@@ -1,5 +1,6 @@
 <template>
-  <PlayList v-if="Object.keys(playlistInfo).length" :playlist-info="playlistInfo" :songs="songs" />
+  <PlayList v-if="playlistInfo" :playlist-info="playlistInfo" :songs="songs" />
+  <el-empty v-else description="暂无数据" />
 </template>
 
 <script setup lang="ts">
@@ -14,34 +15,23 @@ const router = useRouter()
 const currentRoute = useRoute()
 const currentPlaylistId = ref(currentRoute.params.id)
 
-const { hasLogin, myPlayList } = storeToRefs(useUserStore())
+const { myPlayList } = storeToRefs(useUserStore())
 
-// 路由拦截
-if (!hasLogin && currentPlaylistId.value !== '7631877215') {
-  router.push(`/playlist/${currentPlaylistId.value}`)
-}
 const playlistInfo = computed(() => {
-  const currentPlayList = myPlayList.value.find(item => String(item.id) === currentPlaylistId.value)
-  if(!currentPlayList) {
-    router.push(`/playlist/${currentPlaylistId.value}`)
-  }
-  return currentPlayList
+  return myPlayList.value.find(item => String(item.id) === currentPlaylistId.value) || null
 })
 
 const songs = ref<Song[]>([])
-getTracks()
 
 function getTracks() {
-  if (currentPlaylistId.value === 'undefined') {
-    songs.value = []
-    return
+  if (currentPlaylistId.value !== 'undefined') {
+    getPlayListTrack(Number(currentPlaylistId.value)).then(res => {
+      songs.value = res
+    })
   }
-  getPlayListTrack(Number(currentPlaylistId.value)).then(res => {
-    songs.value = res
-  }).catch(_ => {
-    songs.value = []
-  })
 }
+
+getTracks()
 
 onBeforeRouteUpdate(to => {
   currentPlaylistId.value = to.params.id

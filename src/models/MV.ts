@@ -76,3 +76,20 @@ export interface MVUrl {
     promotionVo?: any
     msg: string
 }
+
+export interface PersonalizedMV {
+    id: number
+    type: number
+    name: string
+    copywriter: string
+    picUrl: string
+    canDislike: false
+    trackNumberUpdateTime: unknown
+    duration: number
+    playCount: number
+    subed: boolean
+    artists: Array<Artist>
+    artistName: string
+    artistId: number
+    alg: string
+}
