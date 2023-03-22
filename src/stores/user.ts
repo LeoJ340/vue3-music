@@ -6,6 +6,7 @@ import {PlayList} from "@/models/PlayList";
 
 export const useUserStore = defineStore('user', () => {
     const hasLogin = ref(false)
+    const showLogin = ref(false)
 
     const defaultAvatar = 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
     const logoutUserInfo = {
@@ -18,6 +19,11 @@ export const useUserStore = defineStore('user', () => {
         userName: logoutUserInfo.userName,
         avatarUrl: logoutUserInfo.avatarUrl
     })
+
+    function toLogin() {
+        if (hasLogin.value) return
+        showLogin.value = true
+    }
 
     function getUserInfo() {
         checkLogin().then(res => {
@@ -51,7 +57,8 @@ export const useUserStore = defineStore('user', () => {
     }
 
     return {
-        hasLogin, userInfo, getUserInfo, exitLogin,
+        hasLogin, userInfo, showLogin,
+        toLogin, getUserInfo, exitLogin,
         myPlayList
     }
 })

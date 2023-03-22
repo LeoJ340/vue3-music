@@ -45,98 +45,23 @@
       <Mail class="action-icon" theme="outline" size="20" :strokeWidth="2"/>
     </el-col>
   </el-row>
-
-  <!-- 登录弹窗 -->
-  <el-dialog v-model="loginVisible" width="30%" draggable :before-close="closeLogin">
-    <div v-loading="qrImgLoading" class="text-center relative">
-      <h1 class="m-0">扫码登录</h1>
-      <div v-show="qrStatus === 801 || qrStatus === 800">
-        <el-image v-if="qrImg" :src="qrImg" />
-        <div v-show="qrStatus === 800" class="qr-invalid">
-          <p>二维码已失效</p>
-          <el-button size="small" type="primary" @click="toLogin">点击刷新</el-button>
-        </div>
-        <p class="m-0">
-          使用 <a href="https://music.163.com/#/download" target="_blank" style="color: #409eff;">网易云音乐APP</a> 扫码登录
-        </p>
-      </div>
-      <div v-show="qrStatus === 802">
-        <el-image v-show="qrStatus === 802" :src="waiting" style="width: 180px; height: 180px;" />
-        <p class="m-0">请在手机上确认登录</p>
-      </div>
-    </div>
-  </el-dialog>
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref, watch} from "vue";
-import {storeToRefs} from "pinia";
 import { Left, Right, DownOne, Theme, SettingTwo, Mail, Power, CheckOne } from '@icon-park/vue-next';
-import {checkQR, getQR, getQrKey} from "@/api/login";
+import logo from '@/assets/logo.png'
+import {onMounted} from "vue";
+import {storeToRefs} from "pinia";
 import {useUserStore} from "@/stores/user";
 import {useAppStore} from "@/stores/app";
 import {themeList} from "@/models/Theme";
-import waiting from '@/assets/waiting-authorization.png'
-import logo from '@/assets/logo.png'
 
 const userStore = useUserStore()
 const { hasLogin, userInfo } = storeToRefs(userStore)
-const { getUserInfo, exitLogin } = userStore
+const { toLogin, getUserInfo, exitLogin } = userStore
 
 onMounted(() => {
   getUserInfo()
-})
-
-const loginVisible = ref(false)
-/**
- * 0：初始化
- * 800：二维码不存在或已过期
- * 801：等待扫码
- * 802：授权中
- * 803：授权成功
- */
-const qrStatus = ref(0)
-const qrImg = ref('')
-const qrImgLoading = ref(false)
-let timer: number
-
-async function toLogin() {
-  clearInterval(timer)
-  loginVisible.value = true
-  qrImgLoading.value = true
-  const qrKey = await getQrKey()
-  qrImg.value = await getQR(qrKey)
-  timer = setInterval( async () => {
-    try {
-      const { code, cookie } = await checkQR(qrKey)
-      qrStatus.value = code
-      qrImgLoading.value = false
-      if (code === 803) {
-        sessionStorage.setItem('cookie',cookie)
-        getUserInfo()
-        clearInterval(timer)
-        loginVisible.value = false
-      }
-      if (code === 800) {
-        clearInterval(timer)
-      }
-    } catch (e) {
-      clearInterval(timer)
-      qrImgLoading.value = false
-    }
-  }, 2000)
-}
-
-function closeLogin() {
-  loginVisible.value = false
-  clearInterval(timer)
-  qrStatus.value = 0
-}
-
-watch(loginVisible, val => {
-  if (!val && timer) {
-    clearInterval(timer)
-  }
 })
 
 const { currentTheme } = storeToRefs(useAppStore())
