@@ -8,7 +8,7 @@ export default [
     {
         path: 'mv',
         name: 'MV',
-        component: () => import('@/views/Video/MV.vue'),
+        component: () => import('@/views/Video/MV/index.vue'),
         meta: { title: 'MV' }
     }
 ]

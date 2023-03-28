@@ -43,19 +43,19 @@ const router = createRouter({
                 {
                     path: 'topMV',
                     name: 'TopMV',
-                    component: () => import('@/views/Video/TopMV.vue'),
+                    component: () => import('@/views/Video/MV/TopMV.vue'),
                     meta: { title: 'MV排行榜' }
                 },
                 {
                     path: 'allMV',
                     name: 'AllMV',
-                    component: () => import('@/views/Video/AllMV.vue'),
+                    component: () => import('@/views/Video/MV/AllMV.vue'),
                     meta: { title: '全部MV' }
                 },
                 {
                     path: 'mv/:id',
                     name: 'MVDetail',
-                    component: () => import('@/views/Video/MVDetail.vue'),
+                    component: () => import('@/views/Video/MV/MVDetail.vue'),
                     meta: { title: 'MV详情' }
                 }
             ]
