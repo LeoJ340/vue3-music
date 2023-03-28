@@ -7,9 +7,9 @@
         <span>{{useFormatCount(playCount)}}</span>
       </div>
       <transition v-if="iconPlacement && iconTransition" :name="iconTransition">
-        <PlayOne v-show="showPlayIcon" :style="playIconPosition" theme="filled" size="32" :strokeWidth="2"/>
+        <PlayOne v-show="showPlayIcon" class="play-icon" :style="playIconPosition" theme="filled" size="32" :strokeWidth="2"/>
       </transition>
-      <PlayOne v-if="iconPlacement && !iconTransition" v-show="showPlayIcon" :style="playIconPosition" theme="filled" size="32" :strokeWidth="2"/>
+      <PlayOne v-if="iconPlacement && !iconTransition" v-show="showPlayIcon" class="play-icon" :style="playIconPosition" theme="filled" size="32" :strokeWidth="2"/>
     </div>
     <div :class="{ 'mt-5': mode === 'vertical', 'ml-5': mode === 'horizontal' }">
       <slot></slot>
@@ -71,7 +71,7 @@ function click() {
     align-items: center;
     color: #ffffff;
   }
-  .i-icon-play-one {
+  .play-icon {
     position: absolute;
     border-radius: 50%;
     background-color: rgba(255, 255, 255, 0.8);
