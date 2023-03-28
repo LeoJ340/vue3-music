@@ -26,7 +26,7 @@
   <div class="grid-col5">
     <Cover v-for="item in topList.slice(4)"
            mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
-           icon-placement="bottom-right" icon-transition="" @click="toPlayList(item.id)">
+           icon-placement="center" @click="toPlayList(item.id)">
       <el-link :underline="false">{{item.name}}</el-link>
     </Cover>
   </div>

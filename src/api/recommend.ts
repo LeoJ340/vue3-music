@@ -2,7 +2,7 @@ import request from "@/utils/request";
 import {Banner} from "@/models/Banner";
 import {PersonalizedPlayList} from "@/models/PlayList";
 import {Song} from "@/models/Song";
-import {PersonalizedMV} from "@/models/MV";
+import {PersonalizedMV, PrivateMV} from "@/models/MV";
 
 export async function getBanners(type: number = 0) {
     const { banners } = await request.get<{ banners: Array<Banner> }>('/banner', { type })
@@ -30,5 +30,14 @@ export async function getPersonalizedPlaylists(limit: number = 10) {
 // 推荐MV（不需要登录）
 export async function getPersonalizedMV() {
     const { result } = await request.get<{ result: PersonalizedMV[] }>('/personalized/mv')
+    return result
+}
+
+// 推荐独家放送（不需要登录）
+export async function getPrivateMV(limit: number, page: number) {
+    const { result } = await request.get<{ result: PrivateMV[] }>('/personalized/privatecontent', {
+        offset:(page - 1) * limit,
+        limit
+    })
     return result
 }

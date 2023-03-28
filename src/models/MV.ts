@@ -93,3 +93,14 @@ export interface PersonalizedMV {
     artistId: number
     alg: string
 }
+
+export interface PrivateMV {
+    id: number,
+    url: string,
+    picUrl: string
+    sPicUrl: string
+    type: number
+    copywriter: string
+    name: string
+    alg: string
+}

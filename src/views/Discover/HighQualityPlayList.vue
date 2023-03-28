@@ -18,7 +18,7 @@
     <div class="grid-col3">
       <Cover v-for="item in playLists"
              mode="horizontal" :image-url="item.coverImgUrl" image-size="200px" :play-count="item.playCount"
-             icon-placement="bottom-right" icon-transition="" @click="toPlayList(item.id)">
+             icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toPlayList(item.id)">
         <span class="info-name">{{item.name}}</span>
         <p class="text-12 flex">
           by {{item.creator.nickname}}

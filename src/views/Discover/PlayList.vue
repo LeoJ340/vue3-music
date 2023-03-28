@@ -38,7 +38,7 @@
   <div v-loading="loading" element-loading-text="载入中..." class="grid-col5">
     <Cover v-for="item in playlistPage.list"
            mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
-           icon-placement="bottom-right" icon-transition="" @click="toPlayList(item.id)">
+           icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toPlayList(item.id)">
       <el-link :underline="false">{{item.name}}</el-link>
     </Cover>
   </div>

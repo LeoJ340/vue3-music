@@ -15,13 +15,24 @@
   <div class="grid-col5">
     <Cover v-if="hasLogin" class="relative daily-songs"
            mode="vertical" :image-url="dailySongsBg"
-           icon-placement="bottom-right" icon-transition="" @click="toDailySongs">
+           icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toDailySongs">
       <Calendar theme="outline" fill="#ffffff"/>
       <div>每日歌曲推荐</div>
     </Cover>
     <Cover v-for="item in playlists"
            mode="vertical" :image-url="item.picUrl" :play-count="item.playCount"
-           icon-placement="bottom-right" icon-transition="" @click="toPlayList(item.id)">
+           icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toPlayList(item.id)">
+      <div>{{item.name}}</div>
+    </Cover>
+  </div>
+  <!-- 独家放送 -->
+  <router-link to="/">
+    <h3 class="flex-vertical-center m-0">独家放送<Right theme="outline" size="22"/></h3>
+  </router-link>
+  <div class="grid-col3">
+    <Cover v-for="item in privateMVList"
+           mode="vertical" :image-url="item.picUrl"
+           icon-placement="top-left" icon-transition="only-show" @click="toMv(item.id)">
       <div>{{item.name}}</div>
     </Cover>
   </div>
@@ -32,11 +43,12 @@
   <div class="grid-col3">
     <Cover v-for="item in topSongs"
            mode="horizontal" :image-url="item.album.picUrl" image-size="100px"
-           icon-placement="center" icon-transition="" @click="clickTopSong(item.id)">
+           icon-placement="center" icon-transition="only-show" @click="clickTopSong(item.id)">
       <p>{{item.name}}</p>
       <span class="text-12">{{item.artists.map(artist => artist.name).join('/')}}</span>
     </Cover>
   </div>
+  <!-- 推荐MV -->
   <router-link to="/video/mv">
     <h3 class="flex-vertical-center m-0">推荐MV<Right theme="outline" size="22"/></h3>
   </router-link>
@@ -58,12 +70,18 @@ import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
 import {useUserStore} from "@/stores/user";
 import {usePlayerStore} from "@/stores/player";
-import {getBanners, getPersonalizedMV, getPersonalizedPlaylists, recommendPlaylists} from "@/api/recommend";
+import {
+  getBanners,
+  getPersonalizedMV,
+  getPersonalizedPlaylists,
+  getPrivateMV,
+  recommendPlaylists
+} from "@/api/recommend";
 import {getSong, getTopSongs} from "@/api/song";
 import {Banner} from "@/models/Banner";
 import {PersonalizedPlayList} from "@/models/PlayList";
 import {TopSong} from "@/models/Song";
-import {PersonalizedMV} from "@/models/MV";
+import {PersonalizedMV, PrivateMV} from "@/models/MV";
 import {useToSong} from "@/utils/typeFormate";
 
 const router = useRouter()
@@ -146,6 +164,14 @@ getPersonalizedMV().then(res => {
 function toMv(id: number) {
   router.push(`/mv/${id}`)
 }
+
+/**
+ * 独家放送
+ */
+const privateMVList = ref<PrivateMV[]>()
+getPrivateMV(3, 1).then(res => {
+  privateMVList.value = res
+})
 </script>
 
 <style scoped lang="scss">
