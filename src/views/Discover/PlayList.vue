@@ -273,4 +273,7 @@ function toPlayList(id: number) {
     }
   }
 }
+.el-pagination {
+  margin: 40px;
+}
 </style>

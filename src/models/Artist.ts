@@ -17,3 +17,29 @@ export interface Artist {
     topicPerson: number,
     trans: string
 }
+
+export interface ArtistDetail {
+    id: number
+    cover: string
+    name: string
+    transNames: Array<any>
+    alias: Array<string>
+    identities: Array<string>
+    identifyTag: unknown,
+    briefDesc: string
+    rank: {
+        rank: 8
+        type: 1
+    }
+    albumSize: number
+    musicSize: number
+    mvSize: number
+}
+
+export interface ArtistDesc {
+    introduction: Array<{
+        ti: string
+        txt: string
+    }>
+    briefDesc: string
+}
