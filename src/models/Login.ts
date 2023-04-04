@@ -22,15 +22,17 @@ export interface CheckQRRes {
 }
 
 export interface LoginStatus {
-    code: number
-    account: {
-        id: number
-        userName: string
-        createTime: number
-    }
-    profile: {
-        userId: number
-        nickname: string
-        avatarUrl: string
+    data: {
+        code: number
+        account: {
+            id: number
+            userName: string
+            createTime: number
+        }
+        profile: {
+            userId: number
+            nickname: string
+            avatarUrl: string
+        }
     }
 }

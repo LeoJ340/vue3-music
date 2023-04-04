@@ -129,7 +129,7 @@ async function init() {
   hotCategories.value = initRes[0].value
   highQualityCategories.value = initRes[1].value
   currentCategoryName.value = hotCategories.value[0].name
-  const { playlists, total } = await getTopPlaylistsByCategory(currentCategoryName.value, playlistPage.size, playlistPage.page)
+  const { playlists, total } = await getTopPlaylistsByCategory({ cat: currentCategoryName.value, limit: playlistPage.size, page: playlistPage.page })
   loading.value = false
   playlistPage.list = playlists
   playlistPage.total = total
@@ -147,7 +147,7 @@ watch(currentCategoryName, val => {
   // 监听当前分类是否属于精选分类
   if (highQualityCategories.value.map(item => item.name).includes(val)) {
     // 获取精选歌单第一项
-    getTopPlayListsByHighQualityCategories(val, 1).then(res => {
+    getTopPlayListsByHighQualityCategories({ cat: val, limit: 1 }).then(res => {
       highQualityPlayList.value = res.playlists[0]
     })
   } else {
@@ -166,7 +166,7 @@ function changeCategory(category: string) {
   loading.value = true
   playlistPage.page = 1
   currentCategoryName.value = category
-  getTopPlaylistsByCategory(currentCategoryName.value, playlistPage.size, playlistPage.page).then(res => {
+  getTopPlaylistsByCategory({ cat: currentCategoryName.value, limit: playlistPage.size, page: playlistPage.page }).then(res => {
     const { playlists, total } = res
     playlistPage.total = total
     playlistPage.list = playlists
@@ -178,7 +178,7 @@ function changeCategory(category: string) {
 function changePage(page: number) {
   loading.value = true
   playlistPage.page = page
-  getTopPlaylistsByCategory(currentCategoryName.value, playlistPage.size, playlistPage.page).then(res => {
+  getTopPlaylistsByCategory({ cat: currentCategoryName.value, limit: playlistPage.size, page: playlistPage.page }).then(res => {
     const { playlists, total } = res
     playlistPage.total = total
     playlistPage.list = playlists

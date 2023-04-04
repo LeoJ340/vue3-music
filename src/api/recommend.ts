@@ -1,43 +1,59 @@
-import request from "@/utils/request";
+import {request} from "@/utils/request";
 import {Banner} from "@/models/Banner";
 import {PersonalizedPlayList} from "@/models/PlayList";
 import {Song} from "@/models/Song";
 import {PersonalizedMV, PrivateMV} from "@/models/MV";
 
-export async function getBanners(type: number = 0) {
-    const { banners } = await request.get<{ banners: Array<Banner> }>('/banner', { type })
-    return banners
-}
-
-// 推荐歌单列表（需要登录）
-export async function recommendPlaylists() {
-    const { recommend } = await request.get<{ recommend: PersonalizedPlayList[] }>('/recommend/resource', { cookie: sessionStorage.getItem('cookie') })
-    return recommend
-}
-
-// 推荐歌曲列表（需要登录）
-export async function recommendSongs() {
-    const { data } = await request.get<{ data: { dailySongs: Song[] } }>('/recommend/songs', { cookie: sessionStorage.getItem('cookie') })
-    return data.dailySongs
-}
-
-// 推荐歌单（不需要登录）
-export async function getPersonalizedPlaylists(limit: number = 10) {
-    const { result } = await request.get<{ result: PersonalizedPlayList[] }>('/personalized', { limit })
-    return result
-}
-
-// 推荐MV（不需要登录）
-export async function getPersonalizedMV() {
-    const { result } = await request.get<{ result: PersonalizedMV[] }>('/personalized/mv')
-    return result
-}
-
-// 推荐独家放送（不需要登录）
-export async function getPrivateMV(limit: number, page: number) {
-    const { result } = await request.get<{ result: PrivateMV[] }>('/personalized/privatecontent', {
-        offset:(page - 1) * limit,
-        limit
+/**
+ * 首页Banner
+ */
+export function getBanners() {
+    return request<{ banners: Banner[] }>('/banner', 'GET', { type: 0 }).then(res => {
+        return res.banners
     })
-    return result
+}
+
+/**
+ * 推荐歌单列表（需要登录）
+ */
+export function getRecommendPlaylists() {
+    return request<{ recommend: PersonalizedPlayList[] }>('/recommend/resource', 'GET', {}, true).then(res => {
+        return res.recommend
+    })
+}
+
+/**
+ * 推荐歌单列表（不需要登录）
+ */
+export function getPersonalizedPlaylists(limit: number = 10) {
+    return request<{ result: PersonalizedPlayList[] }>('/personalized', 'GET', { limit }).then(res => {
+        return res.result
+    })
+}
+
+/**
+ * 每日歌曲推荐（需要登录）
+ */
+export function getDailySongs() {
+    return request<{ data: { dailySongs: Song[] } }>('/recommend/songs', 'GET', {}, true).then(res => {
+        return res.data.dailySongs
+    })
+}
+
+/**
+ * 推荐MV
+ */
+export function getPersonalizedMV() {
+    return request<{ result: PersonalizedMV[] }>('/personalized/mv', 'GET', {}).then(res => {
+        return res.result
+    })
+}
+
+/**
+ * 推荐独家放送入口
+ */
+export function getPrivateMV() {
+    return request<{ result: PrivateMV[] }>('/personalized/privatecontent', 'GET', {}).then(res => {
+        return res.result
+    })
 }

@@ -54,7 +54,7 @@ const limit = 50
 
 const playLists = reactive<PlayList[]>([])
 
-getTopPlayListsByHighQualityCategories(cat.value as string, limit).then(res => {
+getTopPlayListsByHighQualityCategories({ cat: cat.value as string, limit }).then(res => {
   playLists.push(...res.playlists)
 })
 
@@ -62,7 +62,7 @@ function changeCat(category: string) {
   if (category === cat.value) return
   playLists.length = 0
   cat.value = category
-  getTopPlayListsByHighQualityCategories(cat.value as string, limit).then(res => {
+  getTopPlayListsByHighQualityCategories({ cat: cat.value, limit }).then(res => {
     playLists.push(...res.playlists)
   })
 }

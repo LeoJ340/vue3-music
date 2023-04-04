@@ -3,7 +3,9 @@
     <div class="flex">
       <!-- LEFT -->
       <div style="flex: 2">
-        <h3 class="flex items-center"><Left theme="outline" size="22"/>MV详情</h3>
+        <h3 class="flex items-center">
+          <el-link :underline="false" @click="$router.back()"><Left theme="outline" size="22"/>MV详情</el-link>
+        </h3>
         <video v-if="mvDetail" controls autoplay style="width: 90%;">
           <source :src="mvUrl?.url" type="video/mp4">
         </video>
@@ -65,7 +67,7 @@ function getData() {
     mvUrl.value = res
   })
   getMVLikeCount(Number(mvId)).then(res => {
-    likedCount.value = res
+    likedCount.value = res.likedCount
   })
 }
 

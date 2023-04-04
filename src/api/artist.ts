@@ -1,29 +1,44 @@
-import request from "@/utils/request";
+import {request} from "@/utils/request";
 import {Artist, ArtistDesc, ArtistDetail} from "@/models/Artist";
 
-export async function getArtistList(page: number, limit: number, area?: number, type?: number, initial?: string | number) {
-    const params = {
-        offset: (page - 1) * limit,
-        limit,
-        area,
-        type,
-        initial
+/**
+ * 歌手列表
+ */
+export function getArtistList(params: { page: number, limit: number, area?: number, type?: number, initial?: string | number }) {
+    const reqParams = {
+        offset: (params.page - 1) * params.limit,
+        limit: params.limit,
+        area: params.area,
+        type: params.type,
+        initial: params.initial
     }
-    if (initial === '热门') {
-        params.initial = -1
+    if (params.initial === '热门') {
+        reqParams.initial = -1
     }
-    if (initial === '#') {
-        params.initial = 0
+    if (params.initial === '#') {
+        reqParams.initial = 0
     }
-    const { artists } = await request.get<{ artists: Artist[] }>('/artist/list', params)
-    return artists
+    return request<{ artists: Artist[], more: boolean }>('/artist/list', 'GET', reqParams).then(res => {
+        return res.artists
+    }).catch(_ => {
+        return Promise.reject()
+    })
 }
 
-export async function getArtistDetail(id: number) {
-    const { data } = await request.get<{ data: { artist: ArtistDetail } }>('/artist/detail', { id })
-    return data.artist
+/**
+ * 歌手详情
+ */
+export function getArtistDetail(id: number) {
+    return request<{ data: { artist: ArtistDetail } }>('/artist/detail', 'GET', { id }).then(res => {
+        return res.data.artist
+    })
 }
 
-export async function getArtistDesc(id: number) {
-    return await request.get<ArtistDesc>('/artist/desc', { id })
+/**
+ * 歌手描述
+ */
+export function getArtistDesc(id: number) {
+    return request<ArtistDesc>('/artist/desc', 'GET', { id }).then(res => {
+        return res
+    })
 }

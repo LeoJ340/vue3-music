@@ -107,7 +107,7 @@ function changeFirstMVArea(area: string) {
  */
 const exclusiveMV = ref<MV[]>([])
 
-getExclusiveMV(8, 1).then(res => {
+getExclusiveMV({ limit: 8, page: 1 }).then(res => {
   exclusiveMV.value = res
 })
 

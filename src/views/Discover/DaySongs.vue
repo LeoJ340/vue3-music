@@ -16,7 +16,7 @@
     </div>
   </header>
 
-  <el-table :data="dailySongs" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
+  <el-table :data="dailySongs" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }" @row-dblclick="dblclickPlay">
     <el-table-column type="index" width="50" />
     <el-table-column label="操作" width="80">
       <template #default="scope">
@@ -56,20 +56,27 @@
 
 <script setup lang="ts">
 import {ref} from "vue";
-import {recommendSongs} from "@/api/recommend";
+import {getDailySongs} from "@/api/recommend";
 import {Song} from "@/models/Song";
 import { Calendar, PlayOne, Plus, FolderPlus, Download, Like } from '@icon-park/vue-next';
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
 
 const dailySongs = ref<Song[]>([])
-recommendSongs().then(res => {
+getDailySongs().then(res => {
   dailySongs.value = res
 })
 
 const { push } = usePlayerStore()
 function playAll(replace: boolean = true) {
   push(dailySongs.value.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
+}
+
+// 双击播放
+function dblclickPlay(song: Song) {
+  if (song.noCopyrightRcmd) return
+  const starIndex = dailySongs.value.findIndex(item => item.id === song.id)
+  push(dailySongs.value.filter(item => !item.noCopyrightRcmd), { replace: true, starIndex, trigger: 'doubleClick' })
 }
 </script>
 

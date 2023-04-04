@@ -75,7 +75,7 @@ import {
   getPersonalizedMV,
   getPersonalizedPlaylists,
   getPrivateMV,
-  recommendPlaylists
+  getRecommendPlaylists
 } from "@/api/recommend";
 import {getSong, getTopSongs} from "@/api/song";
 import {Banner} from "@/models/Banner";
@@ -103,8 +103,8 @@ function clickBanner(banner: Banner) {
   const index = banners.value.findIndex(item => item.imageUrl === banner.imageUrl)
   if (currentBannerIndex.value !== index) return
   if (banner.targetType === 1) {
-    getSong([banner.targetId]).then(song => {
-      playImmediately(song)
+    getSong([banner.targetId]).then(songs => {
+      playImmediately(songs[0])
     })
   } else if(banner.targetType === 10) {
     router.push(`/playlist/${banner.targetId}`)
@@ -120,7 +120,7 @@ const playlists = ref<PersonalizedPlayList[]>([])
 const { hasLogin } = storeToRefs(useUserStore())
 watch(hasLogin, value => {
   if (value) {
-    recommendPlaylists().then(res => {
+    getRecommendPlaylists().then(res => {
       playlists.value = res.slice(0, 9)
     })
   } else {
@@ -169,7 +169,7 @@ function toMv(id: number) {
  * 独家放送
  */
 const privateMVList = ref<PrivateMV[]>()
-getPrivateMV(3, 1).then(res => {
+getPrivateMV().then(res => {
   privateMVList.value = res
 })
 </script>

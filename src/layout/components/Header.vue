@@ -50,7 +50,6 @@
 <script setup lang="ts">
 import { Left, Right, DownOne, Theme, SettingTwo, Mail, Power, CheckOne } from '@icon-park/vue-next';
 import logo from '@/assets/logo.png'
-import {onMounted} from "vue";
 import {storeToRefs} from "pinia";
 import {useUserStore} from "@/stores/user";
 import {useAppStore} from "@/stores/app";
@@ -58,11 +57,7 @@ import {themeList} from "@/models/Theme";
 
 const userStore = useUserStore()
 const { hasLogin, userInfo } = storeToRefs(userStore)
-const { toLogin, getUserInfo, exitLogin } = userStore
-
-onMounted(() => {
-  getUserInfo()
-})
+const { toLogin, exitLogin } = userStore
 
 const { currentTheme } = storeToRefs(useAppStore())
 function changeTheme(theme: string) {

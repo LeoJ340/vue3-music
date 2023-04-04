@@ -38,7 +38,7 @@ export const useUserStore = defineStore('user', () => {
     }
 
     function exitLogin() {
-        logout().then(_ => {
+        logout().then(() => {
             sessionStorage.removeItem('cookie')
             hasLogin.value = false
             userInfo.userId = logoutUserInfo.userId
@@ -51,8 +51,7 @@ export const useUserStore = defineStore('user', () => {
 
     function getMyPlayList() {
         playList(userInfo.userId).then(res => {
-            const { playlist } = res
-            myPlayList.value = playlist
+            myPlayList.value = res
         })
     }
 

@@ -112,7 +112,13 @@ function selectInitial(initial: string) {
 }
 
 function getData() {
-  getArtistList(page.value, limit.value, params.area, params.type, params.initial).then(res => {
+  getArtistList({
+    page: page.value,
+    limit: limit.value,
+    area: params.area,
+    type: params.type,
+    initial: params.initial,
+  }).then(res => {
     artistList.value = res
   })
 }
