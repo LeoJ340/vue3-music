@@ -22,7 +22,7 @@
       </el-table-column>
       <el-table-column label="歌手" show-overflow-tooltip>
         <template #default="scope">
-          <span>{{scope.row.ar.map(ar => ar.name).join('/')}}</span>
+          <ArtistColumn :artists="scope.row.ar" />
         </template>
       </el-table-column>
       <el-table-column label="时间" width="100">
@@ -40,6 +40,7 @@ import { usePlayerStore } from "@/stores/player";
 import { useFormatSeconds } from "@/utils/time";
 import {Song} from "@/models/Song";
 import { Pause, PlayOne } from '@icon-park/vue-next';
+import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
 
 const playerStore = usePlayerStore()
 const { songs, currentPlay, player } = storeToRefs(playerStore)

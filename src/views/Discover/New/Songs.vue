@@ -27,12 +27,12 @@
     </el-table-column>
     <el-table-column label="歌手" width="180" show-overflow-tooltip>
       <template #default="scope">
-        <span>{{scope.row.artists.map(artist => artist.name).join('/')}}</span>
+        <ArtistColumn :artists="scope.row.artists" />
       </template>
     </el-table-column>
     <el-table-column label="专辑" width="180" show-overflow-tooltip>
       <template #default="scope">
-        <span style="cursor: pointer" @click="toPlayList(scope.row.album.id)">{{scope.row.album.name}}</span>
+        <el-link :underline="false" @click="toCommonPlayList(scope.row.album.id)">{{scope.row.album.name}}</el-link>
       </template>
     </el-table-column>
     <el-table-column label="时长" width="100">
@@ -53,9 +53,11 @@ import {useRouter} from "vue-router";
 import {getTopSongs} from "@/api/song";
 import {Song, TopSong} from "@/models/Song";
 import {PlayOne, FolderPlus} from "@icon-park/vue-next";
+import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
 import {useToSong} from "@/utils/typeFormate";
+import {toCommonPlayList} from "@/router/usePush";
 
 const router = useRouter()
 
@@ -112,10 +114,6 @@ function dblclickPlay(song: Song) {
   if (song.noCopyrightRcmd) return
   const starIndex = topSongs.value.findIndex(item => item.id === song.id)
   push(topSongs.value.map(useToSong), { replace: true, starIndex, trigger: 'doubleClick' })
-}
-
-function toPlayList(id: number) {
-  router.push(`/playlist/${id}`)
 }
 
 </script>

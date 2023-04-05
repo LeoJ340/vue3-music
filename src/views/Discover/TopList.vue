@@ -1,7 +1,7 @@
 <template>
   <h3>官方榜</h3>
   <div v-for="playlist in topList.slice(0, 4)" class="official-list">
-    <div class="cover" @click="toPlayList(playlist.id)">
+    <div class="cover" @click="toCommonPlayList(playlist.id)">
       <el-image :src="playlist.coverImgUrl" />
       <PlayOne class="play-all" theme="filled" size="32" :strokeWidth="2"/>
       <span class="update-time">{{useFormatTime(playlist.updateTime, 'mm月dd日')}}更新</span>
@@ -19,14 +19,14 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-link class="more" :underline="false" @click="toPlayList(playlist.id)">查看更多<Right theme="outline" /></el-link>
+    <el-link class="more" :underline="false" @click="toCommonPlayList(playlist.id)">查看更多<Right theme="outline" /></el-link>
   </div>
 
   <h3>全球榜</h3>
   <div class="grid-col5">
     <Cover v-for="item in topList.slice(4)"
            mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
-           icon-placement="center" @click="toPlayList(item.id)">
+           icon-placement="center" @click="toCommonPlayList(item.id)">
       <el-link :underline="false">{{item.name}}</el-link>
     </Cover>
   </div>
@@ -36,20 +36,15 @@
 import Cover from '@/components/Cover/index.vue'
 import { PlayOne, Right } from "@icon-park/vue-next";
 import {ref} from "vue";
-import {useRouter} from "vue-router";
 import {getTopList} from "@/api/playlist";
 import {TopList} from "@/models/PlayList";
 import {useFormatTime} from "@/utils/time";
+import {toCommonPlayList} from "@/router/usePush";
 
 const topList = ref<TopList[]>([])
 getTopList().then(res => {
   topList.value = res
 })
-
-const router = useRouter()
-function toPlayList(id: number) {
-  router.push(`/playlist/${id}`)
-}
 </script>
 
 <style scoped lang="scss">

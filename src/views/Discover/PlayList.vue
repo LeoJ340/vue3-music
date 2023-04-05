@@ -38,7 +38,7 @@
   <div v-loading="loading" element-loading-text="载入中..." class="grid-col5">
     <Cover v-for="item in playlistPage.list"
            mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
-           icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toPlayList(item.id)">
+           icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toCommonPlayList(item.id)">
       <el-link :underline="false">{{item.name}}</el-link>
     </Cover>
   </div>
@@ -71,6 +71,7 @@ import type {Icon} from "@icon-park/vue-next/lib/runtime";
 import {useRouter} from "vue-router";
 import {useAppStore} from "@/stores/app";
 import {storeToRefs} from "pinia";
+import {toCommonPlayList} from "@/router/usePush";
 
 const { currentTheme } = storeToRefs(useAppStore())
 const router = useRouter()
@@ -185,10 +186,6 @@ function changePage(page: number) {
   }).finally(() => {
     loading.value = false
   })
-}
-
-function toPlayList(id: number) {
-  router.push(`/playlist/${id}`)
 }
 </script>
 

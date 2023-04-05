@@ -1,20 +1,20 @@
 <template>
   <el-scrollbar>
     <!-- 歌单信息 -->
-    <div v-if="playlistInfo" class="flex" style="margin: 20px;">
-      <el-image :src="playlistInfo.coverImgUrl" class="coverImage" />
+    <div v-if="props.playlistInfo" class="flex" style="margin: 20px;">
+      <el-image :src="props.playlistInfo.coverImgUrl" class="coverImage" />
       <div class="flex-1" style="margin-left: 20px;">
-        <h2>{{playlistInfo.name}}</h2>
+        <h2>{{props.playlistInfo.name}}</h2>
         <div class="flex-vertical-center">
-          <el-avatar :src="playlistInfo.creator.avatarUrl" />
-          <span style="margin-left: 10px; font-size: 12px;">{{playlistInfo.creator.nickname}}</span>
-          <span v-if="playlistInfo.updateTime"
+          <el-avatar :src="props.playlistInfo.creator.avatarUrl" />
+          <span style="margin-left: 10px; font-size: 12px;">{{props.playlistInfo.creator.nickname}}</span>
+          <span v-if="props.playlistInfo.updateTime"
                 style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">
-            最近更新{{useFormatTime(playlistInfo.updateTime)}}
+            最近更新{{useFormatTime(props.playlistInfo.updateTime)}}
           </span>
           <span v-else
                 style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">
-            {{useFormatTime(playlistInfo.createTime)}}创建
+            {{useFormatTime(props.playlistInfo.createTime)}}创建
           </span>
         </div>
         <!-- 操作按钮组 -->
@@ -28,16 +28,16 @@
           <el-button round :disabled="!songs.length"><Download theme="outline" size="20" :strokeWidth="2"/>下载全部</el-button>
         </div>
         <div class="text-14">
-          <span>歌曲：{{playlistInfo.trackCount}}</span>
-          <span style="margin-left: 10px;">播放：{{useFormatCount(playlistInfo.playCount)}}</span>
+          <span>歌曲：{{props.playlistInfo.trackCount}}</span>
+          <span style="margin-left: 10px;">播放：{{useFormatCount(props.playlistInfo.playCount)}}</span>
         </div>
         <div class="flex justify-between text-14" style="margin-top: 2px;">
           <div>
-            <span>简介：{{playlistInfo.description.split('\n')[0]}}</span>
-            <p v-show="collapse" v-html="playlistInfo.description.split('\n').slice(1,playlistInfo.description.split('\n').length).join('<br>')"></p>
+            <span>简介：{{props.playlistInfo.description.split('\n')[0]}}</span>
+            <p v-show="collapse" v-html="props.playlistInfo.description.split('\n').slice(1,props.playlistInfo.description.split('\n').length).join('<br>')"></p>
           </div>
           <Component
-              v-if="playlistInfo.description.split('\n').length > 1"
+              v-if="props.playlistInfo.description.split('\n').length > 1"
               :is="collapse ? UpOne : DownOne"
               theme="filled" size="20" :strokeWidth="3"
               @click="collapse = !collapse"
@@ -78,14 +78,12 @@
       </el-table-column>
       <el-table-column label="歌手" show-overflow-tooltip>
         <template #default="scope">
-          <span>{{scope.row.ar.map(ar => ar.name).join('/')}}</span>
+          <ArtistColumn :artists="scope.row.ar" />
         </template>
       </el-table-column>
       <el-table-column label="专辑" show-overflow-tooltip>
         <template #default="scope">
-          <router-link :to="`/playlist/${scope.row.al.id}`">
-            {{scope.row.al.name}}
-          </router-link>
+          <el-link :underline="false" @click="toCommonPlayList(scope.row.al.id)">{{scope.row.al.name}}</el-link>
         </template>
       </el-table-column>
       <el-table-column label="时间" width="100">
@@ -102,18 +100,20 @@
 </template>
 
 <script setup lang="ts">
+import ArtistColumn from './ArtistColumn.vue'
+import { PlayOne, Plus, FolderPlus, Share, Download, DownOne, UpOne, Like } from '@icon-park/vue-next';
 import {ref} from "vue";
 import {PlayList} from "@/models/PlayList";
 import {Song} from "@/models/Song";
-import { useFormatSeconds, useFormatTime } from "@/utils/time";
-import { PlayOne, Plus, FolderPlus, Share, Download, DownOne, UpOne, Like } from '@icon-park/vue-next';
 import { usePlayerStore } from "@/stores/player";
-import useFormatCount from "@/utils/count";
 import { useUserStore } from "@/stores/user";
 import {storeToRefs} from "pinia";
+import { useFormatSeconds, useFormatTime } from "@/utils/time";
+import useFormatCount from "@/utils/count";
+import {toCommonPlayList} from "@/router/usePush";
 
 const props = defineProps<{
-  playlistInfo: PlayList | null
+  playlistInfo: PlayList
   songs: Song[]
 }>()
 
@@ -128,6 +128,7 @@ function playAll(replace: boolean = true) {
   push(props.songs.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
 }
 
+// 双击播放
 function dblclickPlay(song: Song) {
   if (song.noCopyrightRcmd) return
   const starIndex = props.songs.findIndex(item => item.id === song.id)

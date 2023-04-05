@@ -22,7 +22,7 @@
   <!-- 歌手列表 -->
   <!-- TODO：无限滚动 -->
   <div class="artist-list">
-    <div v-for="artist in artistList" class="artist-item" @click="toArtist(artist.id)">
+    <div v-for="artist in artistList" class="artist-item" @click="toCommonArtist(artist.id)">
       <el-image :src="artist.img1v1Url"/>
       <span>{{artist.name}}</span>
       <Me theme="outline" size="18" fill="#f54c43"/>
@@ -35,7 +35,7 @@ import {reactive, readonly, ref} from "vue";
 import {getArtistList} from "@/api/artist";
 import {Artist} from "@/models/Artist";
 import { Me } from "@icon-park/vue-next";
-import {useRouter} from "vue-router";
+import {toCommonArtist} from "@/router/usePush";
 
 const areas = [
   {
@@ -125,10 +125,6 @@ function getData() {
 
 getData()
 
-const router = useRouter()
-function toArtist(id: number) {
-  router.push(`/artist/${id}`)
-}
 </script>
 
 <style scoped lang="scss">

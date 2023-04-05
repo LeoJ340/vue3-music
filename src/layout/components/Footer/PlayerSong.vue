@@ -5,11 +5,14 @@
       {{currentPlay.name}}
       <span v-show="currentPlay.alia.length" style="color:#919192;">（{{currentPlay.alia.join('')}}）</span>
     </div>
-    <div class="text-12">{{currentPlay.ar.map(ar => ar.name).join('/')}}</div>
+    <div class="text-12">
+      <ArtistColumn :artists="currentPlay.ar" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
 import { usePlayerStore } from "@/stores/player";
 import {storeToRefs} from "pinia";
 

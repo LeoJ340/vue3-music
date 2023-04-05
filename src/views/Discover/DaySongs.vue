@@ -21,8 +21,9 @@
     <el-table-column label="操作" width="80">
       <template #default="scope">
         <div style="display: flex; justify-content: space-around;">
-          <el-link :underline="false">
-            <Like theme="filled" size="20" fill="#ec4141" :strokeWidth="2"/>
+          <el-link :underline="false" title="喜欢">
+            <Like v-if="myPlayListIds.includes(scope.row.id)" theme="filled" size="20" fill="#ec4141" :strokeWidth="2"/>
+            <Like v-else theme="outline" size="20" :strokeWidth="2"/>
           </el-link>
           <el-link :underline="false">
             <Download theme="outline" size="20" :strokeWidth="2"/>
@@ -38,10 +39,14 @@
     </el-table-column>
     <el-table-column label="歌手" show-overflow-tooltip>
       <template #default="scope">
-        <span>{{scope.row.ar.map(ar => ar.name).join('/')}}</span>
+        <ArtistColumn :artists="scope.row.ar" />
       </template>
     </el-table-column>
-    <el-table-column prop="al.name" label="专辑" show-overflow-tooltip />
+    <el-table-column label="专辑" show-overflow-tooltip>
+      <template #default="scope">
+        <el-link :underline="false" @click="toCommonPlayList(scope.row.al.id)">{{scope.row.al.name}}</el-link>
+      </template>
+    </el-table-column>
     <el-table-column label="时间" width="100">
       <template #default="scope">
         <span>{{useFormatSeconds(scope.row.dt / 1000)}}</span>
@@ -59,14 +64,22 @@ import {ref} from "vue";
 import {getDailySongs} from "@/api/recommend";
 import {Song} from "@/models/Song";
 import { Calendar, PlayOne, Plus, FolderPlus, Download, Like } from '@icon-park/vue-next';
+import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
+import {useUserStore} from "@/stores/user";
+import {storeToRefs} from "pinia";
+import {toCommonPlayList} from "@/router/usePush";
 
 const dailySongs = ref<Song[]>([])
 getDailySongs().then(res => {
   dailySongs.value = res
 })
 
+const { myPlayList } = storeToRefs(useUserStore())
+const myPlayListIds = myPlayList.value.map(item => item.id)
+
+// 播放全部
 const { push } = usePlayerStore()
 function playAll(replace: boolean = true) {
   push(dailySongs.value.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })

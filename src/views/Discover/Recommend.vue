@@ -21,7 +21,7 @@
     </Cover>
     <Cover v-for="item in playlists"
            mode="vertical" :image-url="item.picUrl" :play-count="item.playCount"
-           icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toPlayList(item.id)">
+           icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toCommonPlayList(item.id)">
       <div>{{item.name}}</div>
     </Cover>
   </div>
@@ -83,6 +83,7 @@ import {PersonalizedPlayList} from "@/models/PlayList";
 import {TopSong} from "@/models/Song";
 import {PersonalizedMV, PrivateMV} from "@/models/MV";
 import {useToSong} from "@/utils/typeFormate";
+import {toCommonPlayList} from "@/router/usePush";
 
 const router = useRouter()
 const { playImmediately } = usePlayerStore()
@@ -107,7 +108,7 @@ function clickBanner(banner: Banner) {
       playImmediately(songs[0])
     })
   } else if(banner.targetType === 10) {
-    router.push(`/playlist/${banner.targetId}`)
+    toCommonPlayList(banner.targetId)
   } else {
     window.open(banner.url, '_blank')
   }
@@ -129,11 +130,6 @@ watch(hasLogin, value => {
     })
   }
 }, { immediate: true })
-
-// 去歌单页
-function toPlayList(id: number) {
-  router.push(`/playlist/${id}`)
-}
 
 function toDailySongs() {
   router.push('/dailySongs')

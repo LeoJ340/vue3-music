@@ -57,12 +57,6 @@ const router = createRouter({
                     name: 'MVDetail',
                     component: () => import('@/views/Video/MV/MVDetail.vue'),
                     meta: { title: 'MV详情' }
-                },
-                {
-                    path: 'artist/:id',
-                    name: 'ArtistDetail',
-                    component: () => import('@/views/common/Artist/index.vue'),
-                    meta: { title: '歌手详情' }
                 }
             ]
         },
@@ -85,14 +79,27 @@ const router = createRouter({
                 }
             ]
         },
+        // 公共页
         {
-            path: '/playlist',
+            path: '/common',
             component: Layout,
             children: [
                 {
-                    path: ':id',
-                    name: 'OtherPlayList',
+                    path: 'playlist/:id',
+                    name: 'CommonPlayList',
                     component: () => import('@/views/common/PlayList.vue')
+                },
+                {
+                    path: 'artist/:id',
+                    name: 'ArtistDetail',
+                    component: () => import('@/views/common/Artist/index.vue'),
+                    meta: { title: '歌手详情' }
+                },
+                {
+                    path: 'user/:id',
+                    name: 'User',
+                    component: () => import('@/views/common/User.vue'),
+                    meta: { title: '用户主页' }
                 }
             ]
         }

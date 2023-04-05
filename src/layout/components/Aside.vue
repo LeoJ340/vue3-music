@@ -67,6 +67,7 @@ const menuGroups = computed(() => {
       text: '我的音乐云盘',
       icon: Download
     })
+    // 创建的歌单
     const createPlaylist = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator?.userId === userInfo.value.userId).map(item => {
       return {
         path: `/my/playlist/${item.id}`,
@@ -78,9 +79,10 @@ const menuGroups = computed(() => {
       title: '创建的歌单',
       list: createPlaylist
     })
+    // 收藏的歌单
     const favorPlaylist = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator?.userId !== userInfo.value.userId).map(item => {
           return {
-            path: `/playlist/${item.id}`,
+            path: `/common/playlist/${item.id}`,
             text: item.name,
             icon: MusicMenu
           }
