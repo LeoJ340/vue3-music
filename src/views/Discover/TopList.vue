@@ -1,21 +1,25 @@
 <template>
   <h3>官方榜</h3>
-  <div v-for="playlist in topList.slice(0, 4)" class="official-list">
+  <div v-for="(playlist, index) in topList.slice(0, 4)" class="official-list">
     <div class="cover" @click="toCommonPlayList(playlist.id)">
       <el-image :src="playlist.coverImgUrl" />
       <PlayOne class="play-all" theme="filled" size="32" :strokeWidth="2"/>
       <span class="update-time">{{useFormatTime(playlist.updateTime, 'mm月dd日')}}更新</span>
     </div>
-    <el-table :data="playlist.tracks" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
-      <el-table-column type="index" width="50"/>
+    <el-table :data="topTrack[index]" stripe :show-header="false" tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }">
+      <el-table-column type="index" width="50">
+        <template #default="scope">
+          <span :style="{ color: (scope.$index < 3) ? 'var(--player-theme)' : 'initial' }">{{scope.$index + 1}}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="标题" show-overflow-tooltip>
         <template #default="scope">
-          <span>{{scope.row.first}}</span>
+          <span>{{scope.row.name}}</span>
         </template>
       </el-table-column>
       <el-table-column label="歌手" align="right" show-overflow-tooltip>
         <template #default="scope">
-          <span style="color:#919192;">{{scope.row.second}}</span>
+          <ArtistColumn :artists="scope.row.ar" />
         </template>
       </el-table-column>
     </el-table>
@@ -27,7 +31,7 @@
     <Cover v-for="item in topList.slice(4)"
            mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
            icon-placement="center" @click="toCommonPlayList(item.id)">
-      <el-link :underline="false">{{item.name}}</el-link>
+      <el-link :underline="false" @click="toCommonPlayList(item.id)">{{item.name}}</el-link>
     </Cover>
   </div>
 </template>
@@ -35,22 +39,30 @@
 <script setup lang="ts">
 import Cover from '@/components/Cover/index.vue'
 import { PlayOne, Right } from "@icon-park/vue-next";
-import {ref} from "vue";
-import {getTopList} from "@/api/playlist";
+import ArtistColumn from "@/components/PlayList/ArtistColumn.vue";
+import {reactive, ref} from "vue";
+import {getPlayListTrack, getTopList} from "@/api/playlist";
 import {TopList} from "@/models/PlayList";
+import {Song} from "@/models/Song";
 import {useFormatTime} from "@/utils/time";
 import {toCommonPlayList} from "@/router/usePush";
 
 const topList = ref<TopList[]>([])
+const topTrack = reactive<Song[][]>([[], [], [], []])
 getTopList().then(res => {
   topList.value = res
+  topList.value.slice(0, 4).forEach((item: TopList, index: number) => {
+    getPlayListTrack(item.id, { offset: 0, limit: 5 }).then(res => {
+      topTrack[index].push(...res)
+    })
+  })
 })
 </script>
 
 <style scoped lang="scss">
 .official-list {
   display: flex;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   position: relative;
   .cover {
     width: 230px;
@@ -82,7 +94,7 @@ getTopList().then(res => {
   }
   .more {
     position: absolute;
-    bottom: 0;
+    bottom: -20px;
     left: 230px;
   }
 }

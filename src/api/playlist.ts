@@ -16,8 +16,8 @@ export function getPlayList(id: number) {
  * 获取歌单的歌曲列表
  * 歌单里存在用户自己云盘的歌曲时，请求需要用户cookie
  */
-export function getPlayListTrack(id: number) {
-    return request<{ songs: Array<Song> }>('/playlist/track/all', 'GET', { id }, true).then(res => {
+export function getPlayListTrack(id: number, page: { offset: number, limit?: number } = { offset: 0 }) {
+    return request<{ songs: Array<Song> }>('/playlist/track/all', 'GET', Object.assign({ id }, page), true).then(res => {
         return res.songs
     })
 }

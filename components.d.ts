@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ArtistColumn: typeof import('./src/components/PlayList/ArtistColumn.vue')['default']
     Cover: typeof import('./src/components/Cover/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -37,7 +38,6 @@ declare module '@vue/runtime-core' {
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     Login: typeof import('./src/components/Login/index.vue')['default']
     PlayList: typeof import('./src/components/PlayList/index.vue')['default']
-    ArtistColumn: typeof import('./src/components/PlayList/ArtistColumn.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }
