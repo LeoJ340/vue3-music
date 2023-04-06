@@ -4,7 +4,7 @@
 </template>
 
 <script setup lang="ts">
-import {useRoute} from "vue-router";
+import {onBeforeRouteUpdate, useRoute} from "vue-router";
 import {defineAsyncComponent, ref} from "vue";
 import {getPlayList} from "@/api/playlist";
 import {Song} from "@/models/Song";
@@ -21,11 +21,19 @@ function getData() {
     getPlayList(Number(currentPlaylistId.value)).then(res => {
       playlistInfo.value = res
       songs.value = res.tracks
+      document.title = playlistInfo.value?.name
     })
   }
 }
 
 getData()
+
+onBeforeRouteUpdate(async to => {
+  playlistInfo.value = undefined
+  songs.value = []
+  currentPlaylistId.value = to.params.id
+  getData()
+})
 
 const PlayList = defineAsyncComponent(() => import('@/components/PlayList/index.vue'))
 </script>

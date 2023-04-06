@@ -31,18 +31,18 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="标题" show-overflow-tooltip>
+    <el-table-column label="标题" :show-overflow-tooltip="true">
       <template #default="scope">
         <span>{{scope.row.name}}</span>
         <span v-if="scope.row.alia.length" style="color:#919192;">（{{scope.row.alia.join('')}}）</span>
       </template>
     </el-table-column>
-    <el-table-column label="歌手" show-overflow-tooltip>
+    <el-table-column label="歌手" :show-overflow-tooltip="true">
       <template #default="scope">
         <ArtistColumn :artists="scope.row.ar" />
       </template>
     </el-table-column>
-    <el-table-column label="专辑" show-overflow-tooltip>
+    <el-table-column label="专辑" :show-overflow-tooltip="true">
       <template #default="scope">
         <el-link :underline="false" @click="toCommonPlayList(scope.row.al.id)">{{scope.row.al.name}}</el-link>
       </template>

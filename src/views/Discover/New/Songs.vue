@@ -30,9 +30,10 @@
         <ArtistColumn :artists="scope.row.artists" />
       </template>
     </el-table-column>
-    <el-table-column label="专辑" width="180" show-overflow-tooltip>
+    <!-- TODO：专辑页 -->
+    <el-table-column label="专辑" width="180" :show-overflow-tooltip="true">
       <template #default="scope">
-        <el-link :underline="false" @click="toCommonPlayList(scope.row.album.id)">{{scope.row.album.name}}</el-link>
+        <el-link :underline="false">{{scope.row.album.name}}</el-link>
       </template>
     </el-table-column>
     <el-table-column label="时长" width="100">

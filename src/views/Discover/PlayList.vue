@@ -1,4 +1,5 @@
 <template>
+  <!-- 精选歌单 -->
   <div v-if="highQualityPlayList" class="top-playlist flex" @click="toHighQualityPlayList">
     <div class="top-playlist-bg" :style="{ backgroundImage: `url(${highQualityPlayList.coverImgUrl})` }"></div>
     <el-image :src="highQualityPlayList.coverImgUrl" />
@@ -8,6 +9,7 @@
       <span class="text-12">{{highQualityPlayList.copywriter}}</span>
     </div>
   </div>
+  <!-- 分类选择 -->
   <div class="flex justify-between items-end" style="margin: 15px 0;">
     <el-popover placement="bottom-start" width="auto" trigger="click" :effect="currentTheme === 'dark' ? 'dark' : 'light'">
       <template #reference>
@@ -35,13 +37,15 @@
       </el-link>
     </div>
   </div>
+  <!-- 歌单列表 -->
   <div v-loading="loading" element-loading-text="载入中..." class="grid-col5">
     <Cover v-for="item in playlistPage.list"
            mode="vertical" :image-url="item.coverImgUrl" :play-count="item.playCount"
            icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toCommonPlayList(item.id)">
-      <el-link :underline="false">{{item.name}}</el-link>
+      <el-link :underline="false" @click="toCommonPlayList(item.id)">{{item.name}}</el-link>
     </Cover>
   </div>
+  <!-- 分页条 -->
   <el-pagination
       small
       background

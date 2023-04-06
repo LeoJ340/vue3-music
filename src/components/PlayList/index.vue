@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar>
     <!-- 歌单信息 -->
-    <div v-if="props.playlistInfo" class="flex" style="margin: 20px;">
+    <div class="flex" style="margin: 20px;">
       <el-image :src="props.playlistInfo.coverImgUrl" class="coverImage" />
       <div class="flex-1" style="margin-left: 20px;">
         <h2>{{props.playlistInfo.name}}</h2>
@@ -31,7 +31,7 @@
           <span>歌曲：{{props.playlistInfo.trackCount}}</span>
           <span style="margin-left: 10px;">播放：{{useFormatCount(props.playlistInfo.playCount)}}</span>
         </div>
-        <div class="flex justify-between text-14" style="margin-top: 2px;">
+        <div v-if="props.playlistInfo.description" class="flex justify-between text-14" style="margin-top: 2px;">
           <div>
             <span>简介：{{props.playlistInfo.description.split('\n')[0]}}</span>
             <p v-show="collapse" v-html="props.playlistInfo.description.split('\n').slice(1,props.playlistInfo.description.split('\n').length).join('<br>')"></p>
@@ -69,19 +69,19 @@
           </div>
         </template>
       </el-table-column>
-      <el-table-column label="标题" show-overflow-tooltip>
+      <el-table-column label="标题" :show-overflow-tooltip="true">
         <template #default="scope">
           <span>{{scope.row.name}}</span>
           <span v-if="scope.row.alia.length" style="color:#919192;">（{{scope.row.alia.join('')}}）</span>
           <span v-if="scope.row.noCopyrightRcmd">无音源</span>
         </template>
       </el-table-column>
-      <el-table-column label="歌手" show-overflow-tooltip>
+      <el-table-column label="歌手" :show-overflow-tooltip="true">
         <template #default="scope">
           <ArtistColumn :artists="scope.row.ar" />
         </template>
       </el-table-column>
-      <el-table-column label="专辑" show-overflow-tooltip>
+      <el-table-column label="专辑" :show-overflow-tooltip="true">
         <template #default="scope">
           <el-link :underline="false" @click="toCommonPlayList(scope.row.al.id)">{{scope.row.al.name}}</el-link>
         </template>

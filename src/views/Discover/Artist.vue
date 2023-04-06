@@ -21,10 +21,12 @@
   </div>
   <!-- 歌手列表 -->
   <!-- TODO：无限滚动 -->
-  <div class="artist-list">
+  <div v-loading="loading" element-loading-text="载入中..." class="artist-list">
     <div v-for="artist in artistList" class="artist-item" @click="toCommonArtist(artist.id)">
       <el-image :src="artist.img1v1Url"/>
-      <span>{{artist.name}}</span>
+      <!-- TODO：去歌手页 -->
+      <el-link :underline="false" @click="toCommonArtist(artist.id)">{{artist.name}}</el-link>
+      <!-- TODO：去用户页 -->
       <Me theme="outline" size="18" fill="#f54c43"/>
     </div>
   </div>
@@ -111,7 +113,12 @@ function selectInitial(initial: string) {
   getData()
 }
 
+const loading = ref(false)
+const noNetwork = ref(false)
+
 function getData() {
+  loading.value = true
+  artistList.value = []
   getArtistList({
     page: page.value,
     limit: limit.value,
@@ -119,7 +126,12 @@ function getData() {
     type: params.type,
     initial: params.initial,
   }).then(res => {
+    noNetwork.value = false
     artistList.value = res
+  }).catch(() => {
+    noNetwork.value = true
+  }).finally(() => {
+    loading.value = false
   })
 }
 
@@ -172,7 +184,9 @@ getData()
   grid-template-rows: auto;
   grid-gap: 20px;
   .artist-item {
-    cursor: pointer;
+    .el-image {
+      cursor: pointer;
+    }
   }
   .i-icon-me {
     float: right;

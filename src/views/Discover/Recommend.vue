@@ -9,54 +9,58 @@
     </el-carousel-item>
   </el-carousel>
   <!-- 推荐歌单 -->
-  <router-link to="/discover/playlist" class="plate-title">
-    <h3 class="flex-vertical-center m-0">推荐歌单<Right theme="outline" size="22"/></h3>
+  <router-link to="/discover/playlist">
+    <h3 class="flex-vertical-center">推荐歌单<Right theme="outline" size="22"/></h3>
   </router-link>
   <div class="grid-col5">
     <Cover v-if="hasLogin" class="relative daily-songs"
            mode="vertical" :image-url="dailySongsBg"
            icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toDailySongs">
-      <Calendar theme="outline" fill="#ffffff"/>
-      <div>每日歌曲推荐</div>
+      <Calendar theme="outline" fill="#ffffff" @click="toDailySongs"/>
+      <el-link :underline="false" @click="toDailySongs">每日歌曲推荐</el-link>
     </Cover>
     <Cover v-for="item in playlists"
            mode="vertical" :image-url="item.picUrl" :play-count="item.playCount"
            icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toCommonPlayList(item.id)">
-      <div>{{item.name}}</div>
+      <el-link :underline="false" @click="toCommonPlayList(item.id)">{{item.name}}</el-link>
     </Cover>
   </div>
   <!-- 独家放送 -->
   <router-link to="/">
-    <h3 class="flex-vertical-center m-0">独家放送<Right theme="outline" size="22"/></h3>
+    <h3 class="flex-vertical-center">独家放送<Right theme="outline" size="22"/></h3>
   </router-link>
   <div class="grid-col3">
     <Cover v-for="item in privateMVList"
            mode="vertical" :image-url="item.picUrl"
            icon-placement="top-left" icon-transition="only-show" @click="toMv(item.id)">
-      <div>{{item.name}}</div>
+      <el-link :underline="false" @click="toMv(item.id)">{{item.name}}</el-link>
     </Cover>
   </div>
   <!-- 最新音乐 -->
   <router-link to="/discover/new/songs">
-    <h3 class="flex-vertical-center m-0">最新音乐<Right theme="outline" size="22"/></h3>
+    <h3 class="flex-vertical-center">最新音乐<Right theme="outline" size="22"/></h3>
   </router-link>
   <div class="grid-col3">
     <Cover v-for="item in topSongs"
            mode="horizontal" :image-url="item.album.picUrl" image-size="100px"
            icon-placement="center" icon-transition="only-show" @click="clickTopSong(item.id)">
       <p>{{item.name}}</p>
-      <span class="text-12">{{item.artists.map(artist => artist.name).join('/')}}</span>
+      <span class="text-12">
+        <ArtistColumn :artists="item.artists" />
+      </span>
     </Cover>
   </div>
   <!-- 推荐MV -->
   <router-link to="/video/mv">
-    <h3 class="flex-vertical-center m-0">推荐MV<Right theme="outline" size="22"/></h3>
+    <h3 class="flex-vertical-center">推荐MV<Right theme="outline" size="22"/></h3>
   </router-link>
   <div class="grid-col3">
     <Cover v-for="item in personalizedMVList"
            mode="vertical" :image-url="item.picUrl" @click="toMv(item.id)">
-      <div>{{item.name}}</div>
-      <span class="text-12">{{item.artists.map(artist => artist.name).join('/')}}</span>
+      <el-link :underline="false" @click="toMv(item.id)">{{item.name}}</el-link>
+      <div>
+        <ArtistColumn :artists="item.artists" />
+      </div>
     </Cover>
   </div>
 </template>
@@ -65,6 +69,7 @@
 import dailySongsBg from '@/assets/dailySongsBg.jpg'
 import Cover from '@/components/Cover/index.vue'
 import {Right, Calendar} from "@icon-park/vue-next";
+import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
 import {reactive, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";
@@ -202,6 +207,9 @@ getPrivateMV().then(res => {
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 120px;
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 </style>

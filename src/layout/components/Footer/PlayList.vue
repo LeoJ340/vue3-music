@@ -10,7 +10,7 @@
         tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }"
         :row-class-name="playingClass"
         @row-dblclick="dblclickPlay">
-      <el-table-column label="标题" show-overflow-tooltip>
+      <el-table-column label="标题" :show-overflow-tooltip="true">
         <template #default="scope">
           <span v-show="isPlaying(scope.row)" style="margin-right: 5px;">
             <Pause v-show="player.paused" theme="outline" size="12" :strokeWidth="7"/>
@@ -20,7 +20,7 @@
           <span v-if="scope.row.alia.length" style="color:#919192;">（{{scope.row.alia.join('')}}）</span>
         </template>
       </el-table-column>
-      <el-table-column label="歌手" show-overflow-tooltip>
+      <el-table-column label="歌手" :show-overflow-tooltip="true">
         <template #default="scope">
           <ArtistColumn :artists="scope.row.ar" />
         </template>

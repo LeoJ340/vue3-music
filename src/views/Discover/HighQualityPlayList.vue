@@ -19,7 +19,8 @@
       <Cover v-for="item in playLists"
              mode="horizontal" :image-url="item.coverImgUrl" image-size="200px" :play-count="item.playCount"
              icon-placement="bottom-right" icon-transition="el-fade-in-linear" @click="toCommonPlayList(item.id)">
-        <span class="info-name">{{item.name}}</span>
+        <el-link :underline="false" @click="toCommonPlayList(item.id)">{{item.name}}</el-link>
+        <!-- TODO：去用户页 -->
         <p class="text-12 flex">
           by {{item.creator.nickname}}
           <el-image v-if="item.creator.avatarDetail" :src="item.creator.avatarDetail?.identityIconUrl" style="margin-left: 2px; width: 15px;" />

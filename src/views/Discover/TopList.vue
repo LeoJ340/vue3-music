@@ -12,12 +12,13 @@
           <span :style="{ color: (scope.$index < 3) ? 'var(--player-theme)' : 'initial' }">{{scope.$index + 1}}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标题" show-overflow-tooltip>
+      <el-table-column label="标题" :show-overflow-tooltip="true">
         <template #default="scope">
           <span>{{scope.row.name}}</span>
+          <span v-if="scope.row.alia.length" style="color:#919192;">（{{scope.row.alia.join('')}}）</span>
         </template>
       </el-table-column>
-      <el-table-column label="歌手" align="right" show-overflow-tooltip>
+      <el-table-column label="歌手" align="right" :show-overflow-tooltip="true">
         <template #default="scope">
           <ArtistColumn :artists="scope.row.ar" />
         </template>
