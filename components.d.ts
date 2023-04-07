@@ -37,9 +37,12 @@ declare module '@vue/runtime-core' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     Login: typeof import('./src/components/Login/index.vue')['default']
+    NetLess: typeof import('./src/components/NetLess/index.vue')['default']
+    NoNetwork: typeof import('./src/components/NetLess/index.vue')['default']
     PlayList: typeof import('./src/components/PlayList/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    ToPlayList: typeof import('./src/components/ToPlayList/index.vue')['default']
   }
   export interface ComponentCustomProperties {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']

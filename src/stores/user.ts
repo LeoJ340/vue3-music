@@ -44,6 +44,13 @@ export const useUserStore = defineStore('user', () => {
             userInfo.userId = logoutUserInfo.userId
             userInfo.userName = logoutUserInfo.userName
             userInfo.avatarUrl = logoutUserInfo.avatarUrl
+        }).catch(() => {
+            ElMessage({
+                message: '登出失败',
+                type: 'error',
+                duration: 1000,
+                center: true
+            })
         })
     }
 

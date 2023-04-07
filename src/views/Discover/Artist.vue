@@ -21,14 +21,14 @@
   </div>
   <!-- 歌手列表 -->
   <!-- TODO：无限滚动 -->
-  <div v-loading="loading" element-loading-text="载入中..." class="artist-list">
+  <div v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..." class="artist-list">
     <div v-for="artist in artistList" class="artist-item" @click="toCommonArtist(artist.id)">
       <el-image :src="artist.img1v1Url"/>
-      <!-- TODO：去歌手页 -->
       <el-link :underline="false" @click="toCommonArtist(artist.id)">{{artist.name}}</el-link>
       <!-- TODO：去用户页 -->
       <Me theme="outline" size="18" fill="#f54c43"/>
     </div>
+    <NetLess v-show="noNetwork" />
   </div>
 </template>
 
@@ -37,6 +37,7 @@ import {reactive, readonly, ref} from "vue";
 import {getArtistList} from "@/api/artist";
 import {Artist} from "@/models/Artist";
 import { Me } from "@icon-park/vue-next";
+import NetLess from '@/components/NetLess/index.vue'
 import {toCommonArtist} from "@/router/usePush";
 
 const areas = [
@@ -190,6 +191,7 @@ getData()
   }
   .i-icon-me {
     float: right;
+    cursor: pointer;
   }
 }
 .el-pagination {

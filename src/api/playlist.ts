@@ -90,3 +90,17 @@ export function getTopPlaylistsByCategory(params: { cat: string, limit: number, 
         return { playlists: res.playlists, total: res.total }
     })
 }
+
+/**
+ * 对歌单新增|删除歌曲
+ */
+export function managerTracks(op: 'add' | 'del', pid: number, tracks: number[]) {
+    const params = {
+        op,
+        pid,
+        tracks: tracks.join(',')
+    }
+    return request<{ body: { code: number, message?: string } }>('/playlist/tracks', 'POST', params, true).then(res => {
+        return res.body
+    })
+}

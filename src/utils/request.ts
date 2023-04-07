@@ -34,7 +34,6 @@ service.interceptors.response.use(
     }
 )
 
-// TODO：异常提示
 export function request<T>(url: string, method: Method, params: any, needLogin: boolean = false): Promise<T> {
     return new Promise((resolve, reject) => {
         // 携带用户cookie
@@ -42,16 +41,28 @@ export function request<T>(url: string, method: Method, params: any, needLogin: 
             params.cookie = sessionStorage.getItem('cookie')
         }
         service({ url, method, params }).then(res => {
-            const { code } = res.data
-            if (code === 200) {
+            const { code, status } = res.data
+            if (code === 200 || status === 200) {
                 resolve(res.data)
             } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
                 console.error(url, '系统异常', res)
             }
         }).catch((error: string) => {
             if (error === '网络异常') {
                 reject()
             } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
                 console.error(url, '系统异常')
             }
         })
@@ -65,6 +76,12 @@ export function loginRequest<T>(url: string, params?: object): Promise<T> {
             resolve(res.data);
         }).catch((error: string) => {
             if (error === '网络异常') {
+                ElMessage({
+                    message: '网络异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
                 console.error(url, '网络异常')
             }
         })

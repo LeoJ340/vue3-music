@@ -5,16 +5,16 @@
     </div>
     <div class="right">
       <el-button type="primary" size="small" round @click="playAll"><PlayOne theme="filled" size="18" :strokeWidth="2"/>播放全部</el-button>
-      <el-button size="small" round><FolderPlus theme="outline" size="18" :strokeWidth="2"/>收藏全部</el-button>
+      <el-button size="small" round @click="selectPlayList" :disabled="!topSongs.length"><FolderPlus theme="outline" size="18" :strokeWidth="2"/>收藏全部</el-button>
     </div>
   </div>
   <!-- 列表 -->
-  <el-table v-loading="loading" element-loading-text="载入中..."
+  <el-table v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..."
             :data="topSongs" stripe :show-header="false"
             tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }"
             @row-dblclick="dblclickPlay">
     <el-table-column type="index" width="50" />
-    <el-table-column label="封面" show-overflow-tooltip>
+    <el-table-column label="封面" :show-overflow-tooltip="true">
       <template #default="scope">
         <div class="cover">
           <div class="cover-img" @click="playImmediately(useToSong(scope.row))">
@@ -25,7 +25,7 @@
         </div>
       </template>
     </el-table-column>
-    <el-table-column label="歌手" width="180" show-overflow-tooltip>
+    <el-table-column label="歌手" width="180" :show-overflow-tooltip="true">
       <template #default="scope">
         <ArtistColumn :artists="scope.row.artists" />
       </template>
@@ -46,6 +46,8 @@
       <el-empty description="暂无音乐" />
     </template>
   </el-table>
+  <!-- 无网络显示 -->
+  <NetLess v-show="noNetwork" />
 </template>
 
 <script setup lang="ts">
@@ -58,7 +60,8 @@ import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
 import {useToSong} from "@/utils/typeFormate";
-import {toCommonPlayList} from "@/router/usePush";
+import NetLess from '@/components/NetLess/index.vue'
+import { toPlayList } from "@/components/ToPlayList";
 
 const router = useRouter()
 
@@ -88,11 +91,14 @@ const types = [
 const currentType = ref(types[0])
 const topSongs = ref<TopSong[]>([])
 const loading = ref(false)
+const noNetwork = ref(false)
 
 function getData() {
   loading.value = true
   getTopSongs(currentType.value.key).then(res => {
     topSongs.value = res
+  }).catch(() => {
+    noNetwork.value
   }).finally(() => {
     loading.value = false
   })
@@ -100,12 +106,19 @@ function getData() {
 
 getData()
 
+function selectPlayList() {
+  toPlayList(topSongs.value.map(topSong => topSong.id))
+}
+
 function selectType(type: { key: number, text: string }) {
   topSongs.value.length = 0
   currentType.value = type
   getData()
 }
 
+/**
+ * 播放（播放全部、双击播放）
+ */
 const { push, playImmediately } = usePlayerStore()
 function playAll() {
   push(topSongs.value.map(useToSong), { replace: true, trigger: 'playAll' })

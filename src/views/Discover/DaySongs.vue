@@ -12,7 +12,7 @@
         <el-button round type="primary"><PlayOne theme="filled" size="22" @click="playAll"/>播放全部</el-button>
         <el-button round type="primary"><Plus theme="filled" size="20" :strokeWidth="3" @click="playAll(false)"/></el-button>
       </el-button-group>
-      <el-button round><FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏</el-button>
+      <el-button round @click="selectPlayList" :disabled="!dailySongs.length"><FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏全部</el-button>
     </div>
   </header>
 
@@ -70,6 +70,7 @@ import {usePlayerStore} from "@/stores/player";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import {toCommonPlayList} from "@/router/usePush";
+import { toPlayList } from "@/components/ToPlayList";
 
 const dailySongs = ref<Song[]>([])
 getDailySongs().then(res => {
@@ -78,6 +79,10 @@ getDailySongs().then(res => {
 
 const { myPlayList } = storeToRefs(useUserStore())
 const myPlayListIds = myPlayList.value.map(item => item.id)
+
+function selectPlayList() {
+  toPlayList(dailySongs.value.map(item => item.id))
+}
 
 // 播放全部
 const { push } = usePlayerStore()

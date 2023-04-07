@@ -90,3 +90,18 @@
   margin-top: 20px;
   --el-color-primary: var(--player-theme);
 }
+.el-overlay {
+  z-index: 10000 !important;
+}
+// 收藏音乐到歌单弹窗
+.el-dialog.to-playlist-dialog {
+  height: 80vh;
+  margin: 20px auto;
+  .el-dialog__body {
+    height: calc(80vh - 92.44px);
+    padding: 0;
+  }
+}
+.el-message {
+  z-index: 10001 !important;
+}
