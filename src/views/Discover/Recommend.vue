@@ -9,9 +9,11 @@
     </el-carousel-item>
   </el-carousel>
   <!-- 推荐歌单 -->
-  <router-link to="/discover/playlist">
-    <h3 class="flex-vertical-center">推荐歌单<Right theme="outline" size="22"/></h3>
-  </router-link>
+  <div class="flex-vertical-center">
+    <router-link to="/discover/playlist">
+      <h3>推荐歌单<Right theme="outline" size="22"/></h3>
+    </router-link>
+  </div>
   <div class="grid-col5">
     <Cover v-if="hasLogin" class="relative daily-songs"
            mode="vertical" :image-url="dailySongsBg"
@@ -26,9 +28,11 @@
     </Cover>
   </div>
   <!-- 独家放送 -->
-  <router-link to="/">
-    <h3 class="flex-vertical-center">独家放送<Right theme="outline" size="22"/></h3>
-  </router-link>
+  <div class="flex-vertical-center">
+    <router-link to="/privateMVList">
+      <h3>独家放送<Right theme="outline" size="22"/></h3>
+    </router-link>
+  </div>
   <div class="grid-col3">
     <Cover v-for="item in privateMVList"
            mode="vertical" :image-url="item.picUrl"
@@ -37,9 +41,11 @@
     </Cover>
   </div>
   <!-- 最新音乐 -->
-  <router-link to="/discover/new/songs">
-    <h3 class="flex-vertical-center">最新音乐<Right theme="outline" size="22"/></h3>
-  </router-link>
+  <div class="flex-vertical-center">
+    <router-link to="/discover/new/songs">
+      <h3>最新音乐<Right theme="outline" size="22"/></h3>
+    </router-link>
+  </div>
   <div class="grid-col3">
     <Cover v-for="item in topSongs"
            mode="horizontal" :image-url="item.album.picUrl" image-size="100px"
@@ -51,9 +57,11 @@
     </Cover>
   </div>
   <!-- 推荐MV -->
-  <router-link to="/video/mv">
-    <h3 class="flex-vertical-center">推荐MV<Right theme="outline" size="22"/></h3>
-  </router-link>
+  <div class="flex-vertical-center">
+    <router-link to="/video/mv">
+      <h3>推荐MV<Right theme="outline" size="22"/></h3>
+    </router-link>
+  </div>
   <div class="grid-col3">
     <Cover v-for="item in personalizedMVList"
            mode="vertical" :image-url="item.picUrl" @click="toMv(item.id)">

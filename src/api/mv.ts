@@ -1,5 +1,5 @@
 import { request } from '@/utils/request'
-import {MV, MVUrl, TopMV} from "@/models/MV";
+import {MV, MVUrl, PrivateMV, TopMV} from "@/models/MV";
 
 /**
  * MV列表
@@ -72,5 +72,17 @@ export function getMVUrl(id: number) {
 export function getMVLikeCount(mvid: number) {
     return request<{ likedCount: number, liked: boolean }>('/mv/detail/info', 'GET', { mvid }, true).then(res => {
         return res
+    })
+}
+
+/**
+ * 独家放送列表
+ */
+export function getPrivateMVList(limit: number, page: number) {
+    return request<{ result: PrivateMV[] }>('/personalized/privatecontent/list', 'GET', {
+        limit,
+        offset: (page - 1) * limit
+    }).then(res => {
+        return res.result
     })
 }

@@ -30,6 +30,12 @@ const router = createRouter({
                     component: () => import('@/views/Discover/HighQualityPlayList.vue'),
                     meta: { title: '精选歌单' }
                 },
+                {
+                    path: 'privateMVList',
+                    name: 'PrivateMVList',
+                    component: () => import('@/views/Discover/PrivateMV.vue'),
+                    meta: { title: '独家播放' }
+                },
                 /**
                  * 视频
                  */

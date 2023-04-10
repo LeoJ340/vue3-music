@@ -102,5 +102,6 @@ export interface PrivateMV {
     type: number
     copywriter: string
     name: string
-    alg: string
+    alg?: string
+    time?: number
 }
