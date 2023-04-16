@@ -1,4 +1,4 @@
-import {request} from "@/utils/request";
+import {request, newRequest} from "@/utils/request";
 import {Song, TopSong, SongUrl} from "@/models/Song";
 
 /**
@@ -7,8 +7,21 @@ import {Song, TopSong, SongUrl} from "@/models/Song";
  * 未登录状态或者非会员返回试听片段
  */
 export async function getSongUrl(id: number) {
-    return request<{ data: SongUrl[] }>('/song/url', 'GET', { id }, true).then(res => {
-        return res.data[0]
+    return new Promise<SongUrl>((resolve, reject) => {
+        const options = {
+            needLogin: true,
+            data: { id }
+        }
+        newRequest<{ code: number, data: SongUrl[] }>('/song/url', 'POST', options).then(res => {
+            const { code, data } = res
+            if (code === 200) {
+                resolve(data[0])
+            } else {
+                reject()
+            }
+        }).catch(() => {
+            reject()
+        })
     })
 }
 
@@ -25,8 +38,23 @@ export function getSong(ids: number[]) {
 /**
  * 最新音乐
  */
-export function getTopSongs(type: number = 0) {
-    return request<{ data: TopSong[] }>('/top/song', 'GET', { type }).then(res => {
-        return res.data
+export function getTopSongs(type: number = 0): Promise<TopSong[]> {
+    return new Promise((resolve, reject) => {
+        newRequest<{ code: number, data: TopSong[] }>('/top/song', 'GET', { data: { type } }).then(res => {
+            const { code, data } = res
+            if (code === 200) {
+                resolve(data)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            // 需要处理显示网络异常
+            reject(reason)
+        })
     })
 }

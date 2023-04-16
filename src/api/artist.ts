@@ -1,4 +1,4 @@
-import {request} from "@/utils/request";
+import {newRequest} from "@/utils/request";
 import {Artist, ArtistDesc, ArtistDetail} from "@/models/Artist";
 
 /**
@@ -18,10 +18,23 @@ export function getArtistList(params: { page: number, limit: number, area?: numb
     if (params.initial === '#') {
         reqParams.initial = 0
     }
-    return request<{ artists: Artist[], more: boolean }>('/artist/list', 'GET', reqParams).then(res => {
-        return res.artists
-    }).catch(_ => {
-        return Promise.reject()
+    return new Promise<Artist[]>((resolve, reject) => {
+        newRequest<{ code: number, artists: Artist[], more: boolean }>('/artist/list', 'GET', { params: reqParams }).then(res => {
+            const { code, artists } = res
+            if (code === 200) {
+                resolve(artists)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            // 需要处理显示网络异常
+            reject(reason)
+        })
     })
 }
 
@@ -29,16 +42,50 @@ export function getArtistList(params: { page: number, limit: number, area?: numb
  * 歌手详情
  */
 export function getArtistDetail(id: number) {
-    return request<{ data: { artist: ArtistDetail } }>('/artist/detail', 'GET', { id }).then(res => {
-        return res.data.artist
+    return new Promise<ArtistDetail>((resolve, reject) => {
+        newRequest<{ code: number, data: { artist: ArtistDetail } }>('/artist/detail', 'GET', { params: { id } }).then(res => {
+            const { code, data } = res
+            if (code === 200) {
+                resolve(data.artist)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            // 需要处理显示网络异常
+            reject(reason)
+        })
     })
 }
 
 /**
  * 歌手描述
  */
+interface ArtistDescRes extends ArtistDesc{
+    code: number
+}
 export function getArtistDesc(id: number) {
-    return request<ArtistDesc>('/artist/desc', 'GET', { id }).then(res => {
-        return res
+    return new Promise<ArtistDesc>((resolve, reject) => {
+        newRequest<ArtistDescRes>('/artist/desc', 'GET', { params: { id } }).then(res => {
+            const { code, briefDesc, introduction } = res
+            if (code === 200) {
+                resolve({briefDesc, introduction})
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+                reject()
+            }
+        }).catch(reason => {
+            // 需要处理显示网络异常
+            reject(reason)
+        })
     })
 }

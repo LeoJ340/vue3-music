@@ -88,3 +88,37 @@ export function loginRequest<T>(url: string, params?: object): Promise<T> {
     })
 }
 
+
+interface Options {
+    needLogin?: boolean
+    params?: object
+    data?: object
+}
+
+// TODO：请求封装改造
+export function newRequest<T>(url: string, method: Method, options: Options = {}): Promise<T> {
+    const { needLogin = false, params = {}, data = {} } = options
+    return new Promise((resolve, reject) => {
+        // 携带用户cookie
+        if (needLogin) {
+            Object.assign(data, { cookie: sessionStorage.getItem('cookie') })
+        }
+        service({ url, method, params, data }).then((response: AxiosResponse) => {
+            // 接口响应报文格式不规范，对code判断移至api层独立处理
+            resolve(response.data)
+        }).catch((error: string) => {
+            console.error(url, error)
+            if (error === '网络异常' || error === '请求超时') {
+                reject('网络异常')
+            } else {
+                ElMessage({
+                    message: error,
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+                reject()
+            }
+        })
+    })
+}

@@ -1,4 +1,4 @@
-import {request} from "@/utils/request";
+import {newRequest, request} from "@/utils/request";
 import {PlayList, TopList} from "@/models/PlayList";
 import { Song } from "@/models/Song";
 import {Category, HotCategory, HighQualityTag} from "@/models/Category";
@@ -26,8 +26,23 @@ export function getPlayListTrack(id: number, page: { offset: number, limit?: num
  * 排行榜（返回还包括歌手榜、赞赏榜）
  */
 export function getTopList() {
-    return request<{ list: TopList[] }>('/toplist/detail', 'GET', {}).then(res => {
-        return res.list
+    return new Promise<TopList[]>((resolve, reject) => {
+        newRequest<{ code: number, list: TopList[] }>('/toplist/detail', 'GET').then(res => {
+            const { code, list } = res
+            if (code === 200) {
+                resolve(list)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            // 需要处理显示网络异常
+            reject(reason)
+        })
     })
 }
 

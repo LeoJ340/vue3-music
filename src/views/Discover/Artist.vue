@@ -20,7 +20,7 @@
     </div>
   </div>
   <!-- 歌手列表 -->
-  <!-- TODO：无限滚动 -->
+  <!-- TODO：下拉滚动 -->
   <div v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..." class="artist-list">
     <div v-for="artist in artistList" class="artist-item" @click="toCommonArtist(artist.id)">
       <el-image :src="artist.img1v1Url"/>
@@ -28,8 +28,9 @@
       <!-- TODO：去用户页 -->
       <Me theme="outline" size="18" fill="#f54c43"/>
     </div>
-    <NetLess v-show="noNetwork" />
   </div>
+  <!-- 无网络显示 -->
+  <NetLess v-show="noNetwork" />
 </template>
 
 <script setup lang="ts">
@@ -118,6 +119,7 @@ const loading = ref(false)
 const noNetwork = ref(false)
 
 function getData() {
+  if (loading.value) return
   loading.value = true
   artistList.value = []
   getArtistList({
@@ -129,8 +131,10 @@ function getData() {
   }).then(res => {
     noNetwork.value = false
     artistList.value = res
-  }).catch(() => {
-    noNetwork.value = true
+  }).catch((reason: string) => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    }
   }).finally(() => {
     loading.value = false
   })

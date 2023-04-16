@@ -94,11 +94,14 @@ const loading = ref(false)
 const noNetwork = ref(false)
 
 function getData() {
+  if (loading.value) return
   loading.value = true
   getTopSongs(currentType.value.key).then(res => {
     topSongs.value = res
-  }).catch(() => {
-    noNetwork.value
+  }).catch((reason: string) => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    }
   }).finally(() => {
     loading.value = false
   })
