@@ -1,7 +1,7 @@
 <template>
-  <el-scrollbar>
+  <el-scrollbar v-if="artistDetail" >
     <!-- 歌手封面、信息 -->
-    <div v-if="artistDetail" class="artist-info flex">
+    <div class="artist-info flex">
       <el-image :src="artistDetail.cover" class="artist-cover" lazy />
       <div>
         <h3 class="mt-0">{{artistDetail.name}}</h3>
@@ -25,9 +25,12 @@
       <Component :is="activeComponent" />
     </KeepAlive>
   </el-scrollbar>
+  <!-- 无网络显示 -->
+  <NetLess v-if="noNetwork" />
 </template>
 
 <script setup lang="ts">
+import NetLess from '@/components/NetLess/index.vue'
 import { FolderPlus, User } from '@icon-park/vue-next';
 import {ref, shallowRef} from "vue";
 import {useRoute} from "vue-router";
@@ -42,9 +45,15 @@ const currentRoute = useRoute()
 const artistId = currentRoute.params.id
 
 const artistDetail = ref<ArtistDetail>()
+const noNetwork = ref(false)
 
 getArtistDetail(Number(artistId)).then(res => {
   artistDetail.value = res
+  noNetwork.value = false
+}).catch((reason: string) => {
+  if (reason === '网络异常') {
+    noNetwork.value = true
+  }
 })
 
 const menuList = [
