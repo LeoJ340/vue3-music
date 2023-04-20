@@ -10,7 +10,7 @@
     </div>
   </div>
   <!-- 分类选择 -->
-  <div class="flex justify-between items-end" style="margin: 15px 0;">
+  <div v-show="!noNetwork" class="flex justify-between items-end" style="margin: 15px 0;">
     <el-popover placement="bottom-start" width="auto" trigger="click" :effect="currentTheme === 'dark' ? 'dark' : 'light'">
       <template #reference>
         <el-button round>{{currentCategoryName}}<Right theme="outline"/></el-button>
@@ -47,6 +47,7 @@
   </div>
   <!-- 分页条 -->
   <el-pagination
+      v-show="!noNetwork"
       small
       background
       layout="prev, pager, next"
@@ -56,18 +57,21 @@
       :hide-on-single-page="playlistPage.total < playlistPage.size"
       @current-change="changePage"
   />
+  <!-- 无网络显示 -->
+  <NetLess v-show="noNetwork" />
 </template>
 
 <script setup lang="ts">
 import Cover from '@/components/Cover/index.vue'
+import NetLess from '@/components/NetLess/index.vue'
 import {CrownThree, Right ,Earth, Piano, Cup, SlightlySmilingFace, GridTwo} from "@icon-park/vue-next";
 import {reactive, ref, ShallowRef, shallowRef, watch} from "vue";
 import {
   getHighQualityCategories,
   getHotCategories,
   getSubCategories,
-  getTopPlaylistsByCategory,
-  getTopPlayListsByHighQualityCategories
+  getPlaylists,
+  getHighQualityPlayLists
 } from "@/api/playlist";
 import {Category, HighQualityTag, HotCategory} from "@/models/Category";
 import {PlayList} from "@/models/PlayList";
@@ -124,26 +128,47 @@ const playlistPage = reactive<{ list: PlayList[]; page: number; size: number; to
 })
 
 const loading = ref(false)
+const noNetwork = ref(false)
 
 const hotCategories = ref<HotCategory[]>([])
 const highQualityCategories = ref<HighQualityTag[]>([])
 
-async function init() {
+// 获取列表数据
+function getList() {
   loading.value = true
-  const initRes = await Promise.allSettled([await getHotCategories(), await getHighQualityCategories()])
-  hotCategories.value = initRes[0].value
-  highQualityCategories.value = initRes[1].value
-  currentCategoryName.value = hotCategories.value[0].name
-  const { playlists, total } = await getTopPlaylistsByCategory({ cat: currentCategoryName.value, limit: playlistPage.size, page: playlistPage.page })
-  loading.value = false
-  playlistPage.list = playlists
-  playlistPage.total = total
+  getPlaylists({ cat: currentCategoryName.value, limit: playlistPage.size, page: playlistPage.page }).then(res => {
+    noNetwork.value = false
+    const { playlists, total } = res
+    playlistPage.total = total
+    playlistPage.list = playlists
+  }).catch((reason: string) => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    }
+  }).finally(() => {
+    loading.value = false
+  })
+}
+
+// 初始化分类数据
+async function init() {
   // 异步获取全部分类
   getSubCategories().then(res => {
+    noNetwork.value = false
     allCategory.forEach((item, index) => {
       item.sub = res.filter(sub => sub.category === index)
     })
+  }).catch(reason => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    }
   })
+  // 获取热门分类、精选分类
+  const initRes = await Promise.allSettled<[HotCategory[], HighQualityTag[]]>([await getHotCategories(), await getHighQualityCategories()]) as PromiseFulfilledResult<HotCategory[] | HighQualityTag[]>[]
+  hotCategories.value = initRes[0]?.value as HotCategory[]
+  highQualityCategories.value = initRes[1]?.value as HighQualityTag[]
+  currentCategoryName.value = hotCategories.value[0].name
+  getList()
 }
 
 init()
@@ -152,8 +177,12 @@ watch(currentCategoryName, val => {
   // 监听当前分类是否属于精选分类
   if (highQualityCategories.value.map(item => item.name).includes(val)) {
     // 获取精选歌单第一项
-    getTopPlayListsByHighQualityCategories({ cat: val, limit: 1 }).then(res => {
+    getHighQualityPlayLists({ cat: val, limit: 1 }).then(res => {
       highQualityPlayList.value = res.playlists[0]
+    }).catch(reason => {
+      if (reason === '网络异常') {
+        noNetwork.value = true
+      }
     })
   } else {
     highQualityPlayList.value = undefined
@@ -168,28 +197,14 @@ function toHighQualityPlayList() {
 }
 
 function changeCategory(category: string) {
-  loading.value = true
   playlistPage.page = 1
   currentCategoryName.value = category
-  getTopPlaylistsByCategory({ cat: currentCategoryName.value, limit: playlistPage.size, page: playlistPage.page }).then(res => {
-    const { playlists, total } = res
-    playlistPage.total = total
-    playlistPage.list = playlists
-  }).finally(() => {
-    loading.value = false
-  })
+  getList()
 }
 
 function changePage(page: number) {
-  loading.value = true
   playlistPage.page = page
-  getTopPlaylistsByCategory({ cat: currentCategoryName.value, limit: playlistPage.size, page: playlistPage.page }).then(res => {
-    const { playlists, total } = res
-    playlistPage.total = total
-    playlistPage.list = playlists
-  }).finally(() => {
-    loading.value = false
-  })
+  getList()
 }
 </script>
 
