@@ -33,6 +33,6 @@ export interface LoginStatus {
             userId: number
             nickname: string
             avatarUrl: string
-        }
+        } | null
     }
 }

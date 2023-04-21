@@ -69,26 +69,6 @@ export function request<T>(url: string, method: Method, params: any, needLogin: 
     })
 }
 
-// 登录相关的接口和业务请求响应报文不太一样
-export function loginRequest<T>(url: string, params?: object): Promise<T> {
-    return new Promise((resolve) => {
-        service.get(url, { params }).then(res => {
-            resolve(res.data);
-        }).catch((error: string) => {
-            if (error === '网络异常') {
-                ElMessage({
-                    message: '网络异常',
-                    type: 'error',
-                    duration: 1000,
-                    center: true
-                })
-                console.error(url, '网络异常')
-            }
-        })
-    })
-}
-
-
 interface Options {
     needLogin?: boolean
     params?: object

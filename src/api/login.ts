@@ -1,41 +1,90 @@
-import {loginRequest} from "@/utils/request";
+import {newRequest} from "@/utils/request";
 import {QRKeyRes, QRImgRes, CheckQRRes, LoginStatus} from "@/models/Login";
 
 /**
  * 二维码登录
  */
-async function getQrKey() {
-    const { data } = await loginRequest<QRKeyRes>('/login/qr/key', { timestamp: Date.now() })
-    return data.unikey
+export function getQrKey() {
+    return new Promise<string>((resolve, reject) => {
+        const data = { timestamp: Date.now() }
+        newRequest<QRKeyRes>('/login/qr/key', 'POST', { data }).then(res => {
+            const { code, data } = res
+            if (code === 200) {
+                resolve(data.unikey)
+            } else {
+                reject()
+            }
+        }).catch((reason: string) => {
+            // 需要处理异常
+            reject(reason)
+        })
+    })
 }
 
-async function getQR(key: string) {
-    const { data } = await loginRequest<QRImgRes>('/login/qr/create', { qrimg: true, key, timestamp: Date.now() })
-    return data.qrimg
+export function getQR(key: string) {
+    return new Promise<string>((resolve, reject) => {
+        const data = { qrimg: true, key, timestamp: Date.now() }
+        newRequest<QRImgRes>('/login/qr/create', 'POST', { data }).then(res => {
+            const { code, data } = res
+            if (code === 200) {
+                resolve(data.qrimg)
+            } else {
+                reject()
+            }
+        }).catch((reason: string) => {
+            // 需要处理异常
+            reject(reason)
+        })
+    })
 }
 
-async function checkQR(key: string) {
-    return await loginRequest<CheckQRRes>('/login/qr/check', { key, timestamp: Date.now() })
+export function checkQR(key: string) {
+    return new Promise<CheckQRRes>((resolve, reject) => {
+        const data = { key, timestamp: Date.now() }
+        newRequest<CheckQRRes>('/login/qr/check', 'POST', { data }).then(res => {
+            resolve(res)
+        }).catch((reason: string) => {
+            // 需要处理异常
+            reject(reason)
+        })
+    })
 }
 
 /**
  * 登录状态
  */
-async function checkLogin() {
-    return await loginRequest<LoginStatus>('/login/status', { cookie: sessionStorage.getItem('cookie') })
+export function checkLogin() {
+    return new Promise<LoginStatus>((resolve, reject) => {
+        newRequest<LoginStatus>('/login/status', 'POST', { needLogin: true }).then(res => {
+            const { code } = res.data
+            if (code === 200) {
+                resolve(res)
+            } else {
+                reject()
+            }
+        }).catch(() => {
+            reject()
+        })
+    })
 }
 
 /**
  * 注销
  */
-async function logout() {
-    const { code } = await loginRequest<{ code: number }>('/logout')
-    if (code === 200) {
-        return Promise.resolve()
-    } else {
-        return Promise.reject()
-    }
+export function logout() {
+    return new Promise<void>((resolve, reject) => {
+        newRequest<{ code: number }>('/logout', 'POST').then(res => {
+            const { code } = res
+            if (code === 200) {
+                resolve()
+            } else {
+                reject()
+            }
+        }).catch(() => {
+            reject()
+        })
+    })
 }
 
-export { getQrKey, getQR, checkQR, checkLogin, logout }
+// export { getQrKey, getQR, checkQR, checkLogin, logout }
 
