@@ -45,8 +45,9 @@ export function request<T>(url: string, method: Method, options: Options = {}): 
     const { needLogin = false, params = {}, data = {} } = options
     return new Promise((resolve, reject) => {
         // 携带用户cookie
-        if (needLogin) {
-            Object.assign(data, { cookie: sessionStorage.getItem('cookie') })
+        const cookie = sessionStorage.getItem('cookie')
+        if (needLogin && cookie) {
+            Object.assign(data, { cookie })
         }
         service({ url, method, params, data }).then((response: AxiosResponse) => {
             // 接口响应报文格式不规范，对code判断移至api层独立处理
