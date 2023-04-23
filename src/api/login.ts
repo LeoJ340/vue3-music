@@ -85,6 +85,3 @@ export function logout() {
         })
     })
 }
-
-// export { getQrKey, getQR, checkQR, checkLogin, logout }
-

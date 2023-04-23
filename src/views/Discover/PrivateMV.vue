@@ -35,8 +35,12 @@ function getData() {
   getPrivateMVList(limit, page).then(res => {
     noNetwork.value = false
     privateMVList.value.push(...res)
-  }).catch(() => {
-    noNetwork.value = true
+  }).catch(reason => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    } else {
+      page--
+    }
   }).finally(() => {
     loading.value = false
   })

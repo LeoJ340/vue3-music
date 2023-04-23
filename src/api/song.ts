@@ -1,4 +1,4 @@
-import {request, newRequest} from "@/utils/request";
+import {newRequest} from "@/utils/request";
 import {Song, TopSong, SongUrl} from "@/models/Song";
 
 /**
@@ -30,13 +30,25 @@ export async function getSongUrl(id: number) {
  * @param ids（支持多个id，用','隔开）
  */
 export function getSong(ids: number[]) {
-    return request<{ songs: Song[] }>('/song/detail', 'GET', { ids: ids.join(',') }).then(res => {
-        return res.songs
+    return new Promise<Song[]>(resolve => {
+        newRequest<{ code: number, songs: Song[] }>('/song/detail', 'GET', { params: { ids: ids.join(',') } }).then(res => {
+            const { code, songs } = res
+            if (code === 200) {
+                resolve(songs)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        })
     })
 }
 
 /**
- * 最新音乐
+ * 新歌速递
  */
 export function getTopSongs(type: number = 0): Promise<TopSong[]> {
     return new Promise((resolve, reject) => {

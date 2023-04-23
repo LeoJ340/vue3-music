@@ -54,7 +54,9 @@
     </el-table-column>
     <!-- 空数据 -->
     <template #empty="scope">
-      <el-empty description="暂无音乐" />
+      <el-empty v-show="!noNetwork" description="暂无音乐" />
+      <!-- 无网络显示 -->
+      <NetLess v-show="noNetwork" />
     </template>
   </el-table>
 </template>
@@ -65,6 +67,7 @@ import {getDailySongs} from "@/api/recommend";
 import {Song} from "@/models/Song";
 import { Calendar, PlayOne, Plus, FolderPlus, Download, Like } from '@icon-park/vue-next';
 import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
+import NetLess from '@/components/NetLess/index.vue'
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
 import {useUserStore} from "@/stores/user";
@@ -72,9 +75,15 @@ import {storeToRefs} from "pinia";
 import {toCommonPlayList} from "@/router/usePush";
 import { toPlayList } from "@/components/ToPlayList";
 
+const noNetwork = ref(false)
+
 const dailySongs = ref<Song[]>([])
 getDailySongs().then(res => {
   dailySongs.value = res
+}).catch(reason => {
+  if (reason === '网络异常') {
+    noNetwork.value = true
+  }
 })
 
 const { myPlayList } = storeToRefs(useUserStore())

@@ -106,6 +106,15 @@ const { playImmediately } = usePlayerStore()
 const banners = ref<Banner[]>([])
 getBanners().then(res => {
   banners.value = res
+}).catch((reason: string) => {
+  if (reason === '网络异常') {
+    ElMessage({
+      message: '系统异常',
+      type: 'error',
+      duration: 1000,
+      center: true
+    })
+  }
 })
 
 const currentBannerIndex = ref(0)
