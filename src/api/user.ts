@@ -1,4 +1,4 @@
-import {newRequest} from "@/utils/request";
+import {request} from "@/utils/request";
 import {PlayList} from "@/models/PlayList";
 
 /**
@@ -6,7 +6,7 @@ import {PlayList} from "@/models/PlayList";
  */
 export function playList(uid: number) {
     return new Promise<Array<PlayList>>((resolve, reject) => {
-        newRequest<{ code: number, playlist: Array<PlayList> }>('/user/playlist', 'GET', { params: { uid }, needLogin: true }).then(res => {
+        request<{ code: number, playlist: Array<PlayList> }>('/user/playlist', 'GET', { params: { uid }, needLogin: true }).then(res => {
             const { code, playlist } = res
             if (code === 200) {
                 resolve(playlist)

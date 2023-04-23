@@ -46,33 +46,14 @@ function show() {
 }
 
 function toPlaylist(id: number) {
-  managerTracks('add', id, props.tracks).then(res => {
-    const { code, message } = res
-    if (code === 200) {
-      visible.value = false
-      ElMessage({
+  managerTracks('add', id, props.tracks).then(() => {
+    visible.value = false
+    ElMessage({
         message: '已收藏到歌单',
         type: 'success',
         duration: 1000,
         center: true
-      })
-      return
-    }
-    if (code === 502 && message) {
-      ElMessage({
-        message: message,
-        type: 'error',
-        duration: 1000,
-        center: true
-      })
-    } else {
-      ElMessage({
-        message: '系统异常',
-        type: 'error',
-        duration: 1000,
-        center: true
-      })
-    }
+    })
   })
 }
 

@@ -14,6 +14,7 @@ service.interceptors.request.use(
     }
 )
 
+// 响应拦截
 service.interceptors.response.use(
     (response: AxiosResponse) => {
         if (response.status === 200)  {
@@ -34,49 +35,13 @@ service.interceptors.response.use(
     }
 )
 
-export function request<T>(url: string, method: Method, params: any, needLogin: boolean = false): Promise<T> {
-    return new Promise((resolve, reject) => {
-        // 携带用户cookie
-        if (needLogin) {
-            params.cookie = sessionStorage.getItem('cookie')
-        }
-        service({ url, method, params }).then(res => {
-            const { code, status } = res.data
-            if (code === 200 || status === 200) {
-                resolve(res.data)
-            } else {
-                ElMessage({
-                    message: '系统异常',
-                    type: 'error',
-                    duration: 1000,
-                    center: true
-                })
-                console.error(url, '系统异常', res)
-            }
-        }).catch((error: string) => {
-            if (error === '网络异常') {
-                reject()
-            } else {
-                ElMessage({
-                    message: '系统异常',
-                    type: 'error',
-                    duration: 1000,
-                    center: true
-                })
-                console.error(url, '系统异常')
-            }
-        })
-    })
-}
-
 interface Options {
     needLogin?: boolean
     params?: object
     data?: object
 }
 
-// TODO：请求封装改造
-export function newRequest<T>(url: string, method: Method, options: Options = {}): Promise<T> {
+export function request<T>(url: string, method: Method, options: Options = {}): Promise<T> {
     const { needLogin = false, params = {}, data = {} } = options
     return new Promise((resolve, reject) => {
         // 携带用户cookie

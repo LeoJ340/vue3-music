@@ -1,4 +1,4 @@
-import {newRequest} from "@/utils/request";
+import {request} from "@/utils/request";
 import {Song, TopSong, SongUrl} from "@/models/Song";
 
 /**
@@ -12,7 +12,7 @@ export async function getSongUrl(id: number) {
             needLogin: true,
             data: { id }
         }
-        newRequest<{ code: number, data: SongUrl[] }>('/song/url', 'POST', options).then(res => {
+        request<{ code: number, data: SongUrl[] }>('/song/url', 'POST', options).then(res => {
             const { code, data } = res
             if (code === 200) {
                 resolve(data[0])
@@ -31,7 +31,7 @@ export async function getSongUrl(id: number) {
  */
 export function getSong(ids: number[]) {
     return new Promise<Song[]>(resolve => {
-        newRequest<{ code: number, songs: Song[] }>('/song/detail', 'GET', { params: { ids: ids.join(',') } }).then(res => {
+        request<{ code: number, songs: Song[] }>('/song/detail', 'GET', { params: { ids: ids.join(',') } }).then(res => {
             const { code, songs } = res
             if (code === 200) {
                 resolve(songs)
@@ -52,7 +52,7 @@ export function getSong(ids: number[]) {
  */
 export function getTopSongs(type: number = 0): Promise<TopSong[]> {
     return new Promise((resolve, reject) => {
-        newRequest<{ code: number, data: TopSong[] }>('/top/song', 'GET', { data: { type } }).then(res => {
+        request<{ code: number, data: TopSong[] }>('/top/song', 'GET', { data: { type } }).then(res => {
             const { code, data } = res
             if (code === 200) {
                 resolve(data)

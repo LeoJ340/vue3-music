@@ -23,7 +23,7 @@
     </span>
     </div>
     <!-- MV列表 -->
-    <ul v-loading="loading" element-loading-text="载入中..." class="mv-list">
+    <ul v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..." class="mv-list">
       <li v-for="mv in mvList" class="mv-item" @click="toDetail(mv.id)">
         <el-image :src="mv.cover" fit="cover" />
         <div style="margin-top: 5px;">{{mv.name}}</div>
@@ -35,6 +35,7 @@
     </ul>
     <!-- 分页条 -->
     <el-pagination
+        v-show="!noNetwork"
         small
         background
         layout="prev, pager, next"
@@ -44,10 +45,13 @@
         :hide-on-single-page="total < params.limit"
         @current-change="changePage"
     />
+    <!-- 无网络显示 -->
+    <NetLess v-show="noNetwork" />
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
+import NetLess from '@/components/NetLess/index.vue'
 import {PlayOne} from "@icon-park/vue-next";
 import useFormatCount from "@/utils/count";
 import {useRoute, useRouter} from "vue-router";
@@ -70,6 +74,7 @@ const params = reactive({
 })
 
 const loading = ref(false)
+const noNetwork = ref(false)
 const mvList = ref<MV[]>([])
 const total = ref(0)
 
@@ -77,11 +82,16 @@ function getData() {
   loading.value = true
   mvList.value.length = 0
   getMVList(params).then(res => {
+    noNetwork.value = false
     const { data, count } = res
     if (count) {
       total.value = count
     }
     mvList.value = data
+  }).catch((reason: string) => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    }
   }).finally(() => {
     loading.value = false
   })

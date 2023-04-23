@@ -92,6 +92,15 @@ const firstMV = ref<MV[]>([])
 function toGetFirstMV() {
   getFirstMV(firstReq).then(res => {
     firstMV.value = res
+  }).catch((reason: string) => {
+    if (reason === '网络异常') {
+      ElMessage({
+        message: '系统异常',
+        type: 'error',
+        duration: 1000,
+        center: true
+      })
+    }
   })
 }
 

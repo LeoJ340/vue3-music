@@ -1,11 +1,13 @@
 <template>
   <el-scrollbar view-style="padding: 0 20px;">
-    <div class="flex">
+    <div v-show="!noNetwork" class="flex">
       <!-- LEFT -->
       <div style="flex: 2">
-        <h3 class="flex items-center">
-          <el-link :underline="false" @click="$router.back()"><Left theme="outline" size="22"/>MV详情</el-link>
-        </h3>
+        <div class="flex-vertical-center">
+          <a @click="$router.back()">
+            <h3><Left theme="outline" size="22"/>MV详情</h3>
+          </a>
+        </div>
         <video v-if="mvDetail" controls autoplay style="width: 90%;">
           <source :src="mvUrl?.url" type="video/mp4">
         </video>
@@ -39,10 +41,13 @@
         <h3>相关推荐</h3>
       </div>
     </div>
+    <!-- 无网络显示 -->
+    <NetLess v-show="noNetwork" />
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
+import NetLess from '@/components/NetLess/index.vue'
 import {Left, DownOne, UpOne, GoodTwo, FolderPlus, Share, Download} from "@icon-park/vue-next";
 import {ref} from "vue";
 import {useRoute} from "vue-router";
@@ -59,9 +64,16 @@ const mvUrl = ref<MVUrl>()
 
 const showDesc = ref(false)
 
+const noNetwork = ref(false)
+
 function getData() {
   getMVDetail(Number(mvId)).then(res => {
+    noNetwork.value = false
     mvDetail.value = res
+  }).catch(reason => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    }
   })
   getMVUrl(Number(mvId)).then(res => {
     mvUrl.value = res

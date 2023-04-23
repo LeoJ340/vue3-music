@@ -1,4 +1,4 @@
-import {newRequest} from "@/utils/request";
+import {request} from "@/utils/request";
 import {Banner} from "@/models/Banner";
 import {PersonalizedPlayList} from "@/models/PlayList";
 import {Song} from "@/models/Song";
@@ -10,7 +10,7 @@ import {PersonalizedMV, PrivateMV} from "@/models/MV";
 export function getBanners() {
     return new Promise<Banner[]>((resolve, reject) => {
         const params = { type: 0 }
-        newRequest<{ code: number, banners: Banner[] }>('/banner', 'GET', { params }).then(res => {
+        request<{ code: number, banners: Banner[] }>('/banner', 'GET', { params }).then(res => {
             const { code, banners } = res
             if (code === 200) {
                 resolve(banners)
@@ -34,7 +34,7 @@ export function getBanners() {
  */
 export function getRecommendPlaylists() {
     return new Promise<PersonalizedPlayList[]>(resolve => {
-        newRequest<{ code: number, recommend: PersonalizedPlayList[] }>('/recommend/resource', 'POST', { needLogin: true }).then(res => {
+        request<{ code: number, recommend: PersonalizedPlayList[] }>('/recommend/resource', 'POST', { needLogin: true }).then(res => {
             const { code, recommend } = res
             if (code === 200) {
                 resolve(recommend)
@@ -55,7 +55,7 @@ export function getRecommendPlaylists() {
  */
 export function getPersonalizedPlaylists(limit: number = 10) {
     return new Promise<PersonalizedPlayList[]>(resolve => {
-        newRequest<{ code: number, result: PersonalizedPlayList[] }>('/personalized', 'GET', { params: { limit } }).then(res => {
+        request<{ code: number, result: PersonalizedPlayList[] }>('/personalized', 'GET', { params: { limit } }).then(res => {
             const { code, result } = res
             if (code === 200) {
                 resolve(result)
@@ -76,7 +76,7 @@ export function getPersonalizedPlaylists(limit: number = 10) {
  */
 export function getDailySongs() {
     return new Promise<Song[]>((resolve, reject) => {
-        newRequest<{ code: number, data: { dailySongs: Song[] } }>('/recommend/songs', 'POST', { needLogin: true }).then(res => {
+        request<{ code: number, data: { dailySongs: Song[] } }>('/recommend/songs', 'POST', { needLogin: true }).then(res => {
             const { code, data } = res
             if (code === 200) {
                 resolve(data.dailySongs)
@@ -100,7 +100,7 @@ export function getDailySongs() {
  */
 export function getPersonalizedMV() {
     return new Promise<PersonalizedMV[]>(resolve => {
-        newRequest<{ code: number, result: PersonalizedMV[] }>('/personalized/mv', 'GET').then(res => {
+        request<{ code: number, result: PersonalizedMV[] }>('/personalized/mv', 'GET').then(res => {
             const { code, result } = res
             if (code === 200) {
                 resolve(result)
@@ -121,7 +121,7 @@ export function getPersonalizedMV() {
  */
 export function getPrivateMV() {
     return new Promise<PrivateMV[]>(resolve => {
-        newRequest<{ code: number, result: PrivateMV[] }>('/personalized/privatecontent', 'GET').then(res => {
+        request<{ code: number, result: PrivateMV[] }>('/personalized/privatecontent', 'GET').then(res => {
             const { code, result } = res
             if (code === 200) {
                 resolve(result)

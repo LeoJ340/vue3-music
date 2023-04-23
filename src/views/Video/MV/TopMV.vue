@@ -6,7 +6,7 @@
         <div v-for="item in areas" class="area-item" :class="{ active: topReq.area === item }" @click="changeTopMVArea(item)">{{item}}</div>
       </div>
     </header>
-    <ul v-loading="loading" element-loading-text="载入中..." class="top-mv-list">
+    <ul v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..." class="top-mv-list">
       <li v-for="(mv, no) in topMv" class="top-mv-item">
         <div class="flex-center" style="width: 10%;">
           <div>
@@ -26,10 +26,13 @@
         </div>
       </li>
     </ul>
+    <!-- 无网络显示 -->
+    <NetLess v-show="noNetwork" />
   </el-scrollbar>
 </template>
 
 <script setup lang="ts">
+import NetLess from '@/components/NetLess/index.vue'
 import {DownSmall, UpSmall} from "@icon-park/vue-next";
 import {reactive, ref} from "vue";
 import {useRoute, useRouter} from "vue-router";
@@ -44,12 +47,18 @@ const topReq = reactive({
 })
 const topMv = ref<TopMV[]>([])
 const loading = ref(false)
+const noNetwork = ref(false)
 
 function toGetTopMV() {
   loading.value = true
   topMv.value.length = 0
   getTopMV(topReq).then(res => {
+    noNetwork.value = false
     topMv.value = res
+  }).catch(reason => {
+    if (reason === '网络异常') {
+      noNetwork.value = true
+    }
   }).finally(() => {
     loading.value = false
   })

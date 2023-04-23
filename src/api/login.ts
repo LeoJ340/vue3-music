@@ -1,4 +1,4 @@
-import {newRequest} from "@/utils/request";
+import {request} from "@/utils/request";
 import {QRKeyRes, QRImgRes, CheckQRRes, LoginStatus} from "@/models/Login";
 
 /**
@@ -7,7 +7,7 @@ import {QRKeyRes, QRImgRes, CheckQRRes, LoginStatus} from "@/models/Login";
 export function getQrKey() {
     return new Promise<string>((resolve, reject) => {
         const data = { timestamp: Date.now() }
-        newRequest<QRKeyRes>('/login/qr/key', 'POST', { data }).then(res => {
+        request<QRKeyRes>('/login/qr/key', 'POST', { data }).then(res => {
             const { code, data } = res
             if (code === 200) {
                 resolve(data.unikey)
@@ -24,7 +24,7 @@ export function getQrKey() {
 export function getQR(key: string) {
     return new Promise<string>((resolve, reject) => {
         const data = { qrimg: true, key, timestamp: Date.now() }
-        newRequest<QRImgRes>('/login/qr/create', 'POST', { data }).then(res => {
+        request<QRImgRes>('/login/qr/create', 'POST', { data }).then(res => {
             const { code, data } = res
             if (code === 200) {
                 resolve(data.qrimg)
@@ -41,7 +41,7 @@ export function getQR(key: string) {
 export function checkQR(key: string) {
     return new Promise<CheckQRRes>((resolve, reject) => {
         const data = { key, timestamp: Date.now() }
-        newRequest<CheckQRRes>('/login/qr/check', 'POST', { data }).then(res => {
+        request<CheckQRRes>('/login/qr/check', 'POST', { data }).then(res => {
             resolve(res)
         }).catch((reason: string) => {
             // 需要处理异常
@@ -55,7 +55,7 @@ export function checkQR(key: string) {
  */
 export function checkLogin() {
     return new Promise<LoginStatus>((resolve, reject) => {
-        newRequest<LoginStatus>('/login/status', 'POST', { needLogin: true }).then(res => {
+        request<LoginStatus>('/login/status', 'POST', { needLogin: true }).then(res => {
             const { code } = res.data
             if (code === 200) {
                 resolve(res)
@@ -73,7 +73,7 @@ export function checkLogin() {
  */
 export function logout() {
     return new Promise<void>((resolve, reject) => {
-        newRequest<{ code: number }>('/logout', 'POST').then(res => {
+        request<{ code: number }>('/logout', 'POST').then(res => {
             const { code } = res
             if (code === 200) {
                 resolve()
