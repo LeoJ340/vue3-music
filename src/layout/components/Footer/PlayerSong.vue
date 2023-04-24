@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
+import ArtistColumn from '@/components/Songs/ArtistColumn.vue'
 import { usePlayerStore } from "@/stores/player";
 import {storeToRefs} from "pinia";
 

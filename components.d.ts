@@ -9,7 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    ArtistColumn: typeof import('./src/components/PlayList/ArtistColumn.vue')['default']
+    ArtistColumn: typeof import('./src/components/Songs/ArtistColumn.vue')['default']
     Cover: typeof import('./src/components/Cover/index.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
@@ -36,12 +36,14 @@ declare module '@vue/runtime-core' {
     ElSlider: typeof import('element-plus/es')['ElSlider']
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTag: typeof import('element-plus/es')['ElTag']
     Login: typeof import('./src/components/Login/index.vue')['default']
     NetLess: typeof import('./src/components/NetLess/index.vue')['default']
     NoNetwork: typeof import('./src/components/NetLess/index.vue')['default']
     PlayList: typeof import('./src/components/PlayList/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    Songs: typeof import('./src/components/Songs/index.vue')['default']
     ToPlayList: typeof import('./src/components/ToPlayList/index.vue')['default']
   }
   export interface ComponentCustomProperties {

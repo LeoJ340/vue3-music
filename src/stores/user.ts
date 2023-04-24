@@ -1,8 +1,11 @@
+import {useRouter} from "vue-router";
 import { defineStore } from 'pinia'
 import {reactive, ref} from "vue";
 import {checkLogin, logout} from "@/api/login";
 import {playList} from "@/api/user";
 import {PlayList} from "@/models/PlayList";
+
+const router = useRouter()
 
 export const useUserStore = defineStore('user', () => {
     const hasLogin = ref(false)
@@ -44,6 +47,7 @@ export const useUserStore = defineStore('user', () => {
             userInfo.userId = logoutUserInfo.userId
             userInfo.userName = logoutUserInfo.userName
             userInfo.avatarUrl = logoutUserInfo.avatarUrl
+            router.push('/')
         }).catch(() => {
             ElMessage({
                 message: '登出失败',

@@ -77,7 +77,7 @@
 import dailySongsBg from '@/assets/dailySongsBg.jpg'
 import Cover from '@/components/Cover/index.vue'
 import {Right, Calendar} from "@icon-park/vue-next";
-import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
+import ArtistColumn from '@/components/Songs/ArtistColumn.vue'
 import {reactive, ref, watch} from "vue";
 import {useRouter} from "vue-router";
 import {storeToRefs} from "pinia";

@@ -40,7 +40,7 @@ import { usePlayerStore } from "@/stores/player";
 import { useFormatSeconds } from "@/utils/time";
 import {Song} from "@/models/Song";
 import { Pause, PlayOne } from '@icon-park/vue-next';
-import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
+import ArtistColumn from '@/components/Songs/ArtistColumn.vue'
 
 const playerStore = usePlayerStore()
 const { songs, currentPlay, player } = storeToRefs(playerStore)

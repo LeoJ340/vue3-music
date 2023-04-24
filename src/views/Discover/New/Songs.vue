@@ -56,7 +56,7 @@ import {useRouter} from "vue-router";
 import {getTopSongs} from "@/api/song";
 import {Song, TopSong} from "@/models/Song";
 import {PlayOne, FolderPlus} from "@icon-park/vue-next";
-import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
+import ArtistColumn from '@/components/Songs/ArtistColumn.vue'
 import {useFormatSeconds} from "@/utils/time";
 import {usePlayerStore} from "@/stores/player";
 import {useToSong} from "@/utils/typeFormate";

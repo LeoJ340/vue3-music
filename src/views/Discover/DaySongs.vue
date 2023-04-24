@@ -16,63 +16,17 @@
     </div>
   </header>
 
-  <el-table :data="dailySongs" stripe tooltip-effect="light" :tooltip-options="{ placement: 'bottom-end' }" @row-dblclick="dblclickPlay">
-    <el-table-column type="index" width="50" />
-    <el-table-column label="操作" width="80">
-      <template #default="scope">
-        <div style="display: flex; justify-content: space-around;">
-          <el-link :underline="false" title="喜欢">
-            <Like v-if="myPlayListIds.includes(scope.row.id)" theme="filled" size="20" fill="#ec4141" :strokeWidth="2"/>
-            <Like v-else theme="outline" size="20" :strokeWidth="2"/>
-          </el-link>
-          <el-link :underline="false">
-            <Download theme="outline" size="20" :strokeWidth="2"/>
-          </el-link>
-        </div>
-      </template>
-    </el-table-column>
-    <el-table-column label="标题" :show-overflow-tooltip="true">
-      <template #default="scope">
-        <span>{{scope.row.name}}</span>
-        <span v-if="scope.row.alia.length" style="color:#919192;">（{{scope.row.alia.join('')}}）</span>
-      </template>
-    </el-table-column>
-    <el-table-column label="歌手" :show-overflow-tooltip="true">
-      <template #default="scope">
-        <ArtistColumn :artists="scope.row.ar" />
-      </template>
-    </el-table-column>
-    <el-table-column label="专辑" :show-overflow-tooltip="true">
-      <template #default="scope">
-        <el-link :underline="false" @click="toCommonPlayList(scope.row.al.id)">{{scope.row.al.name}}</el-link>
-      </template>
-    </el-table-column>
-    <el-table-column label="时间" width="100">
-      <template #default="scope">
-        <span>{{useFormatSeconds(scope.row.dt / 1000)}}</span>
-      </template>
-    </el-table-column>
-    <!-- 空数据 -->
-    <template #empty="scope">
-      <el-empty v-show="!noNetwork" description="暂无音乐" />
-      <!-- 无网络显示 -->
-      <NetLess v-show="noNetwork" />
-    </template>
-  </el-table>
+  <!-- 歌曲列表 -->
+  <Songs :songs="dailySongs" />
 </template>
 
 <script setup lang="ts">
 import {ref} from "vue";
 import {getDailySongs} from "@/api/recommend";
 import {Song} from "@/models/Song";
-import { Calendar, PlayOne, Plus, FolderPlus, Download, Like } from '@icon-park/vue-next';
-import ArtistColumn from '@/components/PlayList/ArtistColumn.vue'
-import NetLess from '@/components/NetLess/index.vue'
-import {useFormatSeconds} from "@/utils/time";
+import { Calendar, PlayOne, Plus, FolderPlus } from '@icon-park/vue-next';
+import Songs from '@/components/Songs/index.vue'
 import {usePlayerStore} from "@/stores/player";
-import {useUserStore} from "@/stores/user";
-import {storeToRefs} from "pinia";
-import {toCommonPlayList} from "@/router/usePush";
 import { toPlayList } from "@/components/ToPlayList";
 
 const noNetwork = ref(false)
@@ -86,9 +40,6 @@ getDailySongs().then(res => {
   }
 })
 
-const { myPlayList } = storeToRefs(useUserStore())
-const myPlayListIds = myPlayList.value.map(item => item.id)
-
 function selectPlayList() {
   toPlayList(dailySongs.value.map(item => item.id))
 }
@@ -99,12 +50,6 @@ function playAll(replace: boolean = true) {
   push(dailySongs.value.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
 }
 
-// 双击播放
-function dblclickPlay(song: Song) {
-  if (song.noCopyrightRcmd) return
-  const starIndex = dailySongs.value.findIndex(item => item.id === song.id)
-  push(dailySongs.value.filter(item => !item.noCopyrightRcmd), { replace: true, starIndex, trigger: 'doubleClick' })
-}
 </script>
 
 <style scoped lang="scss">

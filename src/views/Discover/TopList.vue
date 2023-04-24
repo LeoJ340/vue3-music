@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import Cover from '@/components/Cover/index.vue'
 import { PlayOne, Right } from "@icon-park/vue-next";
-import ArtistColumn from "@/components/PlayList/ArtistColumn.vue";
+import ArtistColumn from "@/components/Songs/ArtistColumn.vue";
 import {reactive, ref} from "vue";
 import {getPlayListTrack, getTopList} from "@/api/playlist";
 import {TopList} from "@/models/PlayList";
