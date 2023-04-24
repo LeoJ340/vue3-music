@@ -1,5 +1,6 @@
 import {request} from '@/utils/request'
 import {MV, MVUrl, PrivateMV, TopMV} from "@/models/MV";
+import {Video} from "@/models/Video";
 
 /**
  * MV列表
@@ -164,6 +165,29 @@ export function getMVLikeCount(mvid: number) {
             const { code, likedCount, liked } = res
             if (code === 200) {
                 resolve({ likedCount, liked })
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            reject(reason)
+        })
+    })
+}
+
+/**
+ * MV交互信息
+ */
+export function getRelatedVideos(mvid: number) {
+    return new Promise<Video[]>((resolve, reject) => {
+        request<{ code: number, data: Video[] }>('/related/allvideo', 'GET', { params: { id: mvid } }).then(res => {
+            const { code, data } = res
+            if (code === 200) {
+                resolve(data)
             } else {
                 ElMessage({
                     message: '系统异常',
