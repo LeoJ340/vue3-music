@@ -16,7 +16,7 @@
         <Plus theme="filled" size="50" fill="#ec4141" :strokeWidth="1" class="icon flex-center" />
         <div class="flex-vertical-center" style="margin-left: 10px;">创建为新歌单</div>
       </div>
-      <div v-for="item in playList" class="flex playlist" @click="toPlaylist(item.id)">
+      <div v-for="item in myPlayList.created" class="flex playlist" @click="toPlaylist(item.id)">
         <el-image :src="item.coverImgUrl" fit="cover" />
         <div style="margin-left: 10px;">
           <p>{{item.name}}</p>
@@ -29,7 +29,7 @@
 
 <script setup lang="ts">
 import { Plus } from '@icon-park/vue-next';
-import {computed, h, ref} from "vue";
+import {h, ref} from "vue";
 import {useUserStore} from "@/stores/user";
 import {storeToRefs} from "pinia";
 import {managerTracks, createPlayList} from "@/api/playlist";
@@ -40,14 +40,13 @@ const props = defineProps<{
 }>()
 
 const visible = ref(false)
-const { myPlayList, userInfo } = storeToRefs(useUserStore())
 
-const playList = computed(() => {
-  return myPlayList.value.filter(item => item.creator?.userId === userInfo.value.userId)
-})
+const userStore = useUserStore()
+const { getMyPlayList } = userStore
+const { myPlayList } = storeToRefs(userStore)
 
 function show() {
-  if (!playList.value.length) return
+  if (!myPlayList.value.created.length) return
   visible.value = true
 }
 
@@ -89,6 +88,7 @@ function toCreate() {
         duration: 1000,
         center: true
       })
+      getMyPlayList()
     })
   }).catch(() => {})
 }

@@ -26,7 +26,7 @@
             <el-button type="primary" round :disabled="!songs.length" @click="playAll"><PlayOne theme="filled" size="22" />播放全部</el-button>
             <el-button type="primary" round :disabled="!songs.length" @click="playAll(false)"><Plus theme="filled" size="20" :strokeWidth="3" /></el-button>
           </el-button-group>
-          <el-button round :disabled="!songs.length || !isFavor">
+          <el-button round :disabled="!songs.length || !isCollected">
             <FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏
           </el-button>
           <!-- TODO：分享功能 -->
@@ -85,10 +85,9 @@ const currentPlaylistId = ref(currentRoute.params.id)
 const playlistInfo = ref<PlayList>()
 const songs = ref<Song[]>([])
 
-const { myPlayList, userInfo } = storeToRefs(useUserStore())
-const isFavor = computed(() => {
-  const myFavorPlayListIds = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator?.userId !== userInfo.value.userId).map(item => item.id)
-  return myFavorPlayListIds.includes(Number(currentPlaylistId.value))
+const { myPlayList } = storeToRefs(useUserStore())
+const isCollected = computed(() => {
+  return myPlayList.value.collected.map(item => item.id).includes(Number(currentPlaylistId.value))
 })
 
 // 简介下拉完全展示

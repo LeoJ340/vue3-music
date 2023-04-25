@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { Like, Download, MusicMenu, Lock, Plus } from '@icon-park/vue-next';
+import { Like, MusicMenu, Lock, Plus } from '@icon-park/vue-next';
 import {computed, h, ref} from "vue";
 import { useRouter } from "vue-router";
 import {storeToRefs} from "pinia";
@@ -31,8 +31,8 @@ import {createPlayList} from "@/api/playlist";
 import {ElCheckbox} from "element-plus";
 
 const userStore = useUserStore()
-const { getMyPlayList } = userStore
-const { hasLogin, userInfo, myPlayList } = storeToRefs(userStore)
+const { toLogin, getMyPlayList } = userStore
+const { hasLogin, myPlayList } = storeToRefs(userStore)
 
 const router = useRouter()
 
@@ -63,7 +63,7 @@ const menuGroups = computed(() => {
       title: '我的音乐',
       list: [
         {
-          path: `/my/playlist/${myPlayList.value[0]?.id}`,
+          path: `/my/playlist/${myPlayList.value.liked.id}`,
           text: '我喜欢的音乐',
           icon: Like
         }
@@ -71,35 +71,28 @@ const menuGroups = computed(() => {
     }
   ]
   if (hasLogin) {
-    group[1].list.push({
-      path: '/my/cloud',
-      text: '我的音乐云盘',
-      icon: Download
-    })
     // 创建的歌单
-    const createPlaylist = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator?.userId === userInfo.value.userId).map(item => {
-      return {
-        path: `/my/playlist/${item.id}`,
-        text: item.name,
-        icon: item.privacy ? Lock : MusicMenu
-      }
-    })
     group.push({
       title: '创建的歌单',
-      list: createPlaylist
+      list: myPlayList.value.created.map(item => {
+        return {
+          path: `/my/playlist/${item.id}`,
+          text: item.name,
+          icon: item.privacy ? Lock : MusicMenu
+        }
+      })
     })
     // 收藏的歌单
-    const favorPlaylist = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator?.userId !== userInfo.value.userId).map(item => {
-      return {
-        path: `/common/playlist/${item.id}`,
-        text: item.name,
-        icon: MusicMenu
-      }
-    })
-    if (favorPlaylist.length) {
+    if (myPlayList.value.collected.length) {
       group.push({
         title: '收藏的歌单',
-        list: favorPlaylist
+        list: myPlayList.value.collected.map(item => {
+          return {
+            path: `/common/playlist/${item.id}`,
+            text: item.name,
+            icon: MusicMenu
+          }
+        })
       })
     }
   }
@@ -112,6 +105,10 @@ function isActive(path: string) {
 
 const isPrivacy = ref<boolean | string | number>(false)
 function toCreatePlayList() {
+  if (!hasLogin.value) {
+    toLogin()
+    return
+  }
   ElMessageBox.prompt(() => h(ElCheckbox, {
     modelValue: isPrivacy.value,
     label: '设置为隐私歌单',

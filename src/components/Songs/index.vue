@@ -13,7 +13,7 @@
       <template #default="scope">
         <div style="display: flex; justify-content: space-around;">
           <el-link :underline="false" title="喜欢">
-            <Like v-if="myPlayListIds.includes(scope.row.id)" theme="filled" size="20" fill="#ec4141" :strokeWidth="2"/>
+            <Like v-if="myLikedSongIds.includes(scope.row.id)" theme="filled" size="20" fill="#ec4141" :strokeWidth="2"/>
             <Like v-else theme="outline" size="20" :strokeWidth="2"/>
           </el-link>
           <el-link :underline="false">
@@ -64,7 +64,7 @@ import { useFormatSeconds } from "@/utils/time";
 const props = defineProps<{ songs: Song[] }>()
 
 const { myPlayList } = storeToRefs(useUserStore())
-const myPlayListIds = myPlayList.value.map(item => item.id)
+const myLikedSongIds = myPlayList.value.liked.tracks.map((item: Song) => item.id)
 
 const { push } = usePlayerStore()
 

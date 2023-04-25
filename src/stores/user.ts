@@ -4,6 +4,7 @@ import {reactive, ref} from "vue";
 import {checkLogin, logout} from "@/api/login";
 import {playList} from "@/api/user";
 import {PlayList} from "@/models/PlayList";
+import defaultCoverImage from "@/assets/playlist-cover.png";
 
 const router = useRouter()
 
@@ -58,11 +59,46 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    const myPlayList = ref<PlayList[]>([])
+    const defaultMyPlayList: { liked: PlayList, created: PlayList[], collected: PlayList[] } = {
+        liked: {
+            name: '我喜欢的音乐',
+            id: -1,
+            userId: userInfo.userId,
+            coverImgUrl: defaultCoverImage,
+            coverImgId: -1,
+            createTime: 0,
+            updateTime: 0,
+            description: '',
+            tags: [],
+            trackUpdateTime: 0,
+            trackCount: 0,
+            playCount: 0,
+            specialType: 0,
+            totalDuration: 0,
+            creator: null,
+            tracks: [],
+            subscribed: false,
+            subscribers: [],
+            subscribedCount: 0,
+            commentThreadId: '',
+            newImported: false,
+            adType: 0,
+            highQuality: false,
+            privacy: 0,
+            ordered: false
+        },
+        created: [],
+        collected: []
+    }
+    const myPlayList = ref<{ liked: PlayList, created: PlayList[], collected: PlayList[] }>(defaultMyPlayList)
 
     function getMyPlayList() {
         playList(userInfo.userId).then(res => {
-            myPlayList.value = res
+            myPlayList.value = {
+                liked: res[0],
+                created: res.slice(1, res.length).filter(item => item.creator?.userId === userInfo.userId),
+                collected: res.slice(1, res.length).filter(item => item.creator?.userId !== userInfo.userId)
+            }
         })
     }
 

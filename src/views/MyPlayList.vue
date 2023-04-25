@@ -2,7 +2,7 @@
   <el-scrollbar>
     <!-- 歌单信息 -->
     <div class="flex" style="margin: 20px;">
-      <el-image :src="playlistInfo.coverImgUrl" class="coverImage" />
+      <el-image :src="myPlayList.liked.coverImgUrl" class="coverImage" />
       <div class="flex-1" style="margin-left: 20px;">
         <div class="flex-vertical-center">
           <h2 style="margin-left: 10px;">我喜欢的音乐</h2>
@@ -14,13 +14,13 @@
             <el-link v-if="hasLogin" :underline="false">{{userInfo.userName}}</el-link>
             <el-link v-else :underline="false" type="primary" @click="toLogin">未登录></el-link>
           </span>
-          <span v-if="playlistInfo.updateTime"
+          <span v-if="myPlayList.liked.updateTime"
                 style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">
-            最近更新{{useFormatTime(playlistInfo.updateTime)}}
+            最近更新{{useFormatTime(myPlayList.liked.updateTime)}}
           </span>
           <span v-else
                 style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">
-            {{useFormatTime(playlistInfo.createTime)}}创建
+            {{useFormatTime(myPlayList.liked.createTime)}}创建
           </span>
         </div>
         <!-- 操作按钮组 -->
@@ -40,8 +40,8 @@
           </el-button>
         </div>
         <div class="text-14">
-          <span>歌曲：{{playlistInfo.trackCount || 0}}</span>
-          <span style="margin-left: 10px;">播放：{{useFormatCount(playlistInfo.playCount) || 0}}</span>
+          <span>歌曲：{{myPlayList.liked.trackCount || 0}}</span>
+          <span style="margin-left: 10px;">播放：{{useFormatCount(myPlayList.liked.playCount) || 0}}</span>
         </div>
       </div>
     </div>
@@ -51,18 +51,17 @@
 </template>
 
 <script setup lang="ts">
-import defaultCoverImage from '@/assets/playlist-cover.png'
 import Songs from "@/components/Songs/index.vue";
 import { PlayOne, Plus, FolderPlus, Share, Download } from '@icon-park/vue-next';
 import { useFormatTime } from "@/utils/time";
 import useFormatCount from "@/utils/count";
 import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
-import {computed, ref} from "vue";
+import {ref} from "vue";
 import {storeToRefs} from "pinia";
 import {useUserStore} from "@/stores/user";
+import {usePlayerStore} from "@/stores/player";
 import {Song} from "@/models/Song";
 import {getPlayListTrack} from "@/api/playlist";
-import {usePlayerStore} from "@/stores/player";
 
 
 const router = useRouter()
@@ -73,17 +72,10 @@ const userStore = useUserStore()
 const { hasLogin, myPlayList, userInfo } = storeToRefs(userStore)
 const { toLogin } = userStore
 
-const playlistInfo = computed(() => {
-  return myPlayList.value.find(item => String(item.id) === currentPlaylistId.value) || {
-    coverImgUrl: defaultCoverImage,
-    createTime: 0
-  }
-})
-
 const songs = ref<Song[]>([])
 
 function getTracks() {
-  if (!hasLogin.value || currentPlaylistId.value === 'undefined') return
+  if (!hasLogin.value || currentPlaylistId.value === '-1') return
   getPlayListTrack(Number(currentPlaylistId.value)).then(res => {
     songs.value = res
   })

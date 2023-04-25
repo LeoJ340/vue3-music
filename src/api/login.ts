@@ -80,8 +80,6 @@ export function logout() {
             } else {
                 reject()
             }
-        }).catch(() => {
-            reject()
         })
     })
 }
