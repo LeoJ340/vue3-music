@@ -34,7 +34,7 @@ export function getPlayList(id: number) {
 export function getPlayListTrack(id: number, page: { offset: number, limit?: number } = { offset: 0 }) {
     const params = Object.assign({ id }, page)
     return new Promise<Array<Song>>((resolve, reject) => {
-        request<{ code: number, songs: Array<Song> }>('/playlist/track/all', 'GET', { params, needLogin: true }).then(res => {
+        request<{ code: number, songs: Array<Song> }>('/playlist/track/all', 'POST', { data: params, needLogin: true }).then(res => {
             const { code, songs } = res
             if (code === 200) {
                 resolve(songs)
@@ -229,6 +229,7 @@ export function managerTracks(op: 'add' | 'del', pid: number, tracks: number[]) 
             const { code, message } = res.body
             if (code === 200) {
                 resolve()
+                return
             }
             if (code === 502 && message) {
                 ElMessage({
@@ -246,6 +247,28 @@ export function managerTracks(op: 'add' | 'del', pid: number, tracks: number[]) 
                 })
             }
             reject()
+        })
+    })
+}
+
+/**
+ * 创建歌单
+ */
+export function createPlayList(name: string, privacy: boolean = false) {
+    const params = { name, privacy: privacy ? '10' : '' }
+    return new Promise<number>((resolve, reject) => {
+        request<{ code: number, id: number, playlist: PlayList }>('/playlist/create', 'POST', { data: params, needLogin: true }).then(res => {
+            const { code, id } = res
+            if (code === 200) {
+                resolve(id)
+            } else {
+                ElMessage({
+                    message: '创建失败',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
         })
     })
 }
