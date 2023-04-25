@@ -3,7 +3,12 @@
     <el-scrollbar>
       <ul class="menu p-0">
         <li v-for="menuGroup in menuGroups" class="menu-group">
-          <div v-if="menuGroup.title" class="menu-group-title">{{menuGroup.title}}</div>
+          <div v-if="menuGroup.title" class="menu-group-title flex justify-between">
+            <span>{{menuGroup.title}}</span>
+            <el-link v-if="menuGroup.title === '创建的歌单'" :underline="false" @click="toCreatePlayList">
+              <Plus theme="filled" size="14" fill="#000000" :strokeWidth="1" />
+            </el-link>
+          </div>
           <router-link v-for="menuItem in menuGroup.list"
                        class="menu-item" :class="{ active: isActive(menuItem.path), 'not-need-login': !menuGroup.title }"
                        :to="menuItem.path">
@@ -17,13 +22,17 @@
 </template>
 
 <script setup lang="ts">
+import { Like, Download, MusicMenu, Lock, Plus } from '@icon-park/vue-next';
+import {computed, h, ref} from "vue";
 import { useRouter } from "vue-router";
-import { Like, Download, MusicMenu, Lock } from '@icon-park/vue-next';
-import {useUserStore} from "@/stores/user";
-import {computed} from "vue";
 import {storeToRefs} from "pinia";
+import {useUserStore} from "@/stores/user";
+import {createPlayList} from "@/api/playlist";
+import {ElCheckbox} from "element-plus";
 
-const { hasLogin, userInfo, myPlayList } = storeToRefs(useUserStore())
+const userStore = useUserStore()
+const { getMyPlayList } = userStore
+const { hasLogin, userInfo, myPlayList } = storeToRefs(userStore)
 
 const router = useRouter()
 
@@ -81,12 +90,12 @@ const menuGroups = computed(() => {
     })
     // 收藏的歌单
     const favorPlaylist = myPlayList.value.slice(1, myPlayList.value.length).filter(item => item.creator?.userId !== userInfo.value.userId).map(item => {
-          return {
-            path: `/common/playlist/${item.id}`,
-            text: item.name,
-            icon: MusicMenu
-          }
-        })
+      return {
+        path: `/common/playlist/${item.id}`,
+        text: item.name,
+        icon: MusicMenu
+      }
+    })
     if (favorPlaylist.length) {
       group.push({
         title: '收藏的歌单',
@@ -100,6 +109,35 @@ const menuGroups = computed(() => {
 function isActive(path: string) {
   return router.currentRoute.value.fullPath.includes(path)
 }
+
+const isPrivacy = ref<boolean | string | number>(false)
+function toCreatePlayList() {
+  ElMessageBox.prompt(() => h(ElCheckbox, {
+    modelValue: isPrivacy.value,
+    label: '设置为隐私歌单',
+    "onUpdate:modelValue": (val) => {
+      isPrivacy.value = val
+    }
+  }), '新建歌单', {
+    confirmButtonText: '创建',
+    showCancelButton: false,
+    inputPattern: /^[^@#]+$/,
+    inputErrorMessage: '歌单名不能包含@或#',
+    center: true,
+    roundButton: true,
+    draggable: true
+  }).then(({ value }) => {
+    createPlayList(value, isPrivacy.value as boolean).then(() => {
+      getMyPlayList()
+      ElMessage({
+        message: '歌单创建成功！',
+        type: 'success',
+        duration: 1000,
+        center: true
+      })
+    })
+  }).catch(() => {})
+}
 </script>
 
 <style lang="scss" scoped>
@@ -110,7 +148,7 @@ function isActive(path: string) {
     .menu-group-title {
       margin-top: 20px;
       margin-bottom: 10px;
-      padding-left: 20px;
+      padding: 0 20px;
       font-size: 14px;
       color: rgb(169, 169, 169);
     }

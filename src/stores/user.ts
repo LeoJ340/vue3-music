@@ -69,6 +69,6 @@ export const useUserStore = defineStore('user', () => {
     return {
         hasLogin, userInfo, showLogin,
         toLogin, getUserInfo, exitLogin,
-        myPlayList
+        getMyPlayList, myPlayList
     }
 })
