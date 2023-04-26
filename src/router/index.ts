@@ -93,7 +93,14 @@ const router = createRouter({
                 {
                     path: 'playlist/:id',
                     name: 'CommonPlayList',
-                    component: () => import('@/views/common/PlayList.vue')
+                    component: () => import('@/views/common/PlayList.vue'),
+                    meta: { title: '歌单详情' }
+                },
+                {
+                    path: 'album/:id',
+                    name: 'CommonAlbum',
+                    component: () => import('@/views/common/Album/index.vue'),
+                    meta: { title: '专辑详情' }
                 },
                 {
                     path: 'artist/:id',

@@ -30,10 +30,9 @@
         <ArtistColumn :artists="scope.row.artists" />
       </template>
     </el-table-column>
-    <!-- TODO：专辑页 -->
     <el-table-column label="专辑" width="180" :show-overflow-tooltip="true">
       <template #default="scope">
-        <el-link :underline="false">{{scope.row.album.name}}</el-link>
+        <el-link :underline="false" @click="toCommonAlbum(scope.row.album.id)">{{scope.row.album.name}}</el-link>
       </template>
     </el-table-column>
     <el-table-column label="时长" width="100">
@@ -62,6 +61,7 @@ import {usePlayerStore} from "@/stores/player";
 import {useToSong} from "@/utils/typeFormate";
 import NetLess from '@/components/NetLess/index.vue'
 import { toPlayList } from "@/components/ToPlayList";
+import {toCommonAlbum} from "@/router/usePush";
 
 const router = useRouter()
 

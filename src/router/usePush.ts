@@ -1,5 +1,9 @@
 import router from "@/router";
 
+export function toCommonAlbum(id: string | number) {
+    router.push(`/common/album/${id}`)
+}
+
 export function toCommonPlayList(id: string | number) {
     router.push(`/common/playlist/${id}`)
 }

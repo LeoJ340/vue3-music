@@ -34,10 +34,9 @@
         <ArtistColumn :artists="scope.row.ar" />
       </template>
     </el-table-column>
-    <!-- TODO：专辑页 -->
     <el-table-column label="专辑" :show-overflow-tooltip="true">
       <template #default="scope">
-        <el-link :underline="false">{{scope.row.al.name}}</el-link>
+        <el-link :underline="false" @click="toCommonAlbum(scope.row.al.id)">{{scope.row.al.name}}</el-link>
       </template>
     </el-table-column>
     <el-table-column label="时间" width="100">
@@ -60,6 +59,7 @@ import { usePlayerStore } from "@/stores/player";
 import { useUserStore } from "@/stores/user";
 import {storeToRefs} from "pinia";
 import { useFormatSeconds } from "@/utils/time";
+import {toCommonAlbum} from "@/router/usePush";
 
 const props = defineProps<{ songs: Song[] }>()
 
