@@ -18,11 +18,11 @@ export function getArtistList(params: { page: number, limit: number, area?: numb
     if (params.initial === '#') {
         reqParams.initial = 0
     }
-    return new Promise<Artist[]>((resolve, reject) => {
+    return new Promise<{ artists: Artist[], more: boolean }>((resolve, reject) => {
         request<{ code: number, artists: Artist[], more: boolean }>('/artist/list', 'GET', { params: reqParams }).then(res => {
-            const { code, artists } = res
+            const { code, artists, more } = res
             if (code === 200) {
-                resolve(artists)
+                resolve({ artists, more })
             } else {
                 ElMessage({
                     message: '系统异常',

@@ -20,7 +20,6 @@
     </div>
   </div>
   <!-- 歌手列表 -->
-  <!-- TODO：下拉滚动 -->
   <div v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..." class="artist-list">
     <div v-for="artist in artistList" class="artist-item" @click="toCommonArtist(artist.id)">
       <el-image :src="artist.img1v1Url"/>
@@ -28,6 +27,9 @@
       <!-- TODO：去用户页 -->
       <Me theme="outline" size="18" fill="#f54c43"/>
     </div>
+  </div>
+  <div v-show="more" class="flex-horizontal-center">
+    <el-button type="primary" round @click="loadMore">加载更多</el-button>
   </div>
   <!-- 无网络显示 -->
   <NetLess v-show="noNetwork" />
@@ -96,22 +98,26 @@ const params = reactive({
 const page = ref(1)
 const limit = readonly(ref(50))
 const artistList = ref<Artist[]>([])
+const more = ref(true)
 
 function selectArea(area: number) {
   params.area = area
   page.value = 1
+  artistList.value = []
   getData()
 }
 
 function selectType(type: number) {
   params.type = type
   page.value = 1
+  artistList.value = []
   getData()
 }
 
 function selectInitial(initial: string) {
   params.initial = initial
   page.value = 1
+  artistList.value = []
   getData()
 }
 
@@ -121,7 +127,6 @@ const noNetwork = ref(false)
 function getData() {
   if (loading.value) return
   loading.value = true
-  artistList.value = []
   getArtistList({
     page: page.value,
     limit: limit.value,
@@ -130,7 +135,8 @@ function getData() {
     initial: params.initial,
   }).then(res => {
     noNetwork.value = false
-    artistList.value = res
+    artistList.value.push(...res.artists)
+    more.value = res.more
   }).catch((reason: string) => {
     if (reason === '网络异常') {
       noNetwork.value = true
@@ -141,6 +147,11 @@ function getData() {
 }
 
 getData()
+
+function loadMore() {
+  page.value++
+  getData()
+}
 
 </script>
 
