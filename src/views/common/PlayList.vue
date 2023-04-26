@@ -9,7 +9,7 @@
         </div>
         <div class="flex-vertical-center">
           <el-avatar :src="playlistInfo.creator.avatarUrl" />
-          <!-- TODO：跳转用户页 -->
+          <!-- TODO：用户页 -->
           <span style="margin-left: 10px; font-size: 12px;">{{playlistInfo.creator.nickname}}</span>
           <span v-if="playlistInfo.updateTime"
                 style="margin-left: 10px; font-size: 12px; color: #a4a4a4;">

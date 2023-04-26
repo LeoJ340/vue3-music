@@ -9,7 +9,7 @@
         </div>
         <div class="flex-vertical-center">
           <el-avatar :src="userInfo.avatarUrl" />
-          <!-- TODO：跳转用户页 -->
+          <!-- TODO：用户页 -->
           <span style="margin-left: 10px; font-size: 12px;">
             <el-link v-if="hasLogin" :underline="false">{{userInfo.userName}}</el-link>
             <el-link v-else :underline="false" type="primary" @click="toLogin">未登录></el-link>

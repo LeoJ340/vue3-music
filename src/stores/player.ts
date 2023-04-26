@@ -81,9 +81,16 @@ export const usePlayerStore = defineStore('player', () => {
             playAll(list)
             return
         }
-        // 列表重复退出方法
-        if (list.map(item => item.id).toString() === songs.map(item => item.id).toString()) return
         const { replace = true, starIndex = 0, trigger } = options || {}
+        // 列表重复时处理
+        const isSameList = list.map(item => item.id).toString() === songs.map(item => item.id).toString()
+        if (isSameList) {
+            if (starIndex !== index.value) {
+                player.currentId = songs[starIndex].id
+                play()
+            }
+            return
+        }
         if (replace) {
             if (trigger) {
                 // trigger触发，区分提示词
