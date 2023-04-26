@@ -24,3 +24,26 @@ export function playList(uid: number) {
         })
     })
 }
+
+/**
+ * 用户喜欢的歌曲列表
+ */
+export function likedSongs(uid: number) {
+    return new Promise<Array<number>>((resolve, reject) => {
+        request<{ code: number, ids: Array<number> }>('/likelist', 'POST', { data: { uid }, needLogin: true }).then(res => {
+            const { code, ids } = res
+            if (code === 200) {
+                resolve(ids)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            reject(reason)
+        })
+    })
+}

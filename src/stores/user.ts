@@ -2,7 +2,7 @@ import {useRouter} from "vue-router";
 import { defineStore } from 'pinia'
 import {reactive, ref} from "vue";
 import {checkLogin, logout} from "@/api/login";
-import {playList} from "@/api/user";
+import {likedSongs, playList} from "@/api/user";
 import {PlayList} from "@/models/PlayList";
 import defaultCoverImage from "@/assets/playlist-cover.png";
 
@@ -38,6 +38,7 @@ export const useUserStore = defineStore('user', () => {
             userInfo.avatarUrl = profile.avatarUrl
             hasLogin.value = true
             getMyPlayList()
+            getMyLikedSongIds()
         })
     }
 
@@ -102,9 +103,17 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
+    const myLikedSongIds = ref<number[]>()
+    function getMyLikedSongIds() {
+        likedSongs(userInfo.userId).then(res => {
+            myLikedSongIds.value = res
+        })
+    }
+
     return {
         hasLogin, userInfo, showLogin,
         toLogin, getUserInfo, exitLogin,
-        getMyPlayList, myPlayList
+        getMyPlayList, myPlayList,
+        getMyLikedSongIds, myLikedSongIds
     }
 })

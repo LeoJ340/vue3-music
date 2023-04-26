@@ -56,3 +56,15 @@ export interface SongUrl {
     size: number
     time: number
 }
+
+export interface RecentSong {
+    resourceId: string
+    playTime: number
+    resourceType: string
+    data: Song
+    banned: boolean
+    multiTerminalInfo: {
+        icon: string
+        osText: string
+    }
+}

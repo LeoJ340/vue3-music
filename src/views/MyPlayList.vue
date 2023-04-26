@@ -55,7 +55,7 @@ import Songs from "@/components/Songs/index.vue";
 import { PlayOne, Plus, FolderPlus, Share, Download } from '@icon-park/vue-next';
 import { useFormatTime } from "@/utils/time";
 import useFormatCount from "@/utils/count";
-import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {ref} from "vue";
 import {storeToRefs} from "pinia";
 import {useUserStore} from "@/stores/user";
@@ -75,18 +75,13 @@ const { toLogin } = userStore
 const songs = ref<Song[]>([])
 
 function getTracks() {
-  if (!hasLogin.value || currentPlaylistId.value === '-1') return
+  if (currentPlaylistId.value === '-1') return
   getPlayListTrack(Number(currentPlaylistId.value)).then(res => {
     songs.value = res
   })
 }
 
 getTracks()
-
-onBeforeRouteUpdate(to => {
-  currentPlaylistId.value = to.params.id
-  getTracks()
-})
 
 const { push } = usePlayerStore()
 function playAll(replace: boolean = true) {

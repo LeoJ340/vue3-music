@@ -1,5 +1,5 @@
 import {request} from "@/utils/request";
-import {Song, TopSong, SongUrl} from "@/models/Song";
+import {Song, TopSong, SongUrl, RecentSong} from "@/models/Song";
 
 /**
  * 获取音乐URL
@@ -59,6 +59,58 @@ export function getTopSongs(type: number = 0): Promise<TopSong[]> {
             } else {
                 ElMessage({
                     message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            // 需要处理显示网络异常
+            reject(reason)
+        })
+    })
+}
+
+/**
+ * 最近播放
+ */
+export function getRecentSongs(limit : number = 100): Promise<RecentSong[]> {
+    return new Promise((resolve, reject) => {
+        request<{ code: number, data: { total: number, list: RecentSong[] } }>('/record/recent/song', 'GET', { params: { limit } }).then(res => {
+            const { code, data } = res
+            if (code === 200) {
+                resolve(data.list)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+            }
+        }).catch(reason => {
+            // 需要处理显示网络异常
+            reject(reason)
+        })
+    })
+}
+
+/**
+ * 喜欢&不喜欢
+ */
+export function likeSong(songId: number, like : boolean): Promise<void> {
+    const params = {
+        id: songId,
+        like
+    }
+    return new Promise((resolve, reject) => {
+        request<{ code: number }>('/like', 'POST', { data: params, needLogin: true }).then(res => {
+            const { code } = res
+            if (code === 200) {
+                resolve()
+            } else {
+                ElMessage({
+                    message: '操作失败',
                     type: 'error',
                     duration: 1000,
                     center: true
