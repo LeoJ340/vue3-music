@@ -26,7 +26,7 @@
             <Download theme="outline" size="20" :strokeWidth="2"/>下载全部
           </el-button>
         </div>
-        <div class="flex-vertical-center text-14">
+        <div class="flex-vertical-center flex-wrap text-14">
           歌手：<ArtistColumn :artists="album.artists" />
         </div>
         <div class="flex-vertical-center text-14" style="margin-top: 2px;">

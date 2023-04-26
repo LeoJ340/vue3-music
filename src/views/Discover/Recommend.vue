@@ -96,7 +96,7 @@ import {PersonalizedPlayList} from "@/models/PlayList";
 import {TopSong} from "@/models/Song";
 import {PersonalizedMV, PrivateMV} from "@/models/MV";
 import {useToSong} from "@/utils/typeFormate";
-import {toCommonPlayList} from "@/router/usePush";
+import {toCommonAlbum, toCommonPlayList} from "@/router/usePush";
 
 const router = useRouter()
 const { playImmediately } = usePlayerStore()
@@ -125,13 +125,22 @@ function changeBanner(index: number) {
 function clickBanner(banner: Banner) {
   const index = banners.value.findIndex(item => item.imageUrl === banner.imageUrl)
   if (currentBannerIndex.value !== index) return
+  // 新歌首发
   if (banner.targetType === 1) {
     getSong([banner.targetId]).then(songs => {
       playImmediately(songs[0])
     })
-  } else if(banner.targetType === 10) {
+    return
+  }
+  // 专辑
+  if (banner.targetType === 10) {
+    toCommonAlbum(banner.targetId)
+  }
+  // 歌单
+  if (banner.targetType === 1000) {
     toCommonPlayList(banner.targetId)
-  } else {
+  }
+  if (banner.url) {
     window.open(banner.url, '_blank')
   }
 }
