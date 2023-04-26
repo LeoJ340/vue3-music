@@ -82,6 +82,12 @@ const router = createRouter({
                     name: 'Cloud',
                     component: () => import('@/views/Cloud.vue'),
                     meta: { title: '我的音乐网盘' }
+                },
+                {
+                    path: 'recent',
+                    name: 'RecentPlay',
+                    component: () => import('@/views/RecentPlay.vue'),
+                    meta: { title: '最近播放' }
                 }
             ]
         },

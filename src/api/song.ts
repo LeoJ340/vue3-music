@@ -50,8 +50,8 @@ export function getSong(ids: number[]) {
 /**
  * 新歌速递
  */
-export function getTopSongs(type: number = 0): Promise<TopSong[]> {
-    return new Promise((resolve, reject) => {
+export function getTopSongs(type: number = 0) {
+    return new Promise<TopSong[]>((resolve, reject) => {
         request<{ code: number, data: TopSong[] }>('/top/song', 'GET', { data: { type } }).then(res => {
             const { code, data } = res
             if (code === 200) {
@@ -74,12 +74,12 @@ export function getTopSongs(type: number = 0): Promise<TopSong[]> {
 /**
  * 最近播放
  */
-export function getRecentSongs(limit : number = 100): Promise<RecentSong[]> {
-    return new Promise((resolve, reject) => {
+export function getRecentSongs(limit : number = 100) {
+    return new Promise<{ total: number, songs: Song[] }>((resolve, reject) => {
         request<{ code: number, data: { total: number, list: RecentSong[] } }>('/record/recent/song', 'GET', { params: { limit } }).then(res => {
             const { code, data } = res
             if (code === 200) {
-                resolve(data.list)
+                resolve({ total: data.total, songs: data.list.map(item => item.data) })
             } else {
                 ElMessage({
                     message: '系统异常',

@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { Like, MusicMenu, Lock, Plus } from '@icon-park/vue-next';
+import {Like, MusicMenu, Lock, Plus, Time} from '@icon-park/vue-next';
 import {computed, h, ref} from "vue";
 import { useRouter } from "vue-router";
 import {storeToRefs} from "pinia";
@@ -66,6 +66,11 @@ const menuGroups = computed(() => {
           path: `/my/playlist/${myPlayList.value.liked.id}`,
           text: '我喜欢的音乐',
           icon: Like
+        },
+        {
+          path: `/my/recent`,
+          text: '最近播放',
+          icon: Time
         }
       ]
     }

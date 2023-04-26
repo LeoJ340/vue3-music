@@ -1,57 +1,54 @@
 <template>
-  <header v-show="!noNetwork" >
-    <div class="flex">
-      <Calendar theme="outline" />
-      <div class="flex-horizontal-center flex-column" style="margin-left: 20px;">
+  <header v-show="!noNetwork">
+    <div class="flex-vertical-center justify-between">
+      <div class="flex-vertical-center">
         <h3 class="m-0">每日音乐推荐</h3>
-        <p class="m-0 text-12">根据你的音乐口味生成，每天6:00更新</p>
+        <span class="text-14" style="margin-left: 10px;">共{{count}}首</span>
       </div>
+      <el-link :underline="false" type="primary" disabled>清空列表</el-link>
     </div>
     <div class="flex" style="margin: 15px 0;">
       <el-button-group>
         <el-button round type="primary"><PlayOne theme="filled" size="22" @click="playAll"/>播放全部</el-button>
         <el-button round type="primary"><Plus theme="filled" size="20" :strokeWidth="3" @click="playAll(false)"/></el-button>
       </el-button-group>
-      <el-button round @click="selectPlayList" :disabled="!dailySongs.length"><FolderPlus theme="outline" size="20" :strokeWidth="2"/>收藏全部</el-button>
     </div>
   </header>
 
   <!-- 歌曲列表 -->
-  <Songs v-show="!noNetwork" :songs="dailySongs" />
+  <Songs v-show="!noNetwork" :songs="recentSongs" />
   <!-- 无网络显示 -->
   <NetLess v-show="noNetwork" />
 </template>
 
 <script setup lang="ts">
-import NetLess from '@/components/NetLess/index.vue'
+import { PlayOne, Plus } from '@icon-park/vue-next';
 import Songs from '@/components/Songs/index.vue'
-import { Calendar, PlayOne, Plus, FolderPlus } from '@icon-park/vue-next';
+import NetLess from '@/components/NetLess/index.vue'
 import {ref} from "vue";
-import {getDailySongs} from "@/api/recommend";
+import {getRecentSongs} from "@/api/song";
 import {Song} from "@/models/Song";
 import {usePlayerStore} from "@/stores/player";
-import { toPlayList } from "@/components/ToPlayList";
 
 const noNetwork = ref(false)
+const recentSongs = ref<Song[]>([])
+const count = ref<number>(0)
 
-const dailySongs = ref<Song[]>([])
-getDailySongs().then(res => {
+getRecentSongs().then(res => {
   noNetwork.value = false
-  dailySongs.value = res
+  const { total, songs } = res
+  count.value = total
+  recentSongs.value = songs
 }).catch(reason => {
   if (reason === '网络异常') {
     noNetwork.value = true
   }
 })
 
-function selectPlayList() {
-  toPlayList(dailySongs.value.map(item => item.id))
-}
-
 // 播放全部
 const { push } = usePlayerStore()
 function playAll(replace: boolean = true) {
-  push(dailySongs.value.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
+  push(recentSongs.value.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
 }
 
 </script>

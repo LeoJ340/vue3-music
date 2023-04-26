@@ -103,7 +103,7 @@ export const useUserStore = defineStore('user', () => {
         })
     }
 
-    const myLikedSongIds = ref<number[]>()
+    const myLikedSongIds = ref<number[]>([])
     function getMyLikedSongIds() {
         likedSongs(userInfo.userId).then(res => {
             myLikedSongIds.value = res
