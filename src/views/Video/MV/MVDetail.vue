@@ -5,7 +5,7 @@
       <div style="flex: 2">
         <div class="flex-vertical-center">
           <a @click="$router.back()">
-            <h3><Left theme="outline" size="22"/>MV详情</h3>
+            <h3><Left theme="outline" size="22" style="vertical-align: bottom;"/>MV详情</h3>
           </a>
         </div>
         <video v-if="mvDetail" controls autoplay style="width: 90%;">
@@ -43,7 +43,7 @@
                mode="horizontal" :image-url="item.coverUrl" image-size="200px" :play-count="item.playTime"
         >
           <el-link :underline="false">{{item.title}}</el-link>
-          <!-- TODO：去用户页 -->
+          <!-- TODO：用户页 -->
           <p class="text-12 flex-vertical-center">
             by&nbsp;&nbsp;<ArtistColumn :artists="item.creator.map(user => { return { id: user.userId, name: user.userName } })" />
           </p>

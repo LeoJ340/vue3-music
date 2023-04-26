@@ -17,7 +17,7 @@
             </p>
           </div>
         </div>
-        <el-link style="width: 45%;" @click="toDetail(mv.id)">
+        <el-link :underline="false" style="width: 45%;" @click="toDetail(mv.id)">
           <el-image :src="mv.cover" fit="contain" lazy />
         </el-link>
         <div class="info">

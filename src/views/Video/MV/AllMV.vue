@@ -23,16 +23,15 @@
     </span>
     </div>
     <!-- MV列表 -->
-    <ul v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..." class="mv-list">
-      <li v-for="mv in mvList" class="mv-item" @click="toDetail(mv.id)">
-        <el-image :src="mv.cover" fit="cover" />
-        <div style="margin-top: 5px;">{{mv.name}}</div>
-        <div class="play-count">
-          <PlayOne theme="outline" size="22" :strokeWidth="2"/>
-          <span>{{useFormatCount(mv.playCount)}}</span>
+    <div v-show="!noNetwork" v-loading="loading" element-loading-text="载入中..." class="mv-list">
+      <Cover v-for="item in mvList" mode="vertical"
+             :image-url="item.cover" :play-count="item.playCount" @click="toMV(item.id)">
+        <el-link :underline="false" @click="toMV(item.id)">{{item.name}}</el-link>
+        <div>
+          <ArtistColumn :artists="item.artists" />
         </div>
-      </li>
-    </ul>
+      </Cover>
+    </div>
     <!-- 分页条 -->
     <el-pagination
         v-show="!noNetwork"
@@ -51,9 +50,9 @@
 </template>
 
 <script setup lang="ts">
+import Cover from '@/components/Cover/index.vue'
+import ArtistColumn from '@/components/Songs/ArtistColumn.vue'
 import NetLess from '@/components/NetLess/index.vue'
-import {PlayOne} from "@icon-park/vue-next";
-import useFormatCount from "@/utils/count";
 import {useRoute, useRouter} from "vue-router";
 import {reactive, ref} from "vue";
 import {getMVList} from "@/api/mv";
@@ -123,7 +122,7 @@ function changePage(page: number) {
 }
 
 const router = useRouter()
-function toDetail(id: number) {
+function toMV(id: number) {
   router.push(`/mv/${id}`)
 }
 </script>
@@ -155,23 +154,7 @@ function toDetail(id: number) {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 200px;
-  grid-gap: 15px;
-  .mv-item {
-    position: relative;
-    cursor: pointer;
-    .el-image {
-      width: 100%;
-      height: 80%;
-    }
-    .play-count {
-      position: absolute;
-      top: 0;
-      right: 5px;
-      display: flex;
-      align-items: center;
-      color: #ffffff;
-    }
-  }
+  grid-gap: 30px;
 }
 .el-pagination {
   margin: 40px;

@@ -8,32 +8,27 @@
       <div v-for="item in areas" class="area-item" :class="{ active: firstReq.area === item }" @click="changeFirstMVArea(item)">{{item}}</div>
     </div>
   </div>
-  <ul class="mv-list">
-    <li v-for="mv in firstMV" class="mv-item" @click="toDetail(mv.id)">
-      <el-image :src="mv.cover" fit="cover" />
-      <div style="margin-top: 5px;">{{mv.name}}</div>
-      <div class="play-count">
-        <PlayOne theme="outline" size="22" :strokeWidth="2"/>
-        <span>{{useFormatCount(mv.playCount)}}</span>
+  <div class="mv-list">
+    <Cover v-for="item in firstMV" mode="vertical"
+           :image-url="item.cover" :play-count="item.playCount" @click="toMV(item.id)">
+      <el-link :underline="false" @click="toMV(item.id)">{{item.name}}</el-link>
+      <div>
+        <ArtistColumn :artists="item.artists" />
       </div>
-    </li>
-  </ul>
+    </Cover>
+  </div>
   <!-- 网易出品 -->
   <div class="flex justify-between" style="margin-top: 10px;">
     <router-link to="/allMV?type=网易出品">
       <h3 class="flex-vertical-center m-0">网易出品<Right theme="outline" size="22"/></h3>
     </router-link>
   </div>
-  <ul class="mv-list">
-    <li v-for="mv in exclusiveMV" class="mv-item" @click="toDetail(mv.id)">
-      <el-image :src="mv.cover" fit="contain" />
-      <div style="margin-top: 5px;">{{mv.name}}</div>
-      <div class="play-count">
-        <PlayOne theme="outline" size="22" :strokeWidth="2"/>
-        <span>{{useFormatCount(mv.playCount)}}</span>
-      </div>
-    </li>
-  </ul>
+  <div class="mv-list">
+    <Cover v-for="item in exclusiveMV" mode="vertical"
+           :image-url="item.cover" :play-count="item.playCount" @click="toMV(item.id)">
+      <el-link :underline="false" @click="toMV(item.id)">{{item.name}}</el-link>
+    </Cover>
+  </div>
   <!-- MV排行榜 -->
   <div class="flex justify-between" style="margin-top: 30px;">
     <router-link :to="`/topMV?area=${topReq.area}`">
@@ -58,7 +53,7 @@
           </div>
         </div>
       </div>
-      <el-link style="width: 45%;" @click="toDetail(mv.id)">
+      <el-link :underline="false" style="width: 45%;" @click="toMV(mv.id)">
         <el-image :src="mv.cover" fit="contain" lazy />
       </el-link>
       <div class="info">
@@ -72,8 +67,9 @@
 <script setup lang="ts">
 import {reactive, ref} from "vue";
 import {useRouter} from "vue-router";
-import {Right, PlayOne, UpSmall, DownSmall} from "@icon-park/vue-next";
-import useFormatCount from "@/utils/count";
+import Cover from '@/components/Cover/index.vue'
+import ArtistColumn from '@/components/Songs/ArtistColumn.vue'
+import {Right, UpSmall, DownSmall} from "@icon-park/vue-next";
 import {getExclusiveMV, getFirstMV, getTopMV} from "@/api/mv";
 import {MV, TopMV} from "@/models/MV";
 
@@ -143,7 +139,7 @@ function changeTopMVArea(area: string) {
 toGetTopMV()
 
 const router = useRouter()
-function toDetail(id: number) {
+function toMV(id: number) {
   router.push(`/mv/${id}`)
 }
 
@@ -170,30 +166,7 @@ function toDetail(id: number) {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 200px;
-  grid-gap: 15px;
-  //display: flex;
-  //flex-wrap: wrap;
-  .mv-item {
-    position: relative;
-    cursor: pointer;
-    //width: 23.5%;
-    //margin-right: 2%;
-    //&:nth-child(4n) {
-    //  margin-right: 0;
-    //}
-    .el-image {
-      width: 100%;
-      height: 80%;
-    }
-    .play-count {
-      position: absolute;
-      top: 0;
-      right: 5px;
-      display: flex;
-      align-items: center;
-      color: #ffffff;
-    }
-  }
+  grid-gap: 30px;
 }
 .top-mv-list {
   padding: 0;
