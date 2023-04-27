@@ -36,10 +36,21 @@ export interface ArtistDetail {
     mvSize: number
 }
 
-export interface ArtistDesc {
-    introduction: Array<{
-        ti: string
-        txt: string
-    }>
-    briefDesc: string
+export interface ArtistIntroduction {
+    ti: string
+    txt: string
+}
+
+export interface ArtistMV {
+    id: number
+    name: string
+    status: number
+    artist: Artist
+    imgurl: string
+    artistName: string
+    imgurl16v9: string
+    duration: number
+    playCount: number
+    publishTime: string
+    subed: boolean
 }
