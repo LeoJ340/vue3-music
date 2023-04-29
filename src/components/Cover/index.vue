@@ -1,7 +1,7 @@
 <template>
   <div class="flex" :class="{ 'flex-column': mode === 'vertical' }">
     <div class="cover-image" @click="click" @mouseover="hover" @mouseout="hover">
-      <el-image :src="imageUrl" :style="{ width: mode === 'horizontal' ? imageSize: '100%' }" />
+      <el-image :src="imageUrl" :style="{ width: mode === 'horizontal' ? imageSize : '100%' }" />
       <div v-if="playCount" class="play-count">
         <PlayOne theme="outline" size="22" :strokeWidth="2"/>
         <span>{{useFormatCount(playCount)}}</span>

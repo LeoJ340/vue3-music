@@ -1,5 +1,6 @@
 import {request} from "@/utils/request";
 import {Artist, ArtistDetail, ArtistIntroduction, ArtistMV} from "@/models/Artist";
+import {Album} from "@/models/Album";
 
 /**
  * 歌手列表
@@ -132,6 +133,35 @@ export function getArtistMVs(id: number) {
             }
         }).catch(reason => {
             // 需要处理显示网络异常
+            reject(reason)
+        })
+    })
+}
+
+/**
+ * 歌手专辑
+ */
+export function getArtistAlbums(id: number, limit: number = 30, page: number = 1) {
+    const params = {
+        id,
+        limit,
+        offset: (page -1) * limit
+    }
+    return new Promise<Album[]>((resolve, reject) => {
+        request<{ code: number, artist: Artist, hotAlbums: Album[] }>('/artist/album', 'GET', { params }).then(res => {
+            const { code, hotAlbums } = res
+            if (code === 200) {
+                resolve(hotAlbums)
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+                reject()
+            }
+        }).catch(reason => {
             reject(reason)
         })
     })

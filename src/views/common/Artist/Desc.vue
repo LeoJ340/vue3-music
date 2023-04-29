@@ -3,7 +3,7 @@
     <h5 class="mb-0">{{item.ti}}</h5>
     <pre>{{item.txt}}</pre>
   </div>
-  <el-empty v-if="!introduction.length" description="暂无介绍" />
+  <el-empty v-if="!introduction?.length" description="暂无介绍" />
 </template>
 
 <script setup lang="ts">

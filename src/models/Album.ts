@@ -29,7 +29,7 @@ export interface Album {
     type: string
     size: number
     picId_str: string
-    info: {
+    info?: {
         commentThread: object
         latestLikedUsers: unknown | null
         liked: false,
@@ -41,4 +41,5 @@ export interface Album {
         shareCount: number
         threadId: string
     }
+    isSub: boolean
 }

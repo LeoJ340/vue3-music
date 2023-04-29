@@ -10,7 +10,7 @@
 <script setup lang="ts">
 import Cover from '@/components/Cover/index.vue'
 import {ref} from "vue";
-import {onBeforeRouteUpdate, useRoute, useRouter} from "vue-router";
+import {useRoute, useRouter} from "vue-router";
 import {getArtistMVs} from "@/api/artist";
 import {ArtistMV} from "@/models/Artist";
 
@@ -25,11 +25,6 @@ function getData() {
 }
 
 getData()
-
-onBeforeRouteUpdate(to => {
-  artistId.value = to.params.id
-  getData()
-})
 
 const router = useRouter()
 function toMV(id: number) {
