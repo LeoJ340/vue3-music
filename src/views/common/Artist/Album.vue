@@ -53,19 +53,44 @@
         </template>
       </el-table>
     </div>
-
+    <!-- 加载更多专辑 -->
+    <div v-show="curLayout.type !== '图列模式' && more" class="flex-horizontal-center">
+      <el-button type="primary" :loading="loading" round @click="getMoreAlbums">加载更多</el-button>
+    </div>
+    <!-- 图列模式 -->
+    <div v-show="curLayout.type === '图列模式'" class="list flex">
+      <el-image :src="top50" fit="contain" style="width: 180px; height: 180px; margin-right: 20px;"/>
+      <div style="width: 100%;">
+        <div class="flex-vertical-center">
+          <h4 class="m-0" style="margin-right: 20px;">热门50首</h4>
+          <el-link :underline="false" @click="playAll">
+            <Play theme="outline" size="20" :strokeWidth="3"/>
+          </el-link>
+          <div style="margin: 0 10px;">|</div>
+          <el-link :underline="false" @click="selectPlayList">
+            <FolderPlus theme="outline" size="20" :strokeWidth="3"/>
+          </el-link>
+        </div>
+        <Songs :songs="topSongs"  />
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import top50 from '@/assets/top50.png'
+import Songs from '@/components/Songs/index.vue'
 import Cover from '@/components/Cover/index.vue'
-import { AllApplication, HamburgerButton, ListCheckbox } from '@icon-park/vue-next';
+import { AllApplication, HamburgerButton, ListCheckbox, Play, FolderPlus } from '@icon-park/vue-next';
 import {reactive, ref, shallowRef} from "vue";
 import {useRoute} from "vue-router";
-import {getArtistAlbums} from "@/api/artist";
+import {getArtistAlbums, getArtistTopSongs} from "@/api/artist";
 import {Album} from "@/models/Album";
+import {Song} from "@/models/Song";
 import {useFormatTime} from "@/utils/time";
 import {toCommonAlbum} from "@/router/usePush";
+import {usePlayerStore} from "@/stores/player";
+import {toPlayList} from "@/components/ToPlayList/index";
 
 /**
  * 专辑页布局切换
@@ -88,7 +113,11 @@ const curLayout = ref(layoutTypes[0])
 
 function changeLayout(layout: string) {
   curLayout.value = layoutTypes.find(item => item.type === layout)!
+  if (!topSongs.value.length) {
+    getTopSongs()
+  }
 }
+
 /**
  * 获取数据
  */
@@ -96,15 +125,42 @@ const currentRoute = useRoute()
 const artistId = ref(currentRoute.params.id)
 const limit = ref(30)
 const page = ref(1)
+const topSongs = ref<Song[]>([])
 
-const albums = ref<Album[]>()
+const albums = ref<Album[]>([])
+const more = ref(false)
+const loading = ref(false)
 function getData() {
+  loading.value = true
   getArtistAlbums(Number(artistId.value), limit.value, page.value).then(res => {
-    albums.value = res
+    albums.value.push(...res.hotAlbums)
+    more.value = res.more
+  }).finally(() => {
+    loading.value = false
   })
 }
 
 getData()
+
+function getMoreAlbums() {
+  page.value++
+  getData()
+}
+
+function getTopSongs() {
+  getArtistTopSongs(Number(artistId.value)).then(res => {
+    topSongs.value = res
+  })
+}
+
+const { push } = usePlayerStore()
+function playAll(replace: boolean = true) {
+  push(topSongs.value.filter(item => !item.noCopyrightRcmd), { replace, trigger: 'playAll' })
+}
+
+function selectPlayList() {
+  toPlayList(topSongs.value.map(topSong => topSong.id))
+}
 </script>
 
 <style scoped lang="scss">

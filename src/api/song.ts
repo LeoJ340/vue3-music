@@ -110,7 +110,7 @@ export function likeSong(songId: number, like : boolean): Promise<void> {
                 resolve()
             } else {
                 ElMessage({
-                    message: '操作失败',
+                    message: code === 302 ? '先登录' : '操作失败',
                     type: 'error',
                     duration: 1000,
                     center: true

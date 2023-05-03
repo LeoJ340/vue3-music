@@ -1,6 +1,7 @@
 import {request} from "@/utils/request";
 import {Artist, ArtistDetail, ArtistIntroduction, ArtistMV} from "@/models/Artist";
 import {Album} from "@/models/Album";
+import {Song} from "@/models/Song";
 
 /**
  * 歌手列表
@@ -147,11 +148,35 @@ export function getArtistAlbums(id: number, limit: number = 30, page: number = 1
         limit,
         offset: (page -1) * limit
     }
-    return new Promise<Album[]>((resolve, reject) => {
-        request<{ code: number, artist: Artist, hotAlbums: Album[] }>('/artist/album', 'GET', { params }).then(res => {
-            const { code, hotAlbums } = res
+    return new Promise<{ hotAlbums: Album[], more: boolean }>((resolve, reject) => {
+        request<{ code: number, artist: Artist, hotAlbums: Album[], more: boolean }>('/artist/album', 'GET', { params }).then(res => {
+            const { code, hotAlbums, more } = res
             if (code === 200) {
-                resolve(hotAlbums)
+                resolve({ hotAlbums, more })
+            } else {
+                ElMessage({
+                    message: '系统异常',
+                    type: 'error',
+                    duration: 1000,
+                    center: true
+                })
+                reject()
+            }
+        }).catch(reason => {
+            reject(reason)
+        })
+    })
+}
+
+/**
+ * 歌手热门 50 首歌曲
+ */
+export function getArtistTopSongs(id: number) {
+    return new Promise<Song[]>((resolve, reject) => {
+        request<{ code: number, songs: Song[] }>('/artist/top/song', 'GET', { params: { id } }).then(res => {
+            const { code, songs } = res
+            if (code === 200) {
+                resolve(songs)
             } else {
                 ElMessage({
                     message: '系统异常',

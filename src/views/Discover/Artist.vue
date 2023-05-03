@@ -29,7 +29,7 @@
     </div>
   </div>
   <div v-show="more" class="flex-horizontal-center">
-    <el-button type="primary" round @click="loadMore">加载更多</el-button>
+    <el-button type="primary" round :loading="loading" @click="loadMore">加载更多</el-button>
   </div>
   <!-- 无网络显示 -->
   <NetLess v-show="noNetwork" />
