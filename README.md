@@ -16,3 +16,13 @@ pnpm run dev
 后端API使用[网易云音乐 Node.js API service](https://github.com/Binaryify/NeteaseCloudMusicApi)
 
 在线体验已将后端部署，如果你想自己搭建api服务，可参考[开发文档](https://binaryify.github.io/NeteaseCloudMusicApi)
+
+## 预览
+
+![首页](ui/index.png)
+
+![首页（暗黑主题）](ui/index-dark.png)
+
+![歌单页（蓝色主题）](ui/playlist.png)
+
+![歌手页](ui/artist.png)
