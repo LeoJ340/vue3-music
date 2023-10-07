@@ -8,7 +8,15 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 export default defineConfig({
   base: '/vue3-music/',
   build: {
-    outDir: 'docs'
+    outDir: 'docs',
+    minify: 'terser',
+    terserOptions: {
+      compress: {
+        // 打包移除console
+        drop_console: true,
+        drop_debugger: true
+      }
+    }
   },
   plugins: [
     vue(),

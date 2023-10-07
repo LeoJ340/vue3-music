@@ -65,7 +65,7 @@
 import Cover from '@/components/Cover/index.vue'
 import NetLess from '@/components/NetLess/index.vue'
 import {CrownThree, Right ,Earth, Piano, Cup, SlightlySmilingFace, GridTwo} from "@icon-park/vue-next";
-import {reactive, ref, ShallowRef, shallowRef, watch} from "vue";
+import {reactive, ref, markRaw, Raw, watch} from "vue";
 import {
   getHighQualityCategories,
   getHotCategories,
@@ -87,34 +87,34 @@ const router = useRouter()
 // 精选歌单
 const highQualityPlayList = ref<PlayList>()
 const currentCategoryName = ref('全部歌单')
-const allCategory = reactive<{ name: string; icon: ShallowRef<Icon>; sub: Category[]; row: number }[]>([
+const allCategory = reactive<{ name: string; icon: Raw<Icon>; sub: Category[]; row: number }[]>([
   {
     name: '语种',
-    icon: shallowRef(Earth),
+    icon: markRaw(Earth),
     sub: [],
     row: 3
   },
   {
     name: '风格',
-    icon: shallowRef(Piano),
+    icon: markRaw(Piano),
     sub: [],
     row: 6
   },
   {
     name: '场景',
-    icon: shallowRef(Cup),
+    icon: markRaw(Cup),
     sub: [],
     row: 4
   },
   {
     name: '情感',
-    icon: shallowRef(SlightlySmilingFace),
+    icon: markRaw(SlightlySmilingFace),
     sub: [],
     row: 4
   },
   {
     name: '主题',
-    icon: shallowRef(GridTwo),
+    icon: markRaw(GridTwo),
     sub: [],
     row: 5
   }

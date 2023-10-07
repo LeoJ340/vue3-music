@@ -35,7 +35,7 @@
 <script setup lang="ts">
 import NetLess from '@/components/NetLess/index.vue'
 import { FolderPlus, User } from '@icon-park/vue-next';
-import {reactive, ref, shallowRef} from "vue";
+import {reactive, ref, markRaw} from "vue";
 import {onBeforeRouteUpdate, useRoute} from "vue-router";
 import {getArtistDetail} from "@/api/artist";
 import {ArtistDetail} from "@/models/Artist";
@@ -78,22 +78,22 @@ const menuList = reactive([
   {
     key: 'album',
     text: '专辑',
-    component: shallowRef(Album)
+    component: markRaw(Album)
   },
   {
     key: 'mv',
     text: 'MV',
-    component: shallowRef(MV)
+    component: markRaw(MV)
   },
   {
     key: 'desc',
     text: '歌手详情',
-    component: shallowRef(Desc)
+    component: markRaw(Desc)
   },
   {
     key: 'simi',
     text: '相似歌手',
-    component: shallowRef(Simi)
+    component: markRaw(Simi)
   }
 ])
 

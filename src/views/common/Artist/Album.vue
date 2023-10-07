@@ -82,7 +82,7 @@ import top50 from '@/assets/top50.png'
 import Songs from '@/components/Songs/index.vue'
 import Cover from '@/components/Cover/index.vue'
 import { AllApplication, HamburgerButton, ListCheckbox, Play, FolderPlus } from '@icon-park/vue-next';
-import {reactive, ref, shallowRef} from "vue";
+import {reactive, ref, markRaw} from "vue";
 import {useRoute} from "vue-router";
 import {getArtistAlbums, getArtistTopSongs} from "@/api/artist";
 import {Album} from "@/models/Album";
@@ -98,15 +98,15 @@ import {toPlayList} from "@/components/ToPlayList/index";
 const layoutTypes = reactive([
   {
     type: '大图模式',
-    icon: shallowRef(AllApplication)
+    icon: markRaw(AllApplication)
   },
   {
     type: '列表模式',
-    icon: shallowRef(HamburgerButton)
+    icon: markRaw(HamburgerButton)
   },
   {
     type: '图列模式',
-    icon: shallowRef(ListCheckbox)
+    icon: markRaw(ListCheckbox)
   }
 ])
 const curLayout = ref(layoutTypes[0])
