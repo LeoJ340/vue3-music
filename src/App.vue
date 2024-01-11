@@ -6,7 +6,7 @@
 import { usePlayerStore } from "./stores/player";
 import { onMounted, onUnmounted } from "vue";
 const { init, interval } = usePlayerStore()
-let timer: number | undefined
+let timer: NodeJS.Timeout
 
 onMounted(() => {
   init()
