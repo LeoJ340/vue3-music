@@ -1,0 +1,1 @@
+import{_ as e,o,e as r}from"./index-4ff561e7.js";import{E as s}from"./el-empty-53279bc5.js";const t=e({},[["render",function(e,t){const n=s;return o(),r(n,{description:"暂无数据"})}]]);export{t as default};
