@@ -1,1 +1,0 @@
-import{af as o,b as i}from"./index.92e00ce5.js";var n=o("up-one",!1,function(e){return i("svg",{width:e.size,height:e.size,viewBox:"0 0 48 48",fill:"none"},[i("path",{d:"M12 29L24 17L36 29H12Z",fill:e.colors[1],stroke:e.colors[0],"stroke-width":e.strokeWidth,"stroke-linejoin":e.strokeLinejoin},null)])});export{n as U};

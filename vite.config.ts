@@ -9,7 +9,7 @@ import {ElementPlusResolver} from 'unplugin-vue-components/resolvers'
 export default defineConfig({
   base: '/vue3-music/',
   build: {
-    outDir: 'docs',
+    outDir: 'dist',
     minify: 'terser',
     terserOptions: {
       compress: {
